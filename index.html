@@ -44,26 +44,38 @@
     <main class="max-w-3xl mx-auto w-full px-4 py-8 flex-grow flex flex-col justify-center">
 
         <div id="configCard" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 md:p-8 shadow-2xl animate-fade-in space-y-6">
-            <div>
-                <h2 class="text-2xl font-bold text-white flex items-center gap-2 mb-1">
-                    <i class="fa-solid fa-sliders text-indigo-400"></i> Configura la Sessione
-                </h2>
-                <p class="text-slate-400 text-sm">Personalizza l'allenamento e traccia le tue prestazioni nel tempo.</p>
+            
+            <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-users text-indigo-400"></i> Profilo Utente Attivo:
+                    </label>
+                    <button type="button" onclick="deleteActiveUser()" id="deleteUserBtn" class="text-xs text-rose-400 hover:text-rose-300 transition flex items-center gap-1">
+                        <i class="fa-solid fa-user-xmark"></i> Elimina Utente
+                    </button>
+                </div>
+
+                <div id="userTabsContainer" class="grid grid-cols-3 gap-2">
+                    </div>
+
+                <div id="addUserForm" class="hidden flex gap-2 pt-1">
+                    <input type="text" id="newUserNameInput" placeholder="Nome nuovo utente..." maxlength="12" 
+                           class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 w-full">
+                    <button type="button" onclick="confirmAddUser()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium">Salva</button>
+                    <button type="button" onclick="cancelAddUser()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs px-2 py-1.5 rounded-lg">Annulla</button>
+                </div>
             </div>
 
-            <div id="historySummary" class="bg-slate-900/80 border border-slate-700 rounded-xl p-4 flex items-center justify-between">
+            <div id="historySummary" class="bg-slate-900/50 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="bg-indigo-500/20 text-indigo-400 p-3 rounded-lg border border-indigo-500/30">
                         <i class="fa-solid fa-chart-line text-lg"></i>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-400 font-medium">Media Storica Personale</p>
+                        <p class="text-xs text-slate-400 font-medium">Media Storica di <span id="activeUserNameDisplay" class="text-indigo-300 font-semibold">Utente</span></p>
                         <p id="historicalAverageText" class="text-lg font-bold text-slate-200">Nessuna sessione salvata</p>
                     </div>
                 </div>
-                <button onclick="clearHistory()" class="text-xs text-slate-500 hover:text-rose-400 transition" title="Cancella storico">
-                    <i class="fa-solid fa-trash-can"></i> Reset
-                </button>
             </div>
 
             <form id="configForm" class="space-y-6" onsubmit="event.preventDefault(); startSession();">
@@ -210,7 +222,7 @@
                     <i class="fa-solid fa-award"></i>
                 </div>
                 <h2 class="text-3xl font-bold text-white">Sessione Completata!</h2>
-                <p class="text-slate-300 text-sm">Ecco la valutazione complessiva della tua prestazione.</p>
+                <p class="text-slate-300 text-sm">Ottimo lavoro <span id="summaryUserNameDisplay" class="font-bold text-indigo-400">Utente</span>! Ecco la valutazione complessiva.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -313,13 +325,17 @@
             all: "Tutti gli argomenti"
         };
 
+        // Struttura dati Profili Utenti
+        let usersData = [];
+        let activeUserId = null;
+
         let activeQueue = [];
         let currentIndex = 0;
         let isSlowSpeed = false;
         let selectedInputMode = 'text';
         let recognition = null;
         let isRecording = false;
-        let sessionResults = []; // Salva punteggi e dettagli di ogni frase
+        let sessionResults = [];
 
         const synth = window.speechSynthesis;
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -376,27 +392,142 @@
             }
         }
 
-        // Caricamento dello storico all'avvio
+        // Inizializzazione Gestione Utenti
         document.addEventListener("DOMContentLoaded", () => {
-            updateHistoryUI();
+            loadUsersFromStorage();
+            renderUserTabs();
+            updateActiveUserHistoryUI();
         });
 
-        function updateHistoryUI() {
-            const history = JSON.parse(localStorage.getItem('english_trainer_history') || '[]');
-            const historyText = document.getElementById('historicalAverageText');
-            if (history.length === 0) {
-                historyText.innerText = "Nessuna sessione salvata";
-            } else {
-                const sum = history.reduce((acc, curr) => acc + curr, 0);
-                const avg = Math.round(sum / history.length);
-                historyText.innerText = `${avg}% (${history.length} sessioni completate)`;
+        function loadUsersFromStorage() {
+            const stored = localStorage.getItem('english_trainer_users_v2');
+            if (stored) {
+                try {
+                    usersData = JSON.parse(stored);
+                } catch(e) {
+                    usersData = [];
+                }
+            }
+            
+            // Inizializza Utente 1 di default se non presente
+            if (!usersData || usersData.length === 0) {
+                usersData = [
+                    { id: 'u1', name: 'Utente 1', history: [] }
+                ];
+                saveUsersToStorage();
+            }
+            activeUserId = usersData[0].id;
+        }
+
+        function saveUsersToStorage() {
+            localStorage.setItem('english_trainer_users_v2', JSON.stringify(usersData));
+        }
+
+        function renderUserTabs() {
+            const container = document.getElementById('userTabsContainer');
+            container.innerHTML = '';
+
+            usersData.forEach(user => {
+                const isActive = user.id === activeUserId;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectUser(user.id);
+                btn.className = isActive 
+                    ? "py-2 px-3 rounded-lg text-xs font-bold bg-indigo-600 text-white border border-indigo-400 shadow flex items-center justify-center gap-1.5 truncate"
+                    : "py-2 px-3 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center justify-center gap-1.5 truncate transition";
+                
+                btn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="truncate">${user.name}</span>`;
+                container.appendChild(btn);
+            });
+
+            // Mostra il pulsante Aggiungi Utente se meno di 3
+            if (usersData.length < 3) {
+                const addBtn = document.createElement('button');
+                addBtn.type = 'button';
+                addBtn.onclick = showAddUserForm;
+                addBtn.className = "py-2 px-3 rounded-lg text-xs font-medium bg-slate-800/60 hover:bg-slate-700 border border-dashed border-slate-600 text-indigo-400 flex items-center justify-center gap-1 transition";
+                addBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Nuovo`;
+                container.appendChild(addBtn);
+            }
+
+            // Visibilità pulsante elimina
+            const deleteBtn = document.getElementById('deleteUserBtn');
+            if (deleteBtn) {
+                deleteBtn.style.display = usersData.length > 1 ? 'inline-flex' : 'none';
             }
         }
 
-        function clearHistory() {
-            if (confirm("Vuoi davvero azzerare lo storico dei tuoi progressi?")) {
-                localStorage.removeItem('english_trainer_history');
-                updateHistoryUI();
+        function selectUser(userId) {
+            activeUserId = userId;
+            renderUserTabs();
+            updateActiveUserHistoryUI();
+        }
+
+        function showAddUserForm() {
+            document.getElementById('addUserForm').classList.remove('hidden');
+            document.getElementById('newUserNameInput').focus();
+        }
+
+        function cancelAddUser() {
+            document.getElementById('addUserForm').classList.add('hidden');
+            document.getElementById('newUserNameInput').value = '';
+        }
+
+        function confirmAddUser() {
+            const nameInput = document.getElementById('newUserNameInput');
+            const newName = nameInput.value.trim();
+            if (!newName) return;
+
+            if (usersData.length >= 3) {
+                alert("È possibile creare al massimo 3 utenti.");
+                return;
+            }
+
+            const newId = 'u_' + Date.now();
+            usersData.push({
+                id: newId,
+                name: newName,
+                history: []
+            });
+
+            activeUserId = newId;
+            saveUsersToStorage();
+            cancelAddUser();
+            renderUserTabs();
+            updateActiveUserHistoryUI();
+        }
+
+        function deleteActiveUser() {
+            if (usersData.length <= 1) {
+                alert("Deve rimanere almeno un utente attivo.");
+                return;
+            }
+
+            const activeUser = usersData.find(u => u.id === activeUserId);
+            if (!activeUser) return;
+
+            if (confirm(`Sei sicuro di voler eliminare l'utente "${activeUser.name}" e tutti i suoi dati?`)) {
+                usersData = usersData.filter(u => u.id !== activeUserId);
+                activeUserId = usersData[0].id;
+                saveUsersToStorage();
+                renderUserTabs();
+                updateActiveUserHistoryUI();
+            }
+        }
+
+        function updateActiveUserHistoryUI() {
+            const activeUser = usersData.find(u => u.id === activeUserId);
+            if (!activeUser) return;
+
+            document.getElementById('activeUserNameDisplay').innerText = activeUser.name;
+            const historyText = document.getElementById('historicalAverageText');
+
+            if (!activeUser.history || activeUser.history.length === 0) {
+                historyText.innerText = "Nessuna sessione salvata";
+            } else {
+                const sum = activeUser.history.reduce((acc, curr) => acc + curr, 0);
+                const avg = Math.round(sum / activeUser.history.length);
+                historyText.innerText = `${avg}% (${activeUser.history.length} sessioni completate)`;
             }
         }
 
@@ -533,7 +664,6 @@
             const similarity = calculateSimilarity(userText, currentObj.it);
             const scorePercent = Math.round(similarity * 100);
 
-            // Salvataggio nel registro sessione
             sessionResults.push({
                 en: currentObj.en,
                 it: currentObj.it,
@@ -568,19 +698,19 @@
             }
         }
 
-        // Calcolo Valutazione Finale XX% e Miglioramenti
         function showFinalSummary() {
             document.getElementById('exerciseCard').classList.add('hidden');
             document.getElementById('summaryCard').classList.remove('hidden');
             document.getElementById('statsBadge').classList.add('hidden');
 
+            const activeUser = usersData.find(u => u.id === activeUserId);
+            document.getElementById('summaryUserNameDisplay').innerText = activeUser ? activeUser.name : 'Utente';
+
             const totalScore = sessionResults.reduce((acc, curr) => acc + curr.score, 0);
             const averageScore = Math.round(totalScore / sessionResults.length);
 
-            // Punteggio XX%
             document.getElementById('finalScorePercent').innerText = `${averageScore}%`;
 
-            // Giudizio Sintetico
             const gradeText = document.getElementById('finalGradeText');
             if (averageScore >= 85) {
                 gradeText.innerText = "🌟 Ottima comprensione orale!";
@@ -593,13 +723,11 @@
                 gradeText.className = "text-sm font-semibold text-rose-400";
             }
 
-            // Calcolo Miglioramento rispetto al passato
-            const history = JSON.parse(localStorage.getItem('english_trainer_history') || '[]');
             const deltaElem = document.getElementById('improvementDeltaText');
             const subElem = document.getElementById('improvementSubText');
 
-            if (history.length > 0) {
-                const prevAvg = Math.round(history.reduce((a, b) => a + b, 0) / history.length);
+            if (activeUser && activeUser.history && activeUser.history.length > 0) {
+                const prevAvg = Math.round(activeUser.history.reduce((a, b) => a + b, 0) / activeUser.history.length);
                 const diff = averageScore - prevAvg;
 
                 if (diff > 0) {
@@ -621,12 +749,13 @@
                 subElem.innerText = "Base di partenza registrata";
             }
 
-            // Salva sessione corrente nel localStorage
-            history.push(averageScore);
-            localStorage.setItem('english_trainer_history', JSON.stringify(history));
-            updateHistoryUI();
+            // Salvataggio nello storico dell'utente attivo
+            if (activeUser) {
+                activeUser.history.push(averageScore);
+                saveUsersToStorage();
+                updateActiveUserHistoryUI();
+            }
 
-            // Generazione Dettaglio Risposte
             const logContainer = document.getElementById('sessionLogContainer');
             logContainer.innerHTML = '';
 
