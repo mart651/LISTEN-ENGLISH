@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impara l'Inglese - Esercizio di Ascolto e Traduzione</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -24,6 +26,7 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
 
+    <!-- Header -->
     <header class="bg-slate-800/80 backdrop-blur border-b border-slate-700 sticky top-0 z-10">
         <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -32,7 +35,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-tight">English Listening Trainer</h1>
-                    <p class="text-xs text-slate-400">Ascolta, comprendi e valuta i tuoi progressi</p>
+                    <p class="text-xs text-slate-400">Frasi reali dal Web per un ascolto quotidiano</p>
                 </div>
             </div>
             <div id="statsBadge" class="hidden bg-slate-700/60 px-3 py-1.5 rounded-lg border border-slate-600 text-sm font-medium text-slate-300">
@@ -41,10 +44,13 @@
         </div>
     </header>
 
+    <!-- Contenuto Principale -->
     <main class="max-w-3xl mx-auto w-full px-4 py-8 flex-grow flex flex-col justify-center">
 
+        <!-- SCHERMATA CONFIGURAZIONE -->
         <div id="configCard" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 md:p-8 shadow-2xl animate-fade-in space-y-6">
             
+            <!-- SELEZIONE ED ELIMINAZIONE UTENTE (Max 3) -->
             <div class="bg-slate-900/90 border border-slate-700 rounded-xl p-4 space-y-3">
                 <div class="flex items-center justify-between">
                     <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
@@ -55,9 +61,10 @@
                     </button>
                 </div>
 
-                <div id="userTabsContainer" class="grid grid-cols-3 gap-2">
-                    </div>
+                <!-- Lista Bottoni Utenti -->
+                <div id="userTabsContainer" class="grid grid-cols-3 gap-2"></div>
 
+                <!-- Modalità Aggiunta Utente (se < 3) -->
                 <div id="addUserForm" class="hidden flex gap-2 pt-1">
                     <input type="text" id="newUserNameInput" placeholder="Nome nuovo utente..." maxlength="12" 
                            class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 w-full">
@@ -66,6 +73,7 @@
                 </div>
             </div>
 
+            <!-- Box Storico Personale Utente Corrente -->
             <div id="historySummary" class="bg-slate-900/50 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="bg-indigo-500/20 text-indigo-400 p-3 rounded-lg border border-indigo-500/30">
@@ -79,21 +87,23 @@
             </div>
 
             <form id="configForm" class="space-y-6" onsubmit="event.preventDefault(); startSession();">
+                <!-- Origine Frasi e Tema -->
                 <div>
                     <label for="categorySelect" class="block text-sm font-medium text-slate-300 mb-2">
-                        Seleziona Argomento / Tema
+                        Origine e Argomento Frasi
                     </label>
                     <select id="categorySelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
-                        <option value="all">🌟 Tutti gli argomenti (Misto)</option>
-                        <option value="daily">💬 Conversazione Quotidiana</option>
-                        <option value="travel">✈️ Viaggi e Vacanze</option>
-                        <option value="work">💼 Lavoro ed Economia</option>
+                        <option value="web_live">🌐 Web API Live - Frasi della Vita Reale in Tempo Reale</option>
+                        <option value="daily">💬 Conversazione Quotidiana & Idiomi</option>
+                        <option value="travel">✈️ Viaggi, Aeroporto e Direzioni</option>
+                        <option value="work">💼 Lavoro, Email ed Economia</option>
                         <option value="food">🍽️ Ristorante e Cibo</option>
-                        <option value="hobbies">🎨 Hobby e Tempo Libero</option>
                         <option value="hotel">🏨 Hotel e Alloggio</option>
+                        <option value="all">🌟 Tutti gli argomenti (Misto locale)</option>
                     </select>
                 </div>
 
+                <!-- Selettore Modalità Risposta -->
                 <div>
                     <label class="block text-sm font-medium text-slate-300 mb-2">Modalità di Risposta</label>
                     <div class="grid grid-cols-2 gap-3">
@@ -114,6 +124,7 @@
                     </div>
                 </div>
 
+                <!-- Numero di Frasi -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label for="numSentences" class="block text-sm font-medium text-slate-300">
@@ -121,27 +132,38 @@
                         </label>
                         <span id="numValue" class="text-indigo-400 font-bold text-lg bg-indigo-500/10 px-3 py-0.5 rounded-lg border border-indigo-500/20">5</span>
                     </div>
-                    <input type="range" id="numSentences" min="3" max="30" value="5" step="1" 
+                    <input type="range" id="numSentences" min="3" max="20" value="5" step="1" 
                            class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                            oninput="document.getElementById('numValue').innerText = this.value">
                     <div class="flex justify-between text-xs text-slate-500 mt-1">
                         <span>Min: 3</span>
-                        <span>Max: 30</span>
+                        <span>Max: 20</span>
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 flex items-center justify-center gap-2 text-lg">
+                <!-- Pulsante Avvio -->
+                <button type="submit" id="startBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 flex items-center justify-center gap-2 text-lg">
                     <i class="fa-solid fa-play"></i> Inizia Esercizio
                 </button>
             </form>
         </div>
 
+        <!-- SCHERMATA CARICAMENTO LIVE WEB -->
+        <div id="loadingCard" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl text-center space-y-4 animate-fade-in">
+            <div class="inline-block animate-spin text-indigo-400 text-4xl mb-2">
+                <i class="fa-solid fa-circle-notch"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Ricerca frasi dal Web in corso...</h3>
+            <p class="text-xs text-slate-400">Sto scaricando frasi ed espressioni reali e traducendole per l'esercizio.</p>
+        </div>
+
+        <!-- SCHERMATA ESERCIZIO -->
         <div id="exerciseCard" class="hidden space-y-6 animate-fade-in">
             <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 md:p-8 shadow-2xl text-center space-y-6">
                 
                 <div class="flex items-center justify-center gap-2">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                        <i class="fa-solid fa-tag"></i> <span id="currentCategoryBadge">Generale</span>
+                        <i class="fa-solid fa-earth-americas"></i> <span id="currentCategoryBadge">Web Live</span>
                     </div>
                     <div id="modeBadge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
                         <i class="fa-solid fa-keyboard" id="modeIcon"></i> <span id="modeText">Tastiera</span>
@@ -167,7 +189,7 @@
                 <div class="space-y-3 pt-4 border-t border-slate-700/60 text-left">
                     <label for="userTranslation" class="block text-sm font-medium text-slate-300 flex justify-between items-center">
                         <span>Inserisci la traduzione in Italiano:</span>
-                        <span id="speechSupportBadge" class="hidden text-xs text-amber-400"><i class="fa-solid fa-triangle-exclamation"></i> Riconoscimento vocale non supportato</span>
+                        <span id="speechSupportBadge" class="hidden text-xs text-amber-400"><i class="fa-solid fa-triangle-exclamation"></i> Vocale non supportato</span>
                     </label>
 
                     <div id="voiceInputContainer" class="hidden flex flex-col items-center justify-center p-4 bg-slate-900/60 border border-slate-700 rounded-xl space-y-3">
@@ -187,6 +209,7 @@
                 </button>
             </div>
 
+            <!-- Card Risultato / Feedback -->
             <div id="resultCard" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-6 md:p-8 shadow-2xl space-y-5 animate-fade-in">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-700">
                     <h3 class="text-lg font-bold text-white flex items-center gap-2">
@@ -216,6 +239,7 @@
             </div>
         </div>
 
+        <!-- SCHERMATA FINALE & VALUTAZIONE (XX%) -->
         <div id="summaryCard" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-6 md:p-8 shadow-2xl space-y-6 animate-fade-in">
             <div class="text-center space-y-3">
                 <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-indigo-500/20 text-indigo-400 text-4xl">
@@ -225,6 +249,7 @@
                 <p class="text-slate-300 text-sm">Ottimo lavoro <span id="summaryUserNameDisplay" class="font-bold text-indigo-400">Utente</span>! Ecco la valutazione complessiva.</p>
             </div>
 
+            <!-- Griglia Valutazione e Miglioramenti -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-slate-900 p-5 rounded-xl border border-slate-700 text-center flex flex-col justify-center items-center">
                     <p class="text-slate-400 text-xs uppercase font-semibold tracking-wider mb-1">Valutazione Finale</p>
@@ -239,12 +264,12 @@
                 </div>
             </div>
 
+            <!-- Registro Risposte -->
             <div class="space-y-3">
                 <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                     <i class="fa-solid fa-list-check text-indigo-400"></i> Dettaglio Risposte
                 </h3>
-                <div id="sessionLogContainer" class="space-y-3 max-h-72 overflow-y-auto pr-1">
-                    </div>
+                <div id="sessionLogContainer" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
             </div>
 
             <button onclick="resetApp()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 px-8 rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 flex items-center justify-center gap-2">
@@ -258,6 +283,7 @@
         <p>Esercitati ogni giorno per migliorare il tuo ascolto e vocabolario in inglese.</p>
     </footer>
 
+    <!-- LOGICA JAVASCRIPT -->
     <script>
         const sentenceDatabase = {
             daily: [
@@ -268,7 +294,9 @@
                 { en: "It looks like it is going to rain this afternoon.", it: "Sembra che stia per piovere questo pomeriggio." },
                 { en: "I need to go to the supermarket to buy some milk.", it: "Devo andare al supermercato a comprare del latte." },
                 { en: "Could you turn down the volume a little bit?", it: "Potresti abbassare un po' il volume?" },
-                { en: "I usually wake up early on weekdays.", it: "Di solito mi sveglio presto nei giorni lavorativi." }
+                { en: "I usually wake up early on weekdays.", it: "Di solito mi sveglio presto nei giorni lavorativi." },
+                { en: "Let's call it a day and continue tomorrow.", it: "Finiamo per oggi e continuiamo domani." },
+                { en: "I couldn't agree with you more.", it: "Sono pienamente d'accordo con te." }
             ],
             travel: [
                 { en: "Where is the nearest train station?", it: "Dov'è la stazione ferroviaria più vicina?" },
@@ -298,14 +326,6 @@
                 { en: "Everything was delicious, thank you very much.", it: "Era tutto delizioso, grazie mille." },
                 { en: "I am allergic to seafood.", it: "Sono allergico ai frutti di mare." }
             ],
-            hobbies: [
-                { en: "I enjoy reading books in my free time.", it: "Mi piace leggere libri nel mio tempo libero." },
-                { en: "Do you play any musical instruments?", it: "Suoni qualche strumento musicale?" },
-                { en: "I love going for a walk in the park on Sundays.", it: "Amo fare una passeggiata al parco la domenica." },
-                { en: "What kind of movies do you like to watch?", it: "Che genere di film ti piace guardare?" },
-                { en: "I have been practicing photography recently.", it: "Ultimamente mi sto esercitando con la fotografia." },
-                { en: "We are playing football tomorrow evening.", it: "Giocheremo a calcio domani sera." }
-            ],
             hotel: [
                 { en: "I have a reservation under the name of Smith.", it: "Ho una prenotazione a nome Smith." },
                 { en: "What time is checkout tomorrow morning?", it: "A che ora è il checkout domani mattina?" },
@@ -316,19 +336,17 @@
         };
 
         const categoryLabels = {
+            web_live: "🌐 Web API Live",
             daily: "Conversazione Quotidiana",
             travel: "Viaggi e Vacanze",
             work: "Lavoro ed Economia",
             food: "Ristorante e Cibo",
-            hobbies: "Hobby e Tempo Libero",
             hotel: "Hotel e Alloggio",
             all: "Tutti gli argomenti"
         };
 
-        // Struttura dati Profili Utenti
         let usersData = [];
         let activeUserId = null;
-
         let activeQueue = [];
         let currentIndex = 0;
         let isSlowSpeed = false;
@@ -392,7 +410,6 @@
             }
         }
 
-        // Inizializzazione Gestione Utenti
         document.addEventListener("DOMContentLoaded", () => {
             loadUsersFromStorage();
             renderUserTabs();
@@ -402,18 +419,10 @@
         function loadUsersFromStorage() {
             const stored = localStorage.getItem('english_trainer_users_v2');
             if (stored) {
-                try {
-                    usersData = JSON.parse(stored);
-                } catch(e) {
-                    usersData = [];
-                }
+                try { usersData = JSON.parse(stored); } catch(e) { usersData = []; }
             }
-            
-            // Inizializza Utente 1 di default se non presente
             if (!usersData || usersData.length === 0) {
-                usersData = [
-                    { id: 'u1', name: 'Utente 1', history: [] }
-                ];
+                usersData = [{ id: 'u1', name: 'Utente 1', history: [] }];
                 saveUsersToStorage();
             }
             activeUserId = usersData[0].id;
@@ -435,12 +444,10 @@
                 btn.className = isActive 
                     ? "py-2 px-3 rounded-lg text-xs font-bold bg-indigo-600 text-white border border-indigo-400 shadow flex items-center justify-center gap-1.5 truncate"
                     : "py-2 px-3 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center justify-center gap-1.5 truncate transition";
-                
                 btn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="truncate">${user.name}</span>`;
                 container.appendChild(btn);
             });
 
-            // Mostra il pulsante Aggiungi Utente se meno di 3
             if (usersData.length < 3) {
                 const addBtn = document.createElement('button');
                 addBtn.type = 'button';
@@ -450,11 +457,8 @@
                 container.appendChild(addBtn);
             }
 
-            // Visibilità pulsante elimina
             const deleteBtn = document.getElementById('deleteUserBtn');
-            if (deleteBtn) {
-                deleteBtn.style.display = usersData.length > 1 ? 'inline-flex' : 'none';
-            }
+            if (deleteBtn) deleteBtn.style.display = usersData.length > 1 ? 'inline-flex' : 'none';
         }
 
         function selectUser(userId) {
@@ -484,12 +488,7 @@
             }
 
             const newId = 'u_' + Date.now();
-            usersData.push({
-                id: newId,
-                name: newName,
-                history: []
-            });
-
+            usersData.push({ id: newId, name: newName, history: [] });
             activeUserId = newId;
             saveUsersToStorage();
             cancelAddUser();
@@ -531,7 +530,32 @@
             }
         }
 
-        function startSession() {
+        // Funzione per cercare frasi dal Web in tempo reale
+        async function fetchWebSentences(count) {
+            const fetched = [];
+            try {
+                for (let i = 0; i < count; i++) {
+                    // API pubblica per consigli/frasi reali inglesi
+                    const res = await fetch(`https://api.adviceslip.com/advice?t=${Date.now()}_${i}`);
+                    const data = await res.json();
+                    if (data && data.slip && data.slip.advice) {
+                        const enText = data.slip.advice;
+                        
+                        // Traduzione in tempo reale via API MyMemory
+                        const transRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(enText)}&langpair=en|it`);
+                        const transData = await transRes.json();
+                        const itText = transData.responseData ? transData.responseData.translatedText : "Traduzione non disponibile";
+
+                        fetched.push({ en: enText, it: itText });
+                    }
+                }
+            } catch (err) {
+                console.warn("Recupero Web fallito o limitato, uso catalogo locale:", err);
+            }
+            return fetched;
+        }
+
+        async function startSession() {
             const selectedCategory = document.getElementById('categorySelect').value;
             const requestedCount = parseInt(document.getElementById('numSentences').value);
             
@@ -544,15 +568,31 @@
             }
 
             let pool = [];
-            if (selectedCategory === 'all') {
+
+            if (selectedCategory === 'web_live') {
+                document.getElementById('configCard').classList.add('hidden');
+                document.getElementById('loadingCard').classList.remove('hidden');
+
+                const webData = await fetchWebSentences(requestedCount);
+                document.getElementById('loadingCard').classList.add('hidden');
+
+                if (webData && webData.length > 0) {
+                    pool = webData;
+                } else {
+                    // Fallback se offline
+                    Object.values(sentenceDatabase).forEach(list => { pool = pool.concat(list); });
+                }
+            } else if (selectedCategory === 'all') {
                 Object.values(sentenceDatabase).forEach(list => { pool = pool.concat(list); });
             } else {
                 pool = [...(sentenceDatabase[selectedCategory] || [])];
             }
 
-            for (let i = pool.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [pool[i], pool[j]] = [pool[j], pool[i]];
+            if (selectedCategory !== 'web_live') {
+                for (let i = pool.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [pool[i], pool[j]] = [pool[j], pool[i]];
+                }
             }
 
             activeQueue = pool.slice(0, Math.min(requestedCount, pool.length));
@@ -560,7 +600,8 @@
             sessionResults = [];
 
             if (activeQueue.length === 0) {
-                alert("Nessuna frase disponibile.");
+                alert("Nessuna frase disponibile al momento.");
+                document.getElementById('configCard').classList.remove('hidden');
                 return;
             }
 
@@ -596,13 +637,7 @@
             document.getElementById('userTranslation').disabled = false;
             
             const currentItem = activeQueue[index];
-            let foundCategory = "Generale";
-            for (const [cat, list] of Object.entries(sentenceDatabase)) {
-                if (list.some(item => item.en === currentItem.en)) {
-                    foundCategory = categoryLabels[cat] || cat;
-                    break;
-                }
-            }
+            let foundCategory = categoryLabels[document.getElementById('categorySelect').value] || "Vita Reale";
             document.getElementById('currentCategoryBadge').innerText = foundCategory;
 
             setTimeout(() => playCurrentAudio(), 400);
@@ -672,10 +707,10 @@
             });
 
             const scoreBadge = document.getElementById('scoreBadge');
-            if (similarity >= 0.75) {
+            if (similarity >= 0.70) {
                 scoreBadge.className = "px-3 py-1 rounded-lg text-sm font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
                 scoreBadge.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> Eccellente (${scorePercent}%)`;
-            } else if (similarity >= 0.45) {
+            } else if (similarity >= 0.40) {
                 scoreBadge.className = "px-3 py-1 rounded-lg text-sm font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30";
                 scoreBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation me-1"></i> Quasi corretta (${scorePercent}%)`;
             } else {
@@ -749,7 +784,6 @@
                 subElem.innerText = "Base di partenza registrata";
             }
 
-            // Salvataggio nello storico dell'utente attivo
             if (activeUser) {
                 activeUser.history.push(averageScore);
                 saveUsersToStorage();
@@ -764,8 +798,8 @@
                 item.className = "bg-slate-900/80 p-3.5 rounded-xl border border-slate-700/80 text-left space-y-1 text-sm";
                 
                 let scoreColor = "text-rose-400";
-                if (res.score >= 75) scoreColor = "text-emerald-400";
-                else if (res.score >= 45) scoreColor = "text-amber-400";
+                if (res.score >= 70) scoreColor = "text-emerald-400";
+                else if (res.score >= 40) scoreColor = "text-amber-400";
 
                 item.innerHTML = `
                     <div class="flex justify-between items-center font-medium">
