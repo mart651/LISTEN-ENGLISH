@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impara le Lingue - Ascolto e Traduzione</title>
+    <title>Impara le Lingue - Frasi Reali dal Web per la Vita Quotidiana</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,7 +25,8 @@
                             teal: '#14b8a6',
                             emerald: '#10b981',
                             amber: '#f59e0b',
-                            rose: '#f43f5e'
+                            rose: '#f43f5e',
+                            cyan: '#06b6d4'
                         }
                     },
                     fontFamily: {
@@ -41,7 +42,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -49,12 +50,10 @@
             font-family: 'Inter', sans-serif;
             background-color: #0b0f17;
             color: #cbd5e1;
-            /* Anti-aliasing per una leggibilità ottimale senza affaticare gli occhi */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Scrollbar personalizzata e non invasiva */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -69,12 +68,6 @@
             background: #2a354d;
         }
 
-        /* Transizioni morbide senza sfarfallio visivo */
-        .smooth-transition {
-            transition: all 0.25s ease-in-out;
-        }
-
-        /* Effetti rilassanti ai bordi e focus */
         .eye-card {
             background-color: #131926;
             border: 1px solid #1e2638;
@@ -99,26 +92,32 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.85; transform: scale(1.02); }
         }
+
+        .glow-cyan {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- Navigation Header -->
-    <header class="bg-obsidian-800/80 backdrop-blur-md border-b border-obsidian-700/60 sticky top-0 z-50 px-4 py-3.5">
+    <header class="bg-obsidian-800/90 backdrop-blur-md border-b border-obsidian-700/60 sticky top-0 z-50 px-4 py-3.5">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-indigo-600/20 border border-indigo-500/30 p-2.5 rounded-xl text-indigo-400">
-                    <i class="fa-solid fa-language text-xl"></i>
+                <div class="bg-cyan-600/20 border border-cyan-500/30 p-2.5 rounded-xl text-cyan-400">
+                    <i class="fa-solid fa-earth-americas text-xl animate-spin-slow"></i>
                 </div>
                 <div>
                     <h1 class="text-lg md:text-xl font-bold text-slate-100 flex items-center gap-2">
-                        Impara le Lingue 
-                        <span class="text-[10px] uppercase font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-2 py-0.5 rounded-full">Eye-Comfort</span>
+                        Impara le Lingue
+                        <span class="text-[10px] uppercase font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <i class="fa-solid fa-wifi text-[9px] animate-pulse"></i> Web Live Daily
+                        </span>
                     </h1>
-                    <p class="text-xs text-slate-400">Ascolto & Traduzione con Audio madrelingua</p>
+                    <p class="text-xs text-slate-400">Frasi reali ed estratti dal web per la vita quotidiana</p>
                 </div>
             </div>
 
+            <!-- Header indicators -->
             <div class="flex items-center gap-2.5">
                 <div id="activeLangBadgeHeader" class="bg-obsidian-700/80 border border-obsidian-600 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-200 flex items-center gap-2">
                     <span id="headerLangFlag">🇬🇧</span> <span id="headerLangName">Inglese</span>
@@ -133,10 +132,22 @@
         </div>
     </header>
 
-    <!-- Main Content Container -->
+    <div id="appDialog" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="eye-card max-w-sm w-full p-6 rounded-2xl text-center space-y-4">
+            <div id="dialogIcon" class="w-12 h-12 rounded-full bg-indigo-500/20 text-indigo-400 text-2xl mx-auto flex items-center justify-center">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="dialogTitle" class="text-base font-bold text-slate-100">Avviso</h3>
+            <p id="dialogMessage" class="text-xs text-slate-300"></p>
+            <div id="dialogActions" class="flex justify-center gap-2 pt-2">
+                <button id="dialogOkBtn" onclick="closeDialog()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-5 py-2 rounded-xl transition">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
     <main class="max-w-3xl mx-auto w-full px-4 py-6 md:py-8 flex-grow flex flex-col justify-center">
 
-        <!-- CONFIGURATION CARD -->
         <div id="configCard" class="eye-card rounded-2xl p-6 md:p-8 space-y-6">
             
             <!-- User Profile Selector -->
@@ -149,17 +160,17 @@
                         <button type="button" onclick="showAddUserModal()" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition flex items-center gap-1">
                             <i class="fa-solid fa-plus"></i> Nuovo Profilo
                         </button>
-                        <button type="button" onclick="deleteActiveUser()" id="deleteUserBtn" class="text-xs text-rose-400 hover:text-rose-300 font-medium transition flex items-center gap-1 ml-2">
+                        <button type="button" onclick="promptDeleteUser()" id="deleteUserBtn" class="text-xs text-rose-400 hover:text-rose-300 font-medium transition flex items-center gap-1 ml-2">
                             <i class="fa-solid fa-trash-can"></i> Elimina
                         </button>
                     </div>
                 </div>
 
                 <div id="userTabsContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    <!-- Dynamic User Tabs inserted here -->
+                    <!-- Dynamic User Tabs -->
                 </div>
 
-                <!-- Add User Form inline -->
+                <!-- Add User Form -->
                 <div id="addUserForm" class="hidden flex gap-2 pt-2 border-t border-obsidian-700/60">
                     <input type="text" id="newUserNameInput" placeholder="Nome nuovo profilo..." maxlength="14" 
                            class="eye-input rounded-lg px-3 py-1.5 text-xs text-slate-200 w-full">
@@ -181,13 +192,58 @@
                 </div>
             </div>
 
-            <!-- Main Form Settings -->
             <form id="configForm" class="space-y-6" onsubmit="event.preventDefault(); startSession();">
                 
-                <!-- 1. Language Selection -->
                 <div>
                     <label class="block text-xs md:text-sm font-semibold text-slate-300 mb-2.5 flex items-center gap-2">
-                        <i class="fa-solid fa-globe text-indigo-400"></i> Seleziona Lingua da Studiare:
+                        <i class="fa-solid fa-database text-cyan-400"></i> Origine delle Frasi:
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="cursor-pointer border border-cyan-500/50 bg-cyan-950/30 hover:bg-cyan-900/40 rounded-xl p-3.5 flex items-start gap-3 transition has-[:checked]:border-cyan-400 has-[:checked]:bg-cyan-500/15">
+                            <input type="radio" name="phraseSource" value="web" checked onchange="toggleSourceUI()" class="mt-0.5 accent-cyan-400">
+                            <div>
+                                <p class="text-xs md:text-sm font-semibold text-cyan-200 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-globe text-cyan-400"></i> Web Reale (In Tempo Reale)
+                                </p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Estrae frasi vive e recenti dal web (Wikipedia & Attualità) con traduzione automatica</p>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer border border-obsidian-700 bg-obsidian-900/60 hover:bg-obsidian-900 rounded-xl p-3.5 flex items-start gap-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-500/10">
+                            <input type="radio" name="phraseSource" value="local" onchange="toggleSourceUI()" class="mt-0.5 accent-indigo-500">
+                            <div>
+                                <p class="text-xs md:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-book text-indigo-400"></i> Database Offline
+                                </p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Frasi guida selezionate per la conversazione quotidiana senza connessione web</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Custom Web Topic Search (Visible when source=web) -->
+                <div id="webTopicContainer" class="bg-cyan-950/20 border border-cyan-500/20 p-4 rounded-xl space-y-3">
+                    <label for="webTopicInput" class="block text-xs font-semibold text-cyan-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-magnifying-glass"></i> Cerca Argomento della Vita Quotidiana sul Web:
+                    </label>
+                    <input type="text" id="webTopicInput" placeholder="Es. conversazione, cucina, aeroporto, musica, natura, lavoro, shopping..." 
+                           class="w-full eye-input rounded-xl px-3.5 py-2 text-xs md:text-sm focus:border-cyan-400">
+                    
+                    <div class="space-y-1.5">
+                        <span class="text-[11px] text-slate-400 block font-medium">Tag consigliati per la vita reale:</span>
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <button type="button" onclick="setWebTopic('conversazione')" class="text-[11px] bg-obsidian-800 hover:bg-obsidian-700 text-cyan-300 px-2.5 py-1 rounded-lg border border-cyan-500/30">💬 Vita Quotidiana</button>
+                            <button type="button" onclick="setWebTopic('notizie')" class="text-[11px] bg-obsidian-800 hover:bg-obsidian-700 text-cyan-300 px-2.5 py-1 rounded-lg border border-cyan-500/30">📰 Notizie & Attualità</button>
+                            <button type="button" onclick="setWebTopic('viaggi')" class="text-[11px] bg-obsidian-800 hover:bg-obsidian-700 text-slate-300 px-2.5 py-1 rounded-lg border border-obsidian-700">✈️ Viaggi & Hotel</button>
+                            <button type="button" onclick="setWebTopic('cucina')" class="text-[11px] bg-obsidian-800 hover:bg-obsidian-700 text-slate-300 px-2.5 py-1 rounded-lg border border-obsidian-700">🍕 Cibo & Ristorante</button>
+                            <button type="button" onclick="setWebTopic('tecnologia')" class="text-[11px] bg-obsidian-800 hover:bg-obsidian-700 text-slate-300 px-2.5 py-1 rounded-lg border border-obsidian-700">💻 Lavoro & Tech</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs md:text-sm font-semibold text-slate-300 mb-2.5 flex items-center gap-2">
+                        <i class="fa-solid fa-language text-indigo-400"></i> Seleziona Lingua da Studiare:
                     </label>
                     <div class="grid grid-cols-3 gap-2.5" id="languageSelectorContainer">
                         <button type="button" onclick="setLanguage('en')" id="langBtn-en" class="cursor-pointer border border-indigo-500 bg-indigo-500/15 text-white rounded-xl p-3 flex flex-col items-center justify-center transition">
@@ -205,7 +261,7 @@
                     </div>
                 </div>
 
-                <!-- 2. Difficulty Level Selection -->
+                <!-- Difficulty Level Selection -->
                 <div>
                     <label class="block text-xs md:text-sm font-semibold text-slate-300 mb-2.5 flex items-center gap-2">
                         <i class="fa-solid fa-layer-group text-indigo-400"></i> Seleziona Livello di Difficoltà:
@@ -229,41 +285,31 @@
                     </div>
                 </div>
 
-                <!-- 3. Session Mode -->
+                <!-- Session Mode -->
                 <div>
                     <label class="block text-xs md:text-sm font-semibold text-slate-300 mb-2">Modalità di Studio</label>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <label class="cursor-pointer border border-obsidian-700 bg-obsidian-900/60 hover:bg-obsidian-900 rounded-xl p-3.5 flex items-center gap-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-500/10">
                             <input type="radio" name="sessionType" value="practice" checked onchange="toggleSessionTypeUI()" class="accent-indigo-500">
                             <div>
-                                <p class="text-sm font-semibold text-slate-200"><i class="fa-solid fa-graduation-cap text-indigo-400 mr-1.5"></i> Esercitazione</p>
-                                <p class="text-xs text-slate-400">Tempo libero e riascolti illimitati</p>
+                                <p class="text-sm font-semibold text-slate-200"><i class="fa-solid fa-graduation-cap text-indigo-400 mr-1.5"></i> Esercitazione Libera</p>
+                                <p class="text-xs text-slate-400">Tempo libero e ascolti illimitati</p>
                             </div>
                         </label>
                         <label class="cursor-pointer border border-obsidian-700 bg-obsidian-900/60 hover:bg-obsidian-900 rounded-xl p-3.5 flex items-center gap-3 transition has-[:checked]:border-rose-500 has-[:checked]:bg-rose-500/10">
                             <input type="radio" name="sessionType" value="simulation" onchange="toggleSessionTypeUI()" class="accent-rose-500">
                             <div>
                                 <p class="text-sm font-semibold text-rose-300"><i class="fa-solid fa-stopwatch text-rose-400 mr-1.5"></i> Simulazione d'Esame</p>
-                                <p class="text-xs text-slate-400">A tempo, max 2 ascolti per frase</p>
+                                <p class="text-xs text-slate-400">30s per frase, max 2 ascolti audio</p>
                             </div>
                         </label>
                     </div>
                 </div>
 
-                <!-- Simulation rules warning banner -->
-                <div id="simulationLevelContainer" class="hidden bg-rose-500/10 border border-rose-500/20 p-4 rounded-xl space-y-1.5">
-                    <p class="text-xs font-semibold text-rose-300 flex items-center gap-1.5">
-                        <i class="fa-solid fa-shield-halved"></i> Regole Simulazione d'Esame:
-                    </p>
-                    <p class="text-xs text-slate-300">
-                        30 secondi a frase • Max 2 riascolti audio • Soglia di superamento d'esame fissata al 60%.
-                    </p>
-                </div>
-
-                <!-- 4. Category -->
-                <div>
+                <!-- Category Container (When source = local) -->
+                <div id="categoryContainer" class="hidden">
                     <label for="categorySelect" class="block text-xs md:text-sm font-semibold text-slate-300 mb-2">
-                        Argomento / Tema
+                        Argomento / Tema Offline
                     </label>
                     <select id="categorySelect" class="w-full eye-input rounded-xl px-3.5 py-2.5 text-xs md:text-sm focus:outline-none transition cursor-pointer">
                         <option value="all">🌟 Tutti gli argomenti (Misto)</option>
@@ -276,28 +322,7 @@
                     </select>
                 </div>
 
-                <!-- 5. Input Mode -->
-                <div>
-                    <label class="block text-xs md:text-sm font-semibold text-slate-300 mb-2">Modalità di Risposta</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer border border-obsidian-700 bg-obsidian-900/60 hover:bg-obsidian-900 rounded-xl p-3 flex items-center gap-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-500/10">
-                            <input type="radio" name="inputMode" value="text" checked class="accent-indigo-500">
-                            <div>
-                                <p class="text-xs md:text-sm font-medium text-slate-200"><i class="fa-solid fa-keyboard text-indigo-400 mr-1.5"></i> Tastiera</p>
-                                <p class="text-[11px] text-slate-400">Scrivi la traduzione</p>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer border border-obsidian-700 bg-obsidian-900/60 hover:bg-obsidian-900 rounded-xl p-3 flex items-center gap-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-500/10">
-                            <input type="radio" name="inputMode" value="voice" class="accent-indigo-500">
-                            <div>
-                                <p class="text-xs md:text-sm font-medium text-slate-200"><i class="fa-solid fa-microphone text-indigo-400 mr-1.5"></i> Microfono</p>
-                                <p class="text-[11px] text-slate-400">Ditta a voce in italiano</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- 6. Number of sentences -->
+                <!-- Number of Sentences Slider -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label for="numSentences" class="block text-xs md:text-sm font-semibold text-slate-300">
@@ -305,33 +330,30 @@
                         </label>
                         <span id="numValue" class="text-indigo-400 font-bold text-sm bg-indigo-500/10 px-2.5 py-0.5 rounded-lg border border-indigo-500/20">5</span>
                     </div>
-                    <input type="range" id="numSentences" min="3" max="20" value="5" step="1" 
+                    <input type="range" id="numSentences" min="3" max="15" value="5" step="1" 
                            class="w-full h-2 bg-obsidian-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                            oninput="document.getElementById('numValue').innerText = this.value">
-                    <div class="flex justify-between text-[11px] text-slate-500 mt-1">
-                        <span>3 frasi</span>
-                        <span>20 frasi</span>
-                    </div>
                 </div>
 
                 <button type="submit" id="startBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/25 transition duration-200 flex items-center justify-center gap-2 text-base">
-                    <i class="fa-solid fa-play text-sm"></i> Inizia Sessione
+                    <span id="startBtnText" class="flex items-center gap-2">
+                        <i class="fa-solid fa-play text-sm"></i> Inizia Sessione dal Web
+                    </span>
                 </button>
             </form>
         </div>
 
-        <!-- EXERCISE CARD -->
         <div id="exerciseCard" class="hidden space-y-6">
             <div class="eye-card rounded-2xl p-6 md:p-8 text-center space-y-6">
                 
-                <!-- Quick Switches Header Bar -->
+                <!-- On-the-fly Header Bar -->
                 <div class="flex items-center justify-between gap-2 flex-wrap pb-3 border-b border-obsidian-700/60">
                     <div class="flex items-center gap-2">
                         <div id="simModeBadge" class="hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30">
                             <i class="fa-solid fa-shield-halved"></i> SIMULAZIONE
                         </div>
-                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                            <i class="fa-solid fa-tag"></i> <span id="currentCategoryBadge">Generale</span>
+                        <div id="sourceTagBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                            <i class="fa-solid fa-wifi"></i> <span id="currentSourceBadgeText">Web Live</span>
                         </div>
                     </div>
 
@@ -357,50 +379,57 @@
                 </div>
 
                 <!-- Audio Display & Visualizer -->
-                <div class="py-2">
-                    <div class="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-indigo-600/15 border-2 border-indigo-500/30 text-indigo-400 text-3xl mb-3 relative" id="audioPulse">
+                <div class="py-2 space-y-2">
+                    <div class="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-cyan-600/15 border-2 border-cyan-500/30 text-cyan-400 text-3xl mb-1 relative" id="audioPulse">
                         <i class="fa-solid fa-volume-high" id="audioIcon"></i>
                     </div>
-                    <p id="audioStatusText" class="text-xs md:text-sm font-medium text-slate-300">Premi ascolta o avvio automatico...</p>
-                    <p id="audioCountBadge" class="text-[11px] text-slate-400 mt-1 hidden">Ascolti rimasti: <span id="audioRemainingCount" class="font-bold text-indigo-400">2</span></p>
+                    <p id="audioStatusText" class="text-xs md:text-sm font-medium text-slate-300">Ascolta attentamente e scrivi la traduzione</p>
+                    <p id="webSourceReferenceText" class="text-xs text-cyan-400/90 font-medium italic bg-cyan-950/40 px-3 py-1 rounded-lg border border-cyan-500/20 inline-block max-w-full truncate"></p>
+                    <p id="audioCountBadge" class="text-[11px] text-slate-400 hidden">Ascolti rimasti: <span id="audioRemainingCount" class="font-bold text-indigo-400">2</span></p>
                 </div>
 
-                <!-- Audio Action Buttons -->
-                <div class="flex justify-center items-center gap-3">
+                <!-- Audio Controls -->
+                <div class="flex justify-center items-center gap-2 flex-wrap">
                     <button id="replayBtn" onclick="playCurrentAudio()" class="bg-obsidian-700 hover:bg-obsidian-600 text-slate-200 px-4 py-2 rounded-xl border border-obsidian-600 text-xs md:text-sm font-medium transition flex items-center gap-2">
                         <i class="fa-solid fa-rotate-right"></i> <span id="replayBtnText">Riascolta</span>
                     </button>
                     <button id="slowAudioBtn" onclick="toggleSlowAudio()" class="bg-obsidian-700 hover:bg-obsidian-600 text-slate-200 px-4 py-2 rounded-xl border border-obsidian-600 text-xs md:text-sm font-medium transition flex items-center gap-2">
                         <i class="fa-solid fa-turtle"></i> <span id="slowBtnText">Velocità Lenta</span>
                     </button>
+                    <button id="fetchNextWebBtn" onclick="fetchSingleReplacementWebSentence()" class="bg-cyan-950 hover:bg-cyan-900/60 text-cyan-300 px-3 py-2 rounded-xl border border-cyan-500/40 text-xs font-medium transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrows-rotate"></i> Altra Frase Web
+                    </button>
                 </div>
 
-                <!-- Answer Input Section -->
+                <!-- Answer Input Area -->
                 <div class="space-y-3 pt-3 border-t border-obsidian-700/60 text-left">
-                    <label for="userTranslation" class="block text-xs md:text-sm font-medium text-slate-300 flex justify-between items-center">
-                        <span>Inserisci la traduzione in Italiano:</span>
-                        <span id="speechSupportBadge" class="hidden text-xs text-amber-400"><i class="fa-solid fa-triangle-exclamation"></i> Vocale non disponibile</span>
-                    </label>
+                    <div class="flex justify-between items-center">
+                        <label for="userTranslation" class="block text-xs md:text-sm font-medium text-slate-300">
+                            Inserisci la traduzione in Italiano:
+                        </label>
+                        <button type="button" onclick="toggleVoiceInputView()" id="voiceToggleBtn" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1">
+                            <i class="fa-solid fa-microphone"></i> Usa Voce
+                        </button>
+                    </div>
 
                     <div id="voiceInputContainer" class="hidden flex flex-col items-center justify-center p-4 bg-obsidian-900/60 border border-obsidian-700 rounded-xl space-y-2">
                         <button id="micBtn" type="button" onclick="toggleSpeechRecognition()" 
                                 class="w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-xl flex items-center justify-center shadow-lg transition-all active:scale-95">
                             <i class="fa-solid fa-microphone"></i>
                         </button>
-                        <p id="micStatus" class="text-xs text-slate-400 font-medium">Clicca sul microfono per iniziare a parlare in italiano</p>
+                        <p id="micStatus" class="text-xs text-slate-400 font-medium">Clicca sul microfono e parla in italiano</p>
                     </div>
 
-                    <textarea id="userTranslation" rows="3" placeholder="Scrivi la tua traduzione qui..." 
+                    <textarea id="userTranslation" rows="3" placeholder="Scrivi qui la tua traduzione in italiano..." 
                               class="w-full eye-input rounded-xl p-3.5 text-xs md:text-sm placeholder-slate-500 transition resize-none"></textarea>
                 </div>
 
-                <!-- Submit / Check Answer Button -->
+                <!-- Check Answer Button -->
                 <button id="checkBtn" onclick="checkAnswer()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-indigo-600/20 transition duration-200 flex items-center justify-center gap-2 text-sm md:text-base">
                     <i class="fa-solid fa-check"></i> Verifica Traduzione
                 </button>
 
-                <!-- Feedback Section -->
-                <div id="feedbackContainer" class="hidden text-left p-4 rounded-xl border space-y-2 animate-fade-in">
+                <div id="feedbackContainer" class="hidden text-left p-4 rounded-xl border space-y-2">
                     <div class="flex items-center justify-between">
                         <span id="feedbackBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full"></span>
                         <span id="matchScoreText" class="text-xs font-semibold text-slate-400"></span>
@@ -421,17 +450,16 @@
             </div>
         </div>
 
-        <!-- SUMMARY / CERTIFICATE CARD -->
         <div id="summaryCard" class="hidden eye-card rounded-2xl p-6 md:p-8 space-y-6">
             <div class="text-center space-y-3">
                 <div id="summaryIconContainer" class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-500/15 text-indigo-400 text-3xl">
                     <i class="fa-solid fa-award"></i>
                 </div>
                 <h2 id="summaryTitle" class="text-2xl font-bold text-slate-100">Sessione Completata!</h2>
-                <p class="text-slate-300 text-xs md:text-sm">Ottimo lavoro <span id="summaryUserNameDisplay" class="font-bold text-indigo-400">Utente</span>! Ecco il resoconto della tua prova.</p>
+                <p class="text-slate-300 text-xs md:text-sm">Ottimo lavoro <span id="summaryUserNameDisplay" class="font-bold text-indigo-400">Utente</span>!</p>
             </div>
 
-            <!-- Exam simulation outcome badge -->
+            <!-- Exam outcome badge -->
             <div id="simOutcomeBadge" class="hidden bg-obsidian-900 border border-obsidian-700 rounded-xl p-4 text-center">
                 <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Esito Simulazione d'Esame (<span id="certLevelDisplay" class="text-indigo-400">BASIC</span>)</p>
                 <p id="certStatusText" class="text-2xl font-extrabold mt-1">SUPERATO</p>
@@ -449,9 +477,8 @@
                 </div>
             </div>
 
-            <!-- Review list of answered sentences -->
             <div class="space-y-3">
-                <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Dettaglio Risposte</h3>
+                <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Dettaglio Risposte della Sessione</h3>
                 <div id="summarySentencesList" class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
                     <!-- Dynamic review items -->
                 </div>
@@ -469,129 +496,57 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="text-center py-4 text-xs text-slate-500 border-t border-obsidian-800">
-        <p>Impara le Lingue • Design Eye-Comfort per la protezione della vista</p>
+        <p>Impara le Lingue dal Web • Design Eye-Comfort Anti-Affaticamento</p>
     </footer>
 
     <script>
-        // Languages configuration
+        // Language configurations
         const languagesConfig = {
-            en: { name: "Inglese", flag: "🇬🇧", locale: "en-US" },
-            es: { name: "Spagnolo", flag: "🇪🇸", locale: "es-ES" },
-            fr: { name: "Francese", flag: "🇫🇷", locale: "fr-FR" }
+            en: { name: "Inglese", flag: "🇬🇧", locale: "en-US", wikiLang: "en" },
+            es: { name: "Spagnolo", flag: "🇪🇸", locale: "es-ES", wikiLang: "es" },
+            fr: { name: "Francese", flag: "🇫🇷", locale: "fr-FR", wikiLang: "fr" }
         };
 
-        // Sentence Database classified by Language -> Category -> Level
+        // Fallback sentence database for offline mode
         const sentenceDatabase = {
             en: {
                 daily: [
                     { target: "How are you doing today?", it: "Come stai oggi?", level: "basic" },
-                    { target: "I need to buy some milk.", it: "Devo comprare del latte.", level: "basic" },
-                    { target: "What time do you usually wake up?", it: "A che ora ti svegli di solito?", level: "basic" },
-                    { target: "Could you please pass me the salt?", it: "Potresti passarmi il sale per favore?", level: "intermediate" },
-                    { target: "I am running a bit late, see you soon.", it: "Sono un po' in ritardo, a presto.", level: "intermediate" },
-                    { target: "What are your plans for the upcoming weekend?", it: "Quali sono i tuoi programmi per il prossimo fine settimana?", level: "intermediate" },
-                    { target: "Notwithstanding the weather forecast, we decided to go for a walk.", it: "Nonostante le previsioni del tempo, abbiamo deciso di fare una passeggiata.", level: "expert" },
-                    { target: "I inadvertently left my phone at the coffee shop.", it: "Inavvertitamente ho lasciato il telefono al bar.", level: "expert" }
+                    { target: "I need to buy some groceries for dinner.", it: "Devo comprare della spesa per cena.", level: "basic" },
+                    { target: "Could you please tell me what time the store closes?", it: "Potresti dirmi per favore a che ora chiude il negozio?", level: "intermediate" },
+                    { target: "Notwithstanding the traffic jam, we managed to arrive on time.", it: "Nonostante l'ingorgo stradale, siamo riusciti ad arrivare in tempo.", level: "expert" }
                 ],
                 travel: [
-                    { target: "Where is the train station?", it: "Dov'è la stazione dei treni?", level: "basic" },
-                    { target: "What time does the bus leave?", it: "A che ora parte l'autobus?", level: "basic" },
-                    { target: "Could I have a window seat, please?", it: "Potrei avere un posto vicino al finestrino, per favore?", level: "intermediate" },
-                    { target: "How much does a taxi to the city center cost?", it: "Quanto costa un taxi per il centro città?", level: "intermediate" },
-                    { target: "Customs officers conducted a thorough inspection of our luggage.", it: "Gli agenti doganali hanno condotto un'ispezione approfondita dei nostri bagagli.", level: "expert" }
+                    { target: "Where is the nearest subway station?", it: "Dov'è la stazione della metropolitana più vicina?", level: "basic" },
+                    { target: "I would like to book a table for two people.", it: "Vorrei prenotare un tavolo per due persone.", level: "intermediate" }
                 ],
                 work: [
-                    { target: "I have a meeting at ten o'clock.", it: "Ho una riunione alle dieci.", level: "basic" },
-                    { target: "We need to review the quarterly sales budget.", it: "Dobbiamo rivedere il budget delle vendite trimestrali.", level: "intermediate" },
-                    { target: "The board approved the strategic merger unanimously.", it: "Il consiglio di amministrazione ha approvato la fusione strategica all'unanimità.", level: "expert" }
-                ],
-                food: [
-                    { target: "Table for two, please.", it: "Un tavolo per due, per favore.", level: "basic" },
-                    { target: "Does this dish contain any dairy or nuts?", it: "Questo piatto contiene latticini o frutta a guscio?", level: "intermediate" },
-                    { target: "The sommelier recommended an exquisite vintage wine.", it: "Il sommelier ha raccomandato un vino d'epoca squisito.", level: "expert" }
-                ],
-                hobbies: [
-                    { target: "I like reading books in my free time.", it: "Mi piace leggere libri nel mio tempo libero.", level: "basic" },
-                    { target: "I have been practicing acoustic guitar recently.", it: "Ultimamente mi sto esercitando con la chitarra acustica.", level: "intermediate" },
-                    { target: "Her dedication to classical ballet is truly inspiring.", it: "La sua dedizione al balletto classico è davvero inspiratrice.", level: "expert" }
-                ],
-                hotel: [
-                    { target: "I have a room reservation.", it: "Ho una prenotazione per una camera.", level: "basic" },
-                    { target: "Is breakfast included in the room price?", it: "La colazione è inclusa nel prezzo della camera?", level: "intermediate" },
-                    { target: "The concierge arranged private transportation to the airport.", it: "Il concierge ha organizzato un trasporto privato per l'aeroporto.", level: "expert" }
+                    { target: "Let's schedule a call tomorrow morning.", it: "Fissiamo una chiamata domani mattina.", level: "basic" },
+                    { target: "We need to discuss the project deadlines.", it: "Dobbiamo discutere le scadenze del progetto.", level: "intermediate" }
                 ]
             },
             es: {
                 daily: [
                     { target: "¿Cómo estás hoy?", it: "Come stai oggi?", level: "basic" },
-                    { target: "Necesito comprar algo de leche.", it: "Devo comprare del latte.", level: "basic" },
-                    { target: "¿A qué hora te despiertas normalmente?", it: "A che ora ti svegli di solito?", level: "basic" },
-                    { target: "¿Podrías pasarme la sal, por favor?", it: "Potresti passarmi il sale per favore?", level: "intermediate" },
-                    { target: "Llego un poco tarde, nos vemos pronto.", it: "Sono un po' in ritardo, a presto.", level: "intermediate" },
-                    { target: "A pesar del pronóstico del tiempo, decidimos dar un paseo.", it: "Nonostante le previsioni del tempo, abbiamo deciso di fare una passeggiata.", level: "expert" }
-                ],
-                travel: [
-                    { target: "¿Dónde está la estación de trenes?", it: "Dov'è la stazione dei treni?", level: "basic" },
-                    { target: "¿A qué hora sale el autobús?", it: "A che ora parte l'autobus?", level: "basic" },
-                    { target: "¿Podría tener un asiento junto a la ventana?", it: "Potrei avere un posto vicino al finestrino, per favore?", level: "intermediate" },
-                    { target: "Los agentes de aduanas realizaron una inspección exhaustiva de nuestro equipaje.", it: "Gli agenti doganali hanno condotto un'ispezione approfondita dei nostri bagagli.", level: "expert" }
-                ],
-                work: [
-                    { target: "Tengo una reunión a las diez en punto.", it: "Ho una riunione alle dieci.", level: "basic" },
-                    { target: "Necesitamos revisar el presupuesto de ventas trimestral.", it: "Dobbiamo rivedere il budget delle vendite trimestrali.", level: "intermediate" },
-                    { target: "La junta directiva aprobó la fusión estratégica de forma unánime.", it: "Il consiglio di amministrazione ha approvato la fusione strategica all'unanimità.", level: "expert" }
-                ],
-                food: [
-                    { target: "Una mesa para dos, por favor.", it: "Un tavolo per due, por favore.", level: "basic" },
-                    { target: "¿Este plato contiene lácteos o frutos secos?", it: "Questo piatto contiene latticini o frutta a guscio?", level: "intermediate" },
-                    { target: "El sumiller recomendó un vino de cosecha exquisito.", it: "Il sommelier ha raccomandato un vino d'epoca squisito.", level: "expert" }
-                ],
-                hobbies: [
-                    { target: "Me gusta leer libros en mi tiempo libre.", it: "Mi piace leggere libri nel mio tempo libero.", level: "basic" },
-                    { target: "He estado practicando la guitarra acústica recientemente.", it: "Ultimamente mi sto esercitando con la chitarra acustica.", level: "intermediate" }
-                ],
-                hotel: [
-                    { target: "Tengo una reserva de habitación.", it: "Ho una prenotazione per una camera.", level: "basic" },
-                    { target: "El conserje organizó el transporte privado al aeropuerto.", it: "Il concierge ha organizzato un trasporto privato per l'aeroporto.", level: "expert" }
+                    { target: "¿Dónde está la estación de tren más cercana?", it: "Dov'è la stazione dei treni più vicina?", level: "basic" },
+                    { target: "¿Podrías pasarme la sal, por favor?", it: "Potresti passarmi il sale per favore?", level: "intermediate" }
                 ]
             },
             fr: {
                 daily: [
                     { target: "Comment allez-vous aujourd'hui ?", it: "Come stai oggi?", level: "basic" },
-                    { target: "Je dois acheter du lait.", it: "Devo comprare del latte.", level: "basic" },
-                    { target: "Pourriez-vous me passer le sel, s'il vous plaît ?", it: "Potresti passarmi il sale per favore?", level: "intermediate" },
-                    { target: "Malgré les prévisions météo, nous avons décidé de faire une promenade.", it: "Nonostante le previsioni del tempo, abbiamo deciso di fare una passeggiata.", level: "expert" }
-                ],
-                travel: [
-                    { target: "Où se trouve la gare ferroviaire ?", it: "Dov'è la stazione dei treni?", level: "basic" },
-                    { target: "Puis-je avoir une place côté fenêtre, s'il vous plaît ?", it: "Potrei avere un posto vicino al finestrino, per favore?", level: "intermediate" },
-                    { target: "Les douaniers ont effectué une inspection approfondie de nos bagages.", it: "Gli agenti doganali hanno condotto un'ispezione approfondita dei nostri bagagli.", level: "expert" }
-                ],
-                work: [
-                    { target: "J'ai une réunion à dix heures.", it: "Ho una riunione alle dieci.", level: "basic" },
-                    { target: "Le conseil d'administration a approuvé la fusion stratégique à l'unanimité.", it: "Il consiglio di amministrazione ha approvato la fusione strategica all'unanimità.", level: "expert" }
-                ],
-                food: [
-                    { target: "Une table pour deux, s'il vous plaît.", it: "Un tavolo per due, per favore.", level: "basic" },
-                    { target: "Le sommelier a recommandé un vin millésimé exquis.", it: "Il sommelier ha raccomandato un vino d'epoca squisito.", level: "expert" }
-                ],
-                hobbies: [
-                    { target: "J'aime lire des livres pendant mon temps libre.", it: "Mi piace leggere libri nel mio tempo libero.", level: "basic" },
-                    { target: "Son dévouement au ballet classique est vraiment inspirant.", it: "La sua dedizione al balletto classico è davvero inspiratrice.", level: "expert" }
-                ],
-                hotel: [
-                    { target: "J'ai une réservation de chambre.", it: "Ho una prenotazione per una camera.", level: "basic" },
-                    { target: "Le concierge a organisé un transport privé vers l'aéroport.", it: "Il concierge ha organizzato un trasporto privé per l'aeroporto.", level: "expert" }
+                    { target: "Où se trouve la station de métro ?", it: "Dov'è la stazione della metropolitana?", level: "basic" },
+                    { target: "Pourriez-vous me passer le sel, s'il vous plaît ?", it: "Potresti passarmi il sale per favore?", level: "intermediate" }
                 ]
             }
         };
 
-        // State variables
+        // Application State
         let currentLanguage = localStorage.getItem('userSelectedLang') || 'en';
         let currentLevel = 'basic';
-        let sessionType = 'practice'; // 'practice' or 'simulation'
+        let sessionType = 'practice';
+        let phraseSource = 'web';
         let activeQueue = [];
         let currentIndex = 0;
         let isSlowSpeed = false;
@@ -601,9 +556,47 @@
         let timeLeft = 30;
         let sessionResults = [];
 
-        // User management state
+        // User profile management
         let userProfiles = JSON.parse(localStorage.getItem('langUserProfiles')) || ['Studente 1'];
         let activeUser = localStorage.getItem('activeLangUser') || userProfiles[0];
+
+        function showDialog(title, message, isConfirm = false, onConfirm = null) {
+            document.getElementById('dialogTitle').innerText = title;
+            document.getElementById('dialogMessage').innerText = message;
+            
+            const actions = document.getElementById('dialogActions');
+            actions.innerHTML = '';
+
+            if (isConfirm) {
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = "bg-obsidian-700 hover:bg-obsidian-600 text-slate-300 text-xs px-4 py-2 rounded-xl transition";
+                cancelBtn.innerText = "Annulla";
+                cancelBtn.onclick = closeDialog;
+
+                const confirmBtn = document.createElement('button');
+                confirmBtn.className = "bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition";
+                confirmBtn.innerText = "Conferma";
+                confirmBtn.onclick = () => {
+                    closeDialog();
+                    if (onConfirm) onConfirm();
+                };
+
+                actions.appendChild(cancelBtn);
+                actions.appendChild(confirmBtn);
+            } else {
+                const okBtn = document.createElement('button');
+                okBtn.className = "bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-5 py-2 rounded-xl transition";
+                okBtn.innerText = "OK";
+                okBtn.onclick = closeDialog;
+                actions.appendChild(okBtn);
+            }
+
+            document.getElementById('appDialog').classList.remove('hidden');
+        }
+
+        function closeDialog() {
+            document.getElementById('appDialog').classList.add('hidden');
+        }
 
         function initUserProfiles() {
             if (!userProfiles.includes(activeUser)) {
@@ -671,16 +664,21 @@
             }
         }
 
-        function deleteActiveUser() {
+        function promptDeleteUser() {
             if (userProfiles.length <= 1) return;
-            if (confirm(`Sei sicuro di voler eliminare il profilo "${activeUser}" e i suoi dati?`)) {
-                userProfiles = userProfiles.filter(u => u !== activeUser);
-                localStorage.removeItem(`langHistory_${activeUser}`);
-                activeUser = userProfiles[0];
-                saveUserProfilesState();
-                renderUserTabs();
-                updateHistorySummaryUI();
-            }
+            showDialog(
+                "Elimina Profilo", 
+                `Sei sicuro di voler eliminare il profilo "${activeUser}" e la sua cronologia?`, 
+                true, 
+                () => {
+                    userProfiles = userProfiles.filter(u => u !== activeUser);
+                    localStorage.removeItem(`langHistory_${activeUser}`);
+                    activeUser = userProfiles[0];
+                    saveUserProfilesState();
+                    renderUserTabs();
+                    updateHistorySummaryUI();
+                }
+            );
         }
 
         function updateHistorySummaryUI() {
@@ -699,20 +697,35 @@
             }
         }
 
+        function toggleSourceUI() {
+            phraseSource = document.querySelector('input[name="phraseSource"]:checked').value;
+            const webTopicBox = document.getElementById('webTopicContainer');
+            const categoryBox = document.getElementById('categoryContainer');
+
+            if (phraseSource === 'web') {
+                webTopicBox.classList.remove('hidden');
+                categoryBox.classList.add('hidden');
+            } else {
+                webTopicBox.classList.add('hidden');
+                categoryBox.classList.remove('hidden');
+            }
+        }
+
+        function setWebTopic(topic) {
+            document.getElementById('webTopicInput').value = topic;
+        }
+
         function setLanguage(langKey) {
             if (!languagesConfig[langKey]) return;
             currentLanguage = langKey;
             localStorage.setItem('userSelectedLang', currentLanguage);
 
-            // Update UI buttons in config card
             Object.keys(languagesConfig).forEach(key => {
                 const btn = document.getElementById(`langBtn-${key}`);
                 if (btn) {
-                    if (key === currentLanguage) {
-                        btn.className = "cursor-pointer border border-indigo-500 bg-indigo-500/15 text-white rounded-xl p-3 flex flex-col items-center justify-center transition";
-                    } else {
-                        btn.className = "cursor-pointer border border-obsidian-700 bg-obsidian-900/60 text-slate-400 hover:bg-obsidian-900 rounded-xl p-3 flex flex-col items-center justify-center transition";
-                    }
+                    btn.className = (key === currentLanguage)
+                        ? "cursor-pointer border border-indigo-500 bg-indigo-500/15 text-white rounded-xl p-3 flex flex-col items-center justify-center transition"
+                        : "cursor-pointer border border-obsidian-700 bg-obsidian-900/60 text-slate-400 hover:bg-obsidian-900 rounded-xl p-3 flex flex-col items-center justify-center transition";
                 }
             });
 
@@ -726,47 +739,102 @@
             document.getElementById('activeLangSelect').value = currentLanguage;
         }
 
-        function changeActiveLanguage(newLang) {
-            if (newLang === currentLanguage) return;
-            setLanguage(newLang);
-            reloadSessionQueue();
-        }
-
-        function changeActiveLevel(newLevel) {
-            if (newLevel === currentLevel) return;
-            currentLevel = newLevel;
-            reloadSessionQueue();
-        }
-
-        function reloadSessionQueue() {
-            const selectedCategory = document.getElementById('categorySelect').value;
-            let pool = filterSentencesByLevelAndCategory(currentLevel, selectedCategory);
-
-            for (let i = pool.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [pool[i], pool[j]] = [pool[j], pool[i]];
-            }
-
-            const remaining = activeQueue.length - currentIndex;
-            const newSlice = pool.slice(0, Math.min(remaining, pool.length));
-
-            if (newSlice.length > 0) {
-                activeQueue = activeQueue.slice(0, currentIndex).concat(newSlice);
-                loadSentence(currentIndex);
-            }
-        }
-
         function toggleSessionTypeUI() {
             const isSim = document.querySelector('input[name="sessionType"]:checked').value === 'simulation';
-            const simContainer = document.getElementById('simulationLevelContainer');
+            const simBadge = document.getElementById('simTimerBadge');
             if (isSim) {
-                simContainer.classList.remove('hidden');
+                simBadge.classList.remove('hidden');
             } else {
-                simContainer.classList.add('hidden');
+                simBadge.classList.add('hidden');
             }
         }
 
-        function filterSentencesByLevelAndCategory(level, category) {
+        async function fetchLiveWebSentences(lang, topic, count, level) {
+            const wikiLang = languagesConfig[lang].wikiLang;
+            let fetchedSentences = [];
+            
+            try {
+                let apiEndpoint = "";
+                const searchQuery = (topic && topic.trim().length > 0) ? topic.trim() : "conversazione";
+                apiEndpoint = `https://${wikiLang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchQuery)}&utf8=&format=json&origin=*`;
+
+                const searchRes = await fetch(apiEndpoint);
+                const searchData = await searchRes.json();
+                const searchResults = searchData.query?.search || [];
+
+                for (const item of searchResults) {
+                    const snippetClean = item.snippet.replace(/<[^>]*>?/gm, '').replace(/\[\d+\]/g, '').trim();
+                    const parts = snippetClean.split(/(?<=[.!?])\s+/);
+                    for (let p of parts) {
+                        p = p.trim();
+                        if (isValidSentenceForLevel(p, level)) {
+                            fetchedSentences.push({ target: p, sourceTitle: item.title });
+                        }
+                    }
+                    if (fetchedSentences.length >= count * 2) break;
+                }
+
+                if (fetchedSentences.length < count) {
+                    for (let i = 0; i < 5; i++) {
+                        const randomRes = await fetch(`https://${wikiLang}.wikipedia.org/api/rest_v1/page/random/summary`);
+                        const randomData = await randomRes.json();
+                        if (randomData.extract) {
+                            const parts = randomData.extract.replace(/\[\d+\]/g, '').split(/(?<=[.!?])\s+/);
+                            for (let p of parts) {
+                                p = p.trim();
+                                if (isValidSentenceForLevel(p, level)) {
+                                    fetchedSentences.push({ target: p, sourceTitle: randomData.title });
+                                }
+                            }
+                        }
+                        if (fetchedSentences.length >= count) break;
+                    }
+                }
+            } catch (err) {
+                console.warn("Live web fetch warning:", err);
+            }
+
+            // Fallback if needed
+            if (fetchedSentences.length < count) {
+                const fallbackPool = filterLocalSentencesByLevelAndCategory(level, 'all');
+                for (let fb of fallbackPool) {
+                    if (fetchedSentences.length >= count) break;
+                    fetchedSentences.push({ target: fb.target, it: fb.it, sourceTitle: "Conversazione Reale" });
+                }
+            }
+
+            // Limit array length
+            fetchedSentences = fetchedSentences.slice(0, count);
+
+            // Translate via MyMemory API
+            for (let item of fetchedSentences) {
+                if (!item.it) {
+                    try {
+                        const transRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(item.target)}&langpair=${wikiLang}|it`);
+                        const transData = await transRes.json();
+                        if (transData?.responseData?.translatedText) {
+                            item.it = transData.responseData.translatedText.trim();
+                        } else {
+                            item.it = item.target;
+                        }
+                    } catch (e) {
+                        item.it = item.target;
+                    }
+                }
+            }
+
+            return fetchedSentences;
+        }
+
+        function isValidSentenceForLevel(text, level) {
+            if (!text || text.length < 15 || text.length > 220) return false;
+            if (level === 'basic' && text.length <= 70) return true;
+            if (level === 'intermediate' && text.length > 40 && text.length <= 130) return true;
+            if (level === 'expert' && text.length > 80) return true;
+            return (level === 'basic' && text.length <= 90);
+        }
+
+        function filterLocalSentencesByLevelAndCategory(level, category) {
             const langData = sentenceDatabase[currentLanguage] || sentenceDatabase.en;
             let allSentences = [];
             if (category === 'all') {
@@ -780,37 +848,58 @@
             return filtered;
         }
 
-        function startSession() {
+        async function startSession() {
             const diffRadio = document.querySelector('input[name="difficultyLevel"]:checked');
             currentLevel = diffRadio ? diffRadio.value : 'basic';
-            
+            phraseSource = document.querySelector('input[name="phraseSource"]:checked').value;
             sessionType = document.querySelector('input[name="sessionType"]:checked').value;
-            const category = document.getElementById('categorySelect').value;
             const num = parseInt(document.getElementById('numSentences').value, 10);
 
-            let pool = filterSentencesByLevelAndCategory(currentLevel, category);
-            if (pool.length === 0) {
-                alert("Nessuna frase trovata per questa combinazione. Prova a selezionare un'altra categoria.");
+            const startBtn = document.getElementById('startBtn');
+            const startBtnText = document.getElementById('startBtnText');
+
+            if (phraseSource === 'web') {
+                startBtn.disabled = true;
+                startBtnText.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Ricerca frasi dal web in corso...`;
+                
+                const topic = document.getElementById('webTopicInput').value;
+                activeQueue = await fetchLiveWebSentences(currentLanguage, topic, num, currentLevel);
+                
+                startBtn.disabled = false;
+                startBtnText.innerHTML = `<i class="fa-solid fa-play text-sm"></i> Inizia Sessione dal Web`;
+            } else {
+                const category = document.getElementById('categorySelect').value;
+                let pool = filterLocalSentencesByLevelAndCategory(currentLevel, category);
+                
+                for (let i = pool.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [pool[i], pool[j]] = [pool[j], pool[i]];
+                }
+                activeQueue = pool.slice(0, Math.min(num, pool.length));
+            }
+
+            if (!activeQueue || activeQueue.length === 0) {
+                showDialog("Attenzione", "Impossibile recuperare frasi dal web per questo argomento. Prova un altro tag.");
                 return;
             }
 
-            // Shuffle pool
-            for (let i = pool.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [pool[i], pool[j]] = [pool[j], pool[i]];
-            }
-
-            activeQueue = pool.slice(0, Math.min(num, pool.length));
             currentIndex = 0;
             sessionResults = [];
 
-            // UI Adjustments
             document.getElementById('configCard').classList.add('hidden');
             document.getElementById('summaryCard').classList.add('hidden');
             document.getElementById('exerciseCard').classList.remove('hidden');
             document.getElementById('statsBadge').classList.remove('hidden');
 
             document.getElementById('activeLevelSelect').value = currentLevel;
+
+            if (phraseSource === 'web') {
+                document.getElementById('sourceTagBadge').className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30';
+                document.getElementById('currentSourceBadgeText').innerText = "Web Live";
+            } else {
+                document.getElementById('sourceTagBadge').className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30';
+                document.getElementById('currentSourceBadgeText').innerText = "Offline";
+            }
 
             if (sessionType === 'simulation') {
                 maxAudioPlays = 2;
@@ -837,31 +926,35 @@
             document.getElementById('feedbackContainer').classList.add('hidden');
             document.getElementById('checkBtn').disabled = false;
 
-            updateAudioPlayBadge();
+            const item = activeQueue[index];
+            const webRef = document.getElementById('webSourceReferenceText');
+            if (item.sourceTitle) {
+                webRef.innerText = `Fonte Web: "${item.sourceTitle}"`;
+                webRef.classList.remove('hidden');
+            } else {
+                webRef.classList.add('hidden');
+            }
 
-            // Set current category badge text
-            const catSelect = document.getElementById('categorySelect');
-            const catName = catSelect.options[catSelect.selectedIndex].text.replace(/^[^\s]+\s/, '');
-            document.getElementById('currentCategoryBadge').innerText = catName;
+            updateAudioPlayBadge();
 
             if (sessionType === 'simulation') {
                 startSimulationTimer();
             }
 
-            // Auto-play initial audio
-            setTimeout(() => { playCurrentAudio(); }, 300);
+            setTimeout(() => { playCurrentAudio(); }, 350);
         }
 
         function updateAudioPlayBadge() {
             if (sessionType === 'simulation') {
                 const remaining = Math.max(0, maxAudioPlays - audioPlayCount);
                 document.getElementById('audioRemainingCount').innerText = remaining;
+                const replayBtn = document.getElementById('replayBtn');
                 if (remaining <= 0) {
-                    document.getElementById('replayBtn').disabled = true;
-                    document.getElementById('replayBtn').classList.add('opacity-50', 'cursor-not-allowed');
+                    replayBtn.disabled = true;
+                    replayBtn.classList.add('opacity-50', 'cursor-not-allowed');
                 } else {
-                    document.getElementById('replayBtn').disabled = false;
-                    document.getElementById('replayBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+                    replayBtn.disabled = false;
+                    replayBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 }
             }
         }
@@ -874,7 +967,7 @@
                 document.getElementById('simTimerText').innerText = `${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    checkAnswer(true); // auto submit on timeout
+                    checkAnswer(true);
                 }
             }, 1000);
         }
@@ -902,14 +995,14 @@
                 const icon = document.getElementById('audioIcon');
 
                 utterance.onstart = () => {
-                    pulse.classList.add('pulse-subtle', 'border-indigo-400');
-                    icon.classList.add('text-indigo-300');
-                    document.getElementById('audioStatusText').innerText = "Riproduzione in corso...";
+                    pulse.classList.add('pulse-subtle', 'border-cyan-400');
+                    icon.classList.add('text-cyan-300');
+                    document.getElementById('audioStatusText').innerText = "Riproduzione audio in corso...";
                 };
 
                 utterance.onend = () => {
-                    pulse.classList.remove('pulse-subtle', 'border-indigo-400');
-                    icon.classList.remove('text-indigo-300');
+                    pulse.classList.remove('pulse-subtle', 'border-cyan-400');
+                    icon.classList.remove('text-cyan-300');
                     document.getElementById('audioStatusText').innerText = "Ascolta attentamente e traduci";
                 };
 
@@ -917,7 +1010,7 @@
                 audioPlayCount++;
                 updateAudioPlayBadge();
             } else {
-                alert("La sintesi vocale SpeechSynthesis non è supportata dal tuo browser.");
+                showDialog("Sintesi Vocale", "La sintesi audio non è supportata dal browser.");
             }
         }
 
@@ -933,7 +1026,23 @@
             }
         }
 
-        // Web Speech Recognition for Italian input
+        async function fetchSingleReplacementWebSentence() {
+            const btn = document.getElementById('fetchNextWebBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Recupero...`;
+
+            const topic = document.getElementById('webTopicInput').value;
+            const newSentences = await fetchLiveWebSentences(currentLanguage, topic, 1, currentLevel);
+            
+            if (newSentences && newSentences.length > 0) {
+                activeQueue[currentIndex] = newSentences[0];
+                loadSentence(currentIndex);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> Altra Frase Web`;
+        }
+
         let recognition = null;
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -945,25 +1054,30 @@
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
                 document.getElementById('userTranslation').value = transcript;
-                document.getElementById('micStatus').innerText = "Trascrizione completata!";
+                document.getElementById('micStatus').innerText = "Trascrizione ricevuta!";
                 document.getElementById('micBtn').classList.remove('bg-rose-600', 'animate-pulse');
             };
 
             recognition.onerror = () => {
-                document.getElementById('micStatus').innerText = "Errore durante l'ascolto. Riprova.";
+                document.getElementById('micStatus').innerText = "Errore di ascolto. Riprova.";
                 document.getElementById('micBtn').classList.remove('bg-rose-600', 'animate-pulse');
             };
         }
 
+        function toggleVoiceInputView() {
+            const container = document.getElementById('voiceInputContainer');
+            container.classList.toggle('hidden');
+        }
+
         function toggleSpeechRecognition() {
             if (!recognition) {
-                alert("Il tuo browser non supporta il riconoscimento vocale.");
+                showDialog("Non Supportato", "Il tuo browser non supporta il riconoscimento vocale.");
                 return;
             }
 
             try {
                 recognition.start();
-                document.getElementById('micStatus').innerText = "Ascolto in corso... Parla ora";
+                document.getElementById('micStatus').innerText = "Ascolto in corso... Parla in italiano";
                 document.getElementById('micBtn').classList.add('bg-rose-600', 'animate-pulse');
             } catch (e) {
                 recognition.stop();
@@ -971,7 +1085,6 @@
             }
         }
 
-        // Levenshtein fuzzy string matching algorithm
         function calculateSimilarity(str1, str2) {
             const s1 = str1.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").trim();
             const s2 = str2.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").trim();
@@ -1016,7 +1129,6 @@
                 timedOut: isTimeout
             });
 
-            // UI Feedback
             const container = document.getElementById('feedbackContainer');
             const badge = document.getElementById('feedbackBadge');
             const scoreText = document.getElementById('matchScoreText');
@@ -1062,7 +1174,6 @@
 
             document.getElementById('summaryUserNameDisplay').innerText = activeUser;
 
-            // Calculate overall metrics
             const totalScore = sessionResults.reduce((sum, res) => sum + res.score, 0);
             const avgScore = Math.round(totalScore / sessionResults.length);
             const maxScore = Math.max(...sessionResults.map(r => r.score));
@@ -1070,7 +1181,6 @@
             document.getElementById('finalScoreText').innerText = `${avgScore}%`;
             document.getElementById('bestAccuracyText').innerText = `${maxScore}%`;
 
-            // Simulation certification result
             const outcomeBadge = document.getElementById('simOutcomeBadge');
             if (sessionType === 'simulation') {
                 outcomeBadge.classList.remove('hidden');
@@ -1089,7 +1199,7 @@
                 outcomeBadge.classList.add('hidden');
             }
 
-            // Save to active user history
+            // Save session to localStorage
             const historyKey = `langHistory_${activeUser}`;
             const history = JSON.parse(localStorage.getItem(historyKey)) || [];
             history.push({
@@ -1097,6 +1207,7 @@
                 language: currentLanguage,
                 level: currentLevel,
                 sessionType: sessionType,
+                phraseSource: phraseSource,
                 averageScore: avgScore
             });
             localStorage.setItem(historyKey, JSON.stringify(history));
@@ -1125,6 +1236,16 @@
             });
         }
 
+        function changeActiveLanguage(langVal) {
+            setLanguage(langVal);
+            startSession();
+        }
+
+        function changeActiveLevel(levelVal) {
+            currentLevel = levelVal;
+            startSession();
+        }
+
         function restartSession() {
             startSession();
         }
@@ -1136,10 +1257,10 @@
             updateHistorySummaryUI();
         }
 
-        // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             initUserProfiles();
             setLanguage(currentLanguage);
+            toggleSourceUI();
         });
     </script>
 </body>
