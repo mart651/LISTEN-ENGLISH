@@ -84,23 +84,30 @@
     <!-- Header Navbar -->
     <header class="sticky top-0 z-50 eye-glass border-b border-eyeBorder">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+            <div class="flex items-center justify-between h-16 gap-2">
                 
                 <!-- Logo & Home Button -->
-                <div class="flex items-center gap-3">
-                    <button onclick="goHome()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-eyeHeading font-medium text-xs border border-eyeBorder transition" title="Torna alla Home">
-                        <i class="fa-solid fa-house text-brandInd"></i>
-                        <span class="hidden sm:inline">Home</span>
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <button onclick="goHome()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-bold text-xs border border-indigo-500/40 transition eye-button" title="Torna alla Schermata Iniziale">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
                     </button>
                     <div class="h-5 w-px bg-eyeBorder hidden sm:block"></div>
-                    <span class="text-base sm:text-lg font-bold text-eyeHeading tracking-tight">
+                    <span class="text-base sm:text-lg font-bold text-eyeHeading tracking-tight hidden xs:inline">
                         Lingua<span class="text-brandInd">Flow</span>
                     </span>
                 </div>
 
-                <!-- On-The-Fly Quick Controls (Language, Level, Headset) -->
-                <div class="flex items-center gap-2 sm:gap-3">
+                <!-- On-The-Fly Quick Controls (User Switcher, Language, Level, Headset) -->
+                <div class="flex items-center gap-1.5 sm:gap-3">
                     
+                    <!-- USER SELECTOR BUTTON -->
+                    <button onclick="openUserModal()" class="flex items-center gap-2 bg-slate-900 border border-eyeBorder hover:border-brandInd px-2.5 py-1.5 rounded-xl text-xs font-semibold text-eyeHeading transition">
+                        <span id="activeUserAvatarHeader" class="w-5 h-5 rounded-full bg-indigo-500 text-white flex items-center justify-center text-[10px]">👤</span>
+                        <span id="activeUserNameHeader" class="max-w-[80px] sm:max-w-[120px] truncate">Utente</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                    </button>
+
                     <!-- Language Selector -->
                     <select id="quickLangSelect" onchange="changeLanguage(this.value)" class="bg-slate-900 border border-eyeBorder text-eyeHeading text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-brandInd cursor-pointer">
                         <option value="en">🇬🇧 Inglese</option>
@@ -108,8 +115,8 @@
                         <option value="fr">🇫🇷 Francese</option>
                     </select>
 
-                    <!-- Level Selector (Switchable anytime) -->
-                    <select id="quickLevelSelect" onchange="changeLevel(this.value)" class="bg-slate-900 border border-eyeBorder text-eyeHeading text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-brandInd cursor-pointer">
+                    <!-- Level Selector -->
+                    <select id="quickLevelSelect" onchange="changeLevel(this.value)" class="bg-slate-900 border border-eyeBorder text-eyeHeading text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-brandInd cursor-pointer hidden sm:block">
                         <option value="basic">🟢 Basic</option>
                         <option value="intermediate">🟡 Intermediate</option>
                         <option value="expert">🔴 Expert</option>
@@ -132,14 +139,50 @@
             <!-- Welcome Hero -->
             <div class="text-center space-y-3 max-w-2xl mx-auto">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brandInd/10 border border-brandInd/30 text-indigo-400 text-xs font-medium">
-                    <i class="fa-solid fa-eye text-xs"></i> Interfaccia Anti-Affaticamento Visivo
+                    <i class="fa-solid fa-users text-xs"></i> Profilo Attivo: <strong id="activeUserNameHero" class="text-indigo-300">Utente</strong>
                 </span>
                 <h1 class="text-2xl sm:text-4xl font-extrabold text-eyeHeading tracking-tight">
                     Impara a conversare con <span class="text-indigo-400">frasi reali del Web</span>
                 </h1>
                 <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                    Ascolta e traduci frasi brevi di uso quotidiano tratte da conversazioni reali, senza distrazioni.
+                    Ascolta e traduci frasi brevi di uso quotidiano. I tuoi progressi vengono memorizzati per il tuo profilo!
                 </p>
+            </div>
+
+            <!-- Active User Stats Banner -->
+            <div class="eye-glass rounded-2xl p-4 sm:p-5 border border-indigo-500/20 bg-indigo-950/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div id="userBadgeAvatar" class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-indigo-500/20">
+                        👤
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="userBadgeName" class="font-bold text-eyeHeading text-base">Utente 1</h3>
+                            <button onclick="openUserModal('edit')" class="text-slate-400 hover:text-indigo-300 text-xs" title="Modifica Nome Utente">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-400">Progressi salvati sul dispositivo</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 text-center text-xs w-full sm:w-auto justify-around sm:justify-end border-t sm:border-t-0 border-eyeBorder pt-3 sm:pt-0">
+                    <div class="bg-slate-900/80 px-3 py-2 rounded-xl border border-eyeBorder min-w-[80px]">
+                        <span class="text-[10px] text-slate-400 block">Punti Totali</span>
+                        <strong id="userStatScore" class="text-indigo-400 font-extrabold text-sm">0</strong>
+                    </div>
+                    <div class="bg-slate-900/80 px-3 py-2 rounded-xl border border-eyeBorder min-w-[80px]">
+                        <span class="text-[10px] text-slate-400 block">Sessioni</span>
+                        <strong id="userStatSessions" class="text-emerald-400 font-extrabold text-sm">0</strong>
+                    </div>
+                    <div class="bg-slate-900/80 px-3 py-2 rounded-xl border border-eyeBorder min-w-[80px]">
+                        <span class="text-[10px] text-slate-400 block">Record Esame</span>
+                        <strong id="userStatBest" class="text-amber-400 font-extrabold text-sm">0%</strong>
+                    </div>
+                    <button onclick="openUserModal()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-eyeHeading font-medium text-xs border border-eyeBorder transition" title="Cambia o Gestisci Utenti">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Configuration Grid -->
@@ -235,10 +278,13 @@
             <!-- Session Top Status Bar -->
             <div class="eye-glass rounded-2xl p-4 flex flex-wrap justify-between items-center gap-4">
                 <div class="flex items-center gap-3">
+                    <button onclick="goHome()" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-eyeHeading border border-eyeBorder flex items-center gap-1.5 transition" title="Torna alla Home">
+                        <i class="fa-solid fa-house text-indigo-400"></i> Home
+                    </button>
                     <span id="sessionModeBadge" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                         Esercitazione Libera
                     </span>
-                    <span id="sessionTopicBadge" class="text-xs text-slate-400 font-medium">
+                    <span id="sessionTopicBadge" class="text-xs text-slate-400 font-medium hidden sm:inline">
                         💬 Vita Quotidiana
                     </span>
                 </div>
@@ -345,7 +391,7 @@
 
                 <div class="space-y-2">
                     <h2 class="text-2xl font-extrabold text-eyeHeading">Report Finale d'Esame</h2>
-                    <p class="text-xs text-slate-400" id="reportSubtitle">Certificazione del livello di ascolto e traduzione</p>
+                    <p class="text-xs text-slate-400" id="reportSubtitle">Certificazione del livello di ascolto e traduzione per <strong id="reportUserName" class="text-indigo-300">Utente</strong></p>
                 </div>
 
                 <!-- Score Badge -->
@@ -372,8 +418,8 @@
 
                 <!-- Actions -->
                 <div class="flex gap-4 pt-2">
-                    <button onclick="goHome()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-eyeHeading text-xs font-bold rounded-xl transition">
-                        Torna alla Home
+                    <button onclick="goHome()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-eyeHeading text-xs font-bold rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-house"></i> Torna alla Home
                     </button>
                     <button onclick="startSession()" class="flex-1 py-3 bg-brandInd hover:bg-indigo-600 text-white text-xs font-bold rounded-xl transition">
                         Riprova Esame
@@ -385,12 +431,65 @@
 
     </main>
 
+    <!-- USER MANAGEMENT MODAL -->
+    <div id="userModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="eye-glass max-w-md w-full rounded-3xl p-6 space-y-5 border border-eyeBorder shadow-2xl relative">
+            
+            <button onclick="closeUserModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white text-base">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="space-y-1">
+                <h3 class="text-lg font-bold text-eyeHeading flex items-center gap-2">
+                    <i class="fa-solid fa-users text-brandInd"></i> Gestione Profili Utente
+                </h3>
+                <p class="text-xs text-slate-400">Seleziona, aggiungi o modifica i profili salvati.</p>
+            </div>
+
+            <!-- Users List -->
+            <div id="usersListContainer" class="space-y-2 max-h-56 overflow-y-auto pr-1">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Add / Edit Form -->
+            <div id="userFormContainer" class="p-4 rounded-2xl bg-slate-900/90 border border-eyeBorder space-y-3">
+                <h4 id="userFormTitle" class="text-xs font-bold text-indigo-300 uppercase tracking-wider">Aggiungi Nuovo Utente</h4>
+                
+                <div class="space-y-2">
+                    <label class="text-[11px] font-semibold text-slate-400">Nome Profilo</label>
+                    <input type="text" id="userInputName" placeholder="Es. Marco, Anna..." class="w-full bg-slate-950 border border-eyeBorder rounded-xl px-3 py-2 text-xs text-eyeHeading focus:outline-none focus:border-brandInd">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] font-semibold text-slate-400">Scegli Avatar / Colore</label>
+                    <div class="flex items-center gap-2" id="avatarSelectorBox">
+                        <button onclick="selectFormAvatar('👤', 'bg-indigo-600')" class="avatar-opt w-8 h-8 rounded-full bg-indigo-600 text-white text-xs border-2 border-indigo-400">👤</button>
+                        <button onclick="selectFormAvatar('🎓', 'bg-emerald-600')" class="avatar-opt w-8 h-8 rounded-full bg-emerald-600 text-white text-xs border-2 border-transparent">🎓</button>
+                        <button onclick="selectFormAvatar('🚀', 'bg-amber-600')" class="avatar-opt w-8 h-8 rounded-full bg-amber-600 text-white text-xs border-2 border-transparent">🚀</button>
+                        <button onclick="selectFormAvatar('⚡', 'bg-purple-600')" class="avatar-opt w-8 h-8 rounded-full bg-purple-600 text-white text-xs border-2 border-transparent">⚡</button>
+                        <button onclick="selectFormAvatar('🌟', 'bg-rose-600')" class="avatar-opt w-8 h-8 rounded-full bg-rose-600 text-white text-xs border-2 border-transparent">🌟</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                    <button onclick="saveUserFromForm()" id="saveUserFormBtn" class="flex-1 py-2 bg-brandInd hover:bg-indigo-600 text-white font-bold text-xs rounded-xl transition">
+                        Salva Utente
+                    </button>
+                    <button onclick="resetUserForm()" id="cancelUserFormBtn" class="py-2 px-3 bg-slate-800 text-slate-300 hover:text-white text-xs font-medium rounded-xl transition hidden">
+                        Annulla
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="border-t border-eyeBorder bg-slate-950/50 py-4 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
             <p>© 2026 LinguaFlow Web. Modalità Eye-Comfort Attiva.</p>
             <div class="flex items-center gap-4 text-slate-400">
-                <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-emerald-500"></i> Memorizzazione Locale</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-emerald-500"></i> Memorizzazione Locale Multi-Utente</span>
                 <span class="flex items-center gap-1"><i class="fa-solid fa-wifi text-indigo-400"></i> Web Fetch Live</span>
             </div>
         </div>
@@ -416,7 +515,14 @@
             timeLeft: 30,
             speechSynth: window.speechSynthesis,
             recognition: null,
-            isRecognizing: false
+            isRecognizing: false,
+            
+            // Multi-user state
+            users: [],
+            activeUserId: null,
+            editingUserId: null,
+            formAvatarIcon: '👤',
+            formAvatarBg: 'bg-indigo-600'
         };
 
         /* Conversational Offline Phrase Database (Fallback & Instant Play) */
@@ -472,6 +578,9 @@
 
         /* Initialization */
         window.addEventListener('DOMContentLoaded', () => {
+            // Load saved multi-user state
+            initUsersState();
+
             // Load saved settings
             document.getElementById('quickLangSelect').value = state.lang;
             document.getElementById('quickLevelSelect').value = state.level;
@@ -492,6 +601,241 @@
             }
         });
 
+        /* MULTI-USER MANAGEMENT LOGIC */
+        function initUsersState() {
+            const savedUsers = localStorage.getItem('lingua_users_list');
+            const savedActiveId = localStorage.getItem('lingua_active_user_id');
+
+            if (savedUsers) {
+                try {
+                    state.users = JSON.parse(savedUsers);
+                } catch(e) {
+                    state.users = [];
+                }
+            }
+
+            // Create default user if list empty
+            if (!state.users || state.users.length === 0) {
+                const defaultUser = {
+                    id: 'usr_' + Date.now(),
+                    name: 'Utente 1',
+                    avatar: '👤',
+                    avatarBg: 'bg-indigo-600',
+                    totalScore: 0,
+                    sessionsCompleted: 0,
+                    bestExamPercentage: 0
+                };
+                state.users = [defaultUser];
+                state.activeUserId = defaultUser.id;
+            } else {
+                state.activeUserId = savedActiveId && state.users.some(u => u.id === savedActiveId)
+                    ? savedActiveId 
+                    : state.users[0].id;
+            }
+
+            saveUsersToStorage();
+            updateActiveUserUI();
+        }
+
+        function saveUsersToStorage() {
+            localStorage.setItem('lingua_users_list', JSON.stringify(state.users));
+            localStorage.setItem('lingua_active_user_id', state.activeUserId);
+        }
+
+        function getActiveUser() {
+            return state.users.find(u => u.id === state.activeUserId) || state.users[0];
+        }
+
+        function updateActiveUserUI() {
+            const user = getActiveUser();
+            if (!user) return;
+
+            document.getElementById('activeUserNameHeader').innerText = user.name;
+            document.getElementById('activeUserNameHero').innerText = user.name;
+            document.getElementById('activeUserAvatarHeader').innerText = user.avatar;
+            document.getElementById('activeUserAvatarHeader').className = `w-5 h-5 rounded-full ${user.avatarBg || 'bg-indigo-600'} text-white flex items-center justify-center text-[10px]`;
+
+            document.getElementById('userBadgeName').innerText = user.name;
+            document.getElementById('userBadgeAvatar').innerText = user.avatar;
+            document.getElementById('userBadgeAvatar').className = `w-12 h-12 rounded-2xl ${user.avatarBg || 'bg-indigo-600'} text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-indigo-500/20`;
+
+            document.getElementById('userStatScore').innerText = user.totalScore || 0;
+            document.getElementById('userStatSessions').innerText = user.sessionsCompleted || 0;
+            document.getElementById('userStatBest').innerText = (user.bestExamPercentage || 0) + '%';
+        }
+
+        function openUserModal(action = 'list') {
+            renderUsersList();
+            document.getElementById('userModal').classList.remove('hidden');
+
+            if (action === 'edit') {
+                const user = getActiveUser();
+                if (user) setupEditUserForm(user.id);
+            } else {
+                resetUserForm();
+            }
+        }
+
+        function closeUserModal() {
+            document.getElementById('userModal').classList.add('hidden');
+        }
+
+        function renderUsersList() {
+            const container = document.getElementById('usersListContainer');
+            container.innerHTML = '';
+
+            state.users.forEach(u => {
+                const isActive = u.id === state.activeUserId;
+                const div = document.createElement('div');
+                div.className = `p-3 rounded-2xl border flex items-center justify-between gap-2 text-xs transition ${
+                    isActive 
+                    ? 'border-indigo-500 bg-indigo-500/10 text-eyeHeading' 
+                    : 'border-eyeBorder bg-slate-900/60 text-slate-300 hover:border-slate-700'
+                }`;
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="setActiveUser('${u.id}')">
+                        <div class="w-8 h-8 rounded-xl ${u.avatarBg || 'bg-indigo-600'} text-white flex items-center justify-center text-sm font-bold">
+                            ${u.avatar}
+                        </div>
+                        <div>
+                            <div class="font-bold flex items-center gap-1.5">
+                                ${escapeHtml(u.name)}
+                                ${isActive ? '<span class="text-[9px] px-1.5 py-0.2 rounded-full bg-indigo-500/30 text-indigo-300 font-semibold">Attivo</span>' : ''}
+                            </div>
+                            <div class="text-[10px] text-slate-400">Punti: ${u.totalScore || 0} • Sessioni: ${u.sessionsCompleted || 0}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="setupEditUserForm('${u.id}')" class="p-1.5 text-slate-400 hover:text-indigo-300" title="Modifica">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                        ${state.users.length > 1 ? `
+                            <button onclick="deleteUser('${u.id}')" class="p-1.5 text-slate-400 hover:text-red-400" title="Elimina">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function setActiveUser(id) {
+            state.activeUserId = id;
+            saveUsersToStorage();
+            updateActiveUserUI();
+            renderUsersList();
+        }
+
+        function selectFormAvatar(icon, bgClass) {
+            state.formAvatarIcon = icon;
+            state.formAvatarBg = bgClass;
+
+            document.querySelectorAll('#avatarSelectorBox .avatar-opt').forEach(btn => {
+                btn.classList.remove('border-indigo-400');
+                btn.classList.add('border-transparent');
+            });
+            event.currentTarget.classList.remove('border-transparent');
+            event.currentTarget.classList.add('border-indigo-400');
+        }
+
+        function setupEditUserForm(id) {
+            const user = state.users.find(u => u.id === id);
+            if (!user) return;
+
+            state.editingUserId = id;
+            document.getElementById('userFormTitle').innerText = 'Modifica Utente';
+            document.getElementById('userInputName').value = user.name;
+            document.getElementById('saveUserFormBtn').innerText = 'Aggiorna Utente';
+            document.getElementById('cancelUserFormBtn').classList.remove('hidden');
+
+            selectFormAvatar(user.avatar || '👤', user.avatarBg || 'bg-indigo-600');
+        }
+
+        function resetUserForm() {
+            state.editingUserId = null;
+            document.getElementById('userFormTitle').innerText = 'Aggiungi Nuovo Utente';
+            document.getElementById('userInputName').value = '';
+            document.getElementById('saveUserFormBtn').innerText = 'Salva Utente';
+            document.getElementById('cancelUserFormBtn').classList.add('hidden');
+            selectFormAvatar('👤', 'bg-indigo-600');
+        }
+
+        function saveUserFromForm() {
+            const nameInput = document.getElementById('userInputName').value.trim();
+            if (!nameInput) {
+                alert("Inserisci un nome valido per l'utente.");
+                return;
+            }
+
+            if (state.editingUserId) {
+                // Update existing user
+                const user = state.users.find(u => u.id === state.editingUserId);
+                if (user) {
+                    user.name = nameInput;
+                    user.avatar = state.formAvatarIcon;
+                    user.avatarBg = state.formAvatarBg;
+                }
+            } else {
+                // Create new user
+                const newUser = {
+                    id: 'usr_' + Date.now(),
+                    name: nameInput,
+                    avatar: state.formAvatarIcon,
+                    avatarBg: state.formAvatarBg,
+                    totalScore: 0,
+                    sessionsCompleted: 0,
+                    bestExamPercentage: 0
+                };
+                state.users.push(newUser);
+                state.activeUserId = newUser.id;
+            }
+
+            saveUsersToStorage();
+            updateActiveUserUI();
+            renderUsersList();
+            resetUserForm();
+        }
+
+        function deleteUser(id) {
+            if (state.users.length <= 1) {
+                alert("Devi mantenere almeno un profilo utente.");
+                return;
+            }
+
+            const targetUser = state.users.find(u => u.id === id);
+            if (!confirm(`Sei sicuro di voler eliminare il profilo "${targetUser?.name}"?`)) return;
+
+            state.users = state.users.filter(u => u.id !== id);
+            if (state.activeUserId === id) {
+                state.activeUserId = state.users[0].id;
+            }
+
+            saveUsersToStorage();
+            updateActiveUserUI();
+            renderUsersList();
+        }
+
+        function recordSessionProgress(scoreEarned, totalQuestions, examPercentage = null) {
+            const user = getActiveUser();
+            if (!user) return;
+
+            user.totalScore = (user.totalScore || 0) + scoreEarned;
+            user.sessionsCompleted = (user.sessionsCompleted || 0) + 1;
+
+            if (examPercentage !== null) {
+                user.bestExamPercentage = Math.max(user.bestExamPercentage || 0, examPercentage);
+            }
+
+            saveUsersToStorage();
+            updateActiveUserUI();
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
         /* Navigation & Configuration Handlers */
         function goHome() {
             clearInterval(state.timer);
@@ -500,6 +844,9 @@
             document.getElementById('screenExercise').classList.add('hidden');
             document.getElementById('screenReport').classList.add('hidden');
             document.getElementById('screenHome').classList.remove('hidden');
+            
+            // Refresh stats UI on home page
+            updateActiveUserUI();
         }
 
         function changeLanguage(lang) {
@@ -818,9 +1165,15 @@
                 reportResult.className = "text-3xl font-black text-red-400";
             }
 
+            const activeUser = getActiveUser();
+            document.getElementById('reportUserName').innerText = activeUser ? activeUser.name : 'Utente';
+
             document.getElementById('repScore').innerText = `${state.score} / ${maxScore}`;
             document.getElementById('repLevel').innerText = state.level.toUpperCase();
             document.getElementById('repTime').innerText = `14s / frase`;
+
+            // Record progress persistently for current user
+            recordSessionProgress(state.score, state.totalQuestions, state.mode === 'exam' ? percentage : null);
         }
     </script>
 </body>
