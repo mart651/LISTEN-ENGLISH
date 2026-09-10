@@ -1178,17 +1178,17 @@
             }
         }
 
-        /* Answer Checking & Timer */
+        /* Valutazione del Senso e Punteggio Flessibile */
         function checkAnswer() {
             if (!state.currentPhrase) return;
             
             clearInterval(state.timer);
 
-            const userText = document.getElementById('userAnswerInput').value.trim().toLowerCase();
-            const correctText = state.currentPhrase.translation.toLowerCase();
+            const userText = document.getElementById('userAnswerInput').value.trim();
+            const correctText = state.currentPhrase.translation;
 
-            // Simple similarity calculation
-            const isCorrect = userText.length > 0 && (correctText.includes(userText) || userText.includes(correctText) || calculateSimilarity(userText, correctText) > 0.6);
+            // Valutazione semantica del senso
+            const result = evaluateSense(userText, correctText);
 
             const feedbackBox = document.getElementById('feedbackBox');
             const feedbackTitle = document.getElementById('feedbackTitle');
@@ -1198,25 +1198,99 @@
 
             feedbackBox.classList.remove('hidden');
 
-            if (isCorrect) {
-                state.score += 10;
+            state.score += result.points;
+
+            if (result.points === 10) {
                 feedbackBox.className = "max-w-xl mx-auto p-4 rounded-2xl text-left text-xs space-y-2 border border-emerald-500/40 bg-emerald-500/10";
-                feedbackTitle.innerText = "Ottimo lavoro! Traduzione corretta";
+                feedbackTitle.innerText = "Ottimo! Senso della frase corretto";
                 feedbackTitle.className = "text-emerald-400 font-bold";
                 feedbackScoreTag.innerText = "+10 Punti";
                 feedbackScoreTag.className = "px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 font-bold";
-            } else {
+            } else if (result.points >= 5) {
                 feedbackBox.className = "max-w-xl mx-auto p-4 rounded-2xl text-left text-xs space-y-2 border border-amber-500/40 bg-amber-500/10";
-                feedbackTitle.innerText = "Quasi! Ecco la traduzione esatta:";
+                feedbackTitle.innerText = "Buono! Hai colto il senso generale";
                 feedbackTitle.className = "text-amber-400 font-bold";
-                feedbackScoreTag.innerText = "0 Punti";
+                feedbackScoreTag.innerText = `+${result.points} Punti`;
                 feedbackScoreTag.className = "px-2 py-0.5 rounded-full text-[10px] bg-amber-500/20 text-amber-300 font-bold";
+            } else {
+                feedbackBox.className = "max-w-xl mx-auto p-4 rounded-2xl text-left text-xs space-y-2 border border-red-500/40 bg-red-500/10";
+                feedbackTitle.innerText = "Risposta fuori senso o incompleta";
+                feedbackTitle.className = "text-red-400 font-bold";
+                feedbackScoreTag.innerText = "0 Punti";
+                feedbackScoreTag.className = "px-2 py-0.5 rounded-full text-[10px] bg-red-500/20 text-red-300 font-bold";
             }
 
-            feedbackText.innerText = `Traduzione attesa: "${state.currentPhrase.translation}"`;
+            feedbackText.innerText = `Traduzione di riferimento: "${state.currentPhrase.translation}"`;
             feedbackOriginal.innerText = state.currentPhrase.original;
 
             document.getElementById('scoreVal').innerText = state.score;
+        }
+
+        /* Algoritmo di Analisi Semantica del Senso (Keyword & Stemming Matching) */
+        function evaluateSense(userInput, targetTranslation) {
+            if (!userInput) return { points: 0, score: 0 };
+
+            // Pulizia del testo e normalizzazione (no accenti, no punteggiatura)
+            const clean = (str) => str.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?!]/g, "")
+                .trim();
+
+            const cleanUser = clean(userInput);
+            const cleanTarget = clean(targetTranslation);
+
+            // Se è esattamente uguale o quasi identica
+            if (cleanUser === cleanTarget || cleanTarget.includes(cleanUser) || cleanUser.includes(cleanTarget)) {
+                return { points: 10, score: 1.0 };
+            }
+
+            // Stopwords italiane trascurabili per l'estrazione del senso
+            const stopWords = new Set([
+                'il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'uno', 'una', 'un\'',
+                'di', 'a', 'da', 'in', 'con', 'su', 'per', 'tra', 'fra',
+                'e', 'o', 'ma', 'che', 'non', 'mi', 'ti', 'si', 'ci', 'vi',
+                'ho', 'ha', 'hai', 'abbiamo', 'hanno', 'del', 'della', 'dello',
+                'degli', 'delle', 'al', 'alla', 'allo', 'agli', 'alle', 'sul',
+                'sulla', 'sullo', 'questo', 'questa', 'questi', 'queste',
+                'mio', 'tuo', 'suo', 'nostro', 'vostro', 'loro', 'favore', 'grazie'
+            ]);
+
+            const getKeywords = (text) => {
+                return text.split(/\s+/)
+                    .filter(w => w.length > 2 && !stopWords.has(w));
+            };
+
+            const userKeys = getKeywords(cleanUser);
+            const targetKeys = getKeywords(cleanTarget);
+
+            if (targetKeys.length === 0) {
+                // Fallback a confronto di caratteri
+                const sim = calculateSimilarity(cleanUser, cleanTarget);
+                return { points: sim > 0.5 ? 10 : (sim > 0.3 ? 5 : 0), score: sim };
+            }
+
+            // Calcolo delle concordanze di senso (trova parole o radici di parole)
+            let matchedKeys = 0;
+            targetKeys.forEach(tKey => {
+                const tStem = tKey.substring(0, Math.min(4, tKey.length));
+                const found = userKeys.some(uKey => {
+                    const uStem = uKey.substring(0, Math.min(4, uKey.length));
+                    return uKey === tKey || uKey.includes(tKey) || tKey.includes(uKey) || uStem === tStem;
+                });
+                if (found) matchedKeys++;
+            });
+
+            const matchRatio = matchedKeys / targetKeys.length;
+
+            if (matchRatio >= 0.65) {
+                return { points: 10, score: matchRatio }; // Senso colto appieno
+            } else if (matchRatio >= 0.35) {
+                return { points: 7, score: matchRatio };  // Buona parte del senso
+            } else if (matchRatio > 0) {
+                return { points: 5, score: matchRatio };  // Idea di base presente
+            }
+
+            return { points: 0, score: 0 };
         }
 
         function showHint() {
