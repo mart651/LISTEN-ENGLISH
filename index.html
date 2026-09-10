@@ -222,7 +222,11 @@
                             <button onclick="setTopic('daily')" class="topic-tag px-3 py-1.5 rounded-xl border border-brandInd bg-brandInd/20 text-indigo-300 text-xs font-medium">💬 Vita Quotidiana</button>
                             <button onclick="setTopic('travel')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">✈️ Viaggi & Hotel</button>
                             <button onclick="setTopic('food')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">🍕 Ristorante & Cibo</button>
-                            <button onclick="setTopic('work')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">💼 Lavoro & Sociale</button>
+                            <button onclick="setTopic('work')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">💼 Lavoro & Business</button>
+                            <button onclick="setTopic('health')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">🏥 Salute & Emergenze</button>
+                            <button onclick="setTopic('shopping')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">🛍️ Shopping & Moda</button>
+                            <button onclick="setTopic('hobbies')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">🎬 Tempo Libero & Hobbies</button>
+                            <button onclick="setTopic('tech')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">💻 Tecnologia & Studio</button>
                         </div>
                     </div>
                 </div>
@@ -525,55 +529,115 @@
             formAvatarBg: 'bg-indigo-600'
         };
 
-        /* Conversational Offline Phrase Database (Fallback & Instant Play) */
+        const topicTitles = {
+            daily: '💬 Vita Quotidiana',
+            travel: '✈️ Viaggi & Hotel',
+            food: '🍕 Ristorante & Cibo',
+            work: '💼 Lavoro & Business',
+            health: '🏥 Salute & Emergenze',
+            shopping: '🛍️ Shopping & Moda',
+            hobbies: '🎬 Tempo Libero & Hobbies',
+            tech: '💻 Tecnologia & Studio'
+        };
+
+        /* Conversational Offline Phrase Database (Expanded across 8 topics & 3 difficulty levels) */
         const phraseDb = {
             en: {
                 basic: [
                     { original: "How are you doing today?", translation: "Come stai oggi?", topic: "daily" },
-                    { original: "Could I have a glass of water, please?", translation: "Potrei avere un bicchiere d'acqua, per favore?", topic: "food" },
-                    { original: "Where is the nearest train station?", translation: "Dov'è la stazione dei treni più vicina?", topic: "travel" },
                     { original: "Nice to meet you!", translation: "Piacere di conoscerti!", topic: "daily" },
-                    { original: "What time do you usually wake up?", translation: "A che ora ti svegli di solito?", topic: "daily" }
+                    { original: "What time do you usually wake up?", translation: "A che ora ti svegli di solito?", topic: "daily" },
+                    { original: "Where is the nearest train station?", translation: "Dov'è la stazione dei treni più vicina?", topic: "travel" },
+                    { original: "Is there a pharmacy around here?", translation: "C'è una farmacia qui vicino?", topic: "travel" },
+                    { original: "Could I have a glass of water, please?", translation: "Potrei avere un bicchiere d'acqua, per favore?", topic: "food" },
+                    { original: "Table for two, please.", translation: "Un tavolo per due, per favore.", topic: "food" },
+                    { original: "I have a question about my schedule.", translation: "Ho una domanda sul mio orario.", topic: "work" },
+                    { original: "I need to see a doctor.", translation: "Ho bisogno di vedere un medico.", topic: "health" },
+                    { original: "I have a mild headache.", translation: "Ho un leggero mal di testa.", topic: "health" },
+                    { original: "How much does this cost?", translation: "Quanto costa questo?", topic: "shopping" },
+                    { original: "Do you have this shirt in size medium?", translation: "Avete questa maglia in taglia M?", topic: "shopping" },
+                    { original: "What is your favorite movie?", translation: "Qual è il tuo film preferito?", topic: "hobbies" },
+                    { original: "I love playing basketball on weekends.", translation: "Amo giocare a basket nel fine settimana.", topic: "hobbies" },
+                    { original: "My computer is not working properly.", translation: "Il mio computer non funziona correttamente.", topic: "tech" },
+                    { original: "Can you send me the link?", translation: "Puoi mandarmi il link?", topic: "tech" }
                 ],
                 intermediate: [
                     { original: "Would you mind closing the window?", translation: "Ti dispiacerebbe chiudere la finestra?", topic: "daily" },
                     { original: "I have been looking for my keys all morning.", translation: "Ho cercato le mie chiavi per tutta la mattina.", topic: "daily" },
-                    { original: "Could you recommend a good restaurant nearby?", translation: "Potresti consigliarmi un buon ristorante qui vicino?", topic: "food" },
-                    { original: "Let's schedule a meeting for next Monday.", translation: "Fissiamo una riunione per lunedì prossimo.", topic: "work" }
+                    { original: "Could you recommend a good hotel near the center?", translation: "Potresti consigliarmi un buon hotel vicino al centro?", topic: "travel" },
+                    { original: "Our flight has been delayed by two hours.", translation: "Il nostro volo è stato ritardato di due ore.", topic: "travel" },
+                    { original: "Could we have the bill, please?", translation: "Potremmo avere il conto, per favore?", topic: "food" },
+                    { original: "Let's schedule a meeting for next Monday.", translation: "Fissiamo una riunione per lunedì prossimo.", topic: "work" },
+                    { original: "Please send me the report by five PM.", translation: "Per favore inviami la relazione entro le diciassette.", topic: "work" },
+                    { original: "Where can I buy prescription glasses?", translation: "Dove posso comprare occhiali da vista?", topic: "health" },
+                    { original: "Is this item eligible for a full refund?", translation: "Questo articolo è idoneo per un rimborso completo?", topic: "shopping" },
+                    { original: "I usually go hiking in the mountains.", translation: "Di solito vado a fare escursioni in montagna.", topic: "hobbies" },
+                    { original: "I need to download the latest software update.", translation: "Devo scaricare l'ultimo aggiornamento software.", topic: "tech" }
                 ],
                 expert: [
                     { original: "It goes without saying that practice leads to perfection.", translation: "Va da sé che la pratica porta alla perfezione.", topic: "daily" },
-                    { original: "I would appreciate it if you could clarify this issue.", translation: "Le sarei grato se potesse chiarire questo punto.", topic: "work" }
+                    { original: "We must carefully weigh all pros and cons before booking.", translation: "Dobbiamo valutare attentamente pro e contro prima di prenotare.", topic: "travel" },
+                    { original: "I would appreciate it if you could clarify this issue.", translation: "Le sarei grato se potesse chiarire questo punto.", topic: "work" },
+                    { original: "The patient should avoid strenuous physical activity.", translation: "Il paziente dovrebbe evitare un'attività fisica intensa.", topic: "health" },
+                    { original: "Artificial intelligence is reshaping software development.", translation: "L'intelligenza artificiale sta riplasmando lo sviluppo software.", topic: "tech" }
                 ]
             },
             es: {
                 basic: [
                     { original: "¿Cómo estás hoy?", translation: "Come stai oggi?", topic: "daily" },
+                    { original: "Mucho gusto en conocerte.", translation: "Piacere di conoscerti.", topic: "daily" },
                     { original: "¿Dónde está la estación de tren?", translation: "Dov'è la stazione dei treni?", topic: "travel" },
-                    { original: "Un café por favor.", translation: "Un caffè per favore.", topic: "food" }
+                    { original: "Un café por favor.", translation: "Un caffè per favore.", topic: "food" },
+                    { original: "¿Cuánto cuesta esto?", translation: "Quanto costa questo?", topic: "shopping" },
+                    { original: "Me duele la cabeza.", translation: "Mi fa male la testa.", topic: "health" },
+                    { original: "Me gusta ver películas.", translation: "Mi piace guardare i film.", topic: "hobbies" },
+                    { original: "Necesito una computadora nueva.", translation: "Ho bisogno di un nuovo computer.", topic: "tech" }
                 ],
                 intermediate: [
                     { original: "¿Podrías recomendarme un buen restaurante?", translation: "Potresti consigliarmi un buon ristorante?", topic: "food" },
-                    { original: "Me gustaría reservar una habitación para dos noches.", translation: "Vorrei prenotare una camera per due notti.", topic: "travel" }
+                    { original: "Me gustaría reservar una habitación para dos noches.", translation: "Vorrei prenotare una camera per due notti.", topic: "travel" },
+                    { original: "Tenemos que enviar este documento hoy.", translation: "Dobbiamo inviare questo documento oggi.", topic: "work" },
+                    { original: "¿Tiene esta camisa en una talla más pequeña?", translation: "Ha questa camicia in una taglia più piccola?", topic: "shopping" },
+                    { original: "Prefiero hacer ejercicio por la mañana.", translation: "Preferisco fare esercizio la mattina.", topic: "hobbies" }
                 ],
                 expert: [
-                    { original: "Es de suma importancia mantener la calma.", translation: "È di fondamentale importanza mantenere la calma.", topic: "work" }
+                    { original: "Es de suma importancia mantener la calma.", translation: "È di fondamentale importanza mantenere la calma.", topic: "work" },
+                    { original: "El avance tecnológico ha transformado la sociedad actual.", translation: "Il progresso tecnologico ha trasformato la società attuale.", topic: "tech" }
                 ]
             },
             fr: {
                 basic: [
                     { original: "Comment allez-vous aujourd'hui?", translation: "Come sta oggi?", topic: "daily" },
+                    { original: "Enchanté de faire votre connaissance.", translation: "Piacere di conoscerla.", topic: "daily" },
                     { original: "Où se trouve la gare?", translation: "Dove si trova la stazione?", topic: "travel" },
-                    { original: "Un café s'il vous plaît.", translation: "Un caffè per favore.", topic: "food" }
+                    { original: "Un café s'il vous plaît.", translation: "Un caffè per favore.", topic: "food" },
+                    { original: "Combien ça coûte?", translation: "Quanto costa?", topic: "shopping" },
+                    { original: "J'ai mal à la tête.", translation: "Ho mal di testa.", topic: "health" },
+                    { original: "J'aime écouter de la musique.", translation: "Amo ascoltare la musica.", topic: "hobbies" },
+                    { original: "Mon téléphone ne marche pas.", translation: "Il mio telefono non funziona.", topic: "tech" }
                 ],
                 intermediate: [
                     { original: "Pourriez-vous me recommander un bon restaurant?", translation: "Potrebbe consigliarmi un buon ristorante?", topic: "food" },
-                    { original: "Je voudrais réserver une chambre.", translation: "Vorrei prenotare una camera.", topic: "travel" }
+                    { original: "Je voudrais réserver une chambre d'hôtel.", translation: "Vorrei prenotare una camera d'albergo.", topic: "travel" },
+                    { original: "Nous devons planifier une réunion la semaine prochaine.", translation: "Dobbiamo pianificare una riunione la settimana prossima.", topic: "work" },
+                    { original: "Puis-je essayer cette veste?", translation: "Posso provare questa giacca?", topic: "shopping" }
                 ],
                 expert: [
-                    { original: "Il va sans dire que cela demande des efforts.", translation: "Va da sé che questo richiede impegno.", topic: "work" }
+                    { original: "Il va sans dire que cela demande des efforts.", translation: "Va da sé che questo richiede impegno.", topic: "work" },
+                    { original: "L'innovation numérique révolutionne le monde professionnel.", translation: "L'innovazione digitale sta rivoluzionando il mondo professionale.", topic: "tech" }
                 ]
             }
+        };
+
+        const topicQueries = {
+            daily: ['hello how are you', 'what a nice day', 'see you tomorrow'],
+            travel: ['where is the hotel', 'flight to London', 'passport check'],
+            food: ['delicious meal', 'table for two', 'coffee please'],
+            work: ['project deadline', 'business call', 'great job'],
+            health: ['doctor appointment', 'feeling dizzy', 'pharmacy near me'],
+            shopping: ['how much is it', 'fitting room', 'credit card payment'],
+            hobbies: ['playing guitar', 'hiking in mountains', 'watching movies'],
+            tech: ['software update', 'wifi password', 'computer screen']
         };
 
         /* Initialization */
@@ -931,6 +995,9 @@
                 ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30'
                 : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
 
+            // Set dynamic topic badge title
+            document.getElementById('sessionTopicBadge').innerText = topicTitles[state.topic] || '💬 Vita Quotidiana';
+
             document.getElementById('examTimerBox').style.display = state.mode === 'exam' ? 'flex' : 'none';
             document.getElementById('slowAudioBtn').style.display = state.mode === 'exam' ? 'none' : 'inline-flex';
             document.getElementById('hintBtn').style.display = state.mode === 'exam' ? 'none' : 'inline-flex';
@@ -964,9 +1031,19 @@
             }
 
             if (!phrase) {
-                // Fallback to offline database
-                const pool = (phraseDb[state.lang] && phraseDb[state.lang][state.level]) || phraseDb.en.basic;
-                phrase = pool[Math.floor(Math.random() * pool.length)];
+                // Fallback to offline database with active topic filtering
+                const langPool = (phraseDb[state.lang] && phraseDb[state.lang][state.level]) || phraseDb.en.basic;
+                
+                // Filter by current topic if available
+                const topicFiltered = langPool.filter(p => p.topic === state.topic && !state.usedPhraseIds.has(p.original));
+                const generalFiltered = langPool.filter(p => !state.usedPhraseIds.has(p.original));
+                
+                const candidates = topicFiltered.length > 0 ? topicFiltered : (generalFiltered.length > 0 ? generalFiltered : langPool);
+                phrase = candidates[Math.floor(Math.random() * candidates.length)];
+            }
+
+            if (phrase) {
+                state.usedPhraseIds.add(phrase.original);
             }
 
             state.currentPhrase = phrase;
@@ -985,20 +1062,12 @@
         /* Real-World Conversational Web Fetcher (Filtered for short daily sentences) */
         async function fetchConversationalWebPhrase() {
             try {
-                // Simulated conversational API / Daily quote endpoint for real sentence fetching
-                const topicQueries = {
-                    daily: ['hello how are you', 'what a nice day', 'see you tomorrow'],
-                    travel: ['where is the hotel', 'flight to London', 'passport check'],
-                    food: ['delicious meal', 'table for two', 'coffee please'],
-                    work: ['project deadline', 'business call', 'great job']
-                };
-
+                const queries = topicQueries[state.topic] || topicQueries.daily;
                 const fallbackSentences = phraseDb[state.lang]?.[state.level] || phraseDb.en.basic;
-                const filtered = fallbackSentences.filter(p => !state.usedPhraseIds.has(p.original));
+                const topicFiltered = fallbackSentences.filter(p => p.topic === state.topic && !state.usedPhraseIds.has(p.original));
                 
-                if (filtered.length > 0) {
-                    const selected = filtered[Math.floor(Math.random() * filtered.length)];
-                    state.usedPhraseIds.add(selected.original);
+                if (topicFiltered.length > 0) {
+                    const selected = topicFiltered[Math.floor(Math.random() * topicFiltered.length)];
                     return selected;
                 }
             } catch (e) {
