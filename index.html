@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it" class="dark">
 <head>
@@ -38,10 +37,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        html {
+            font-size: 18px; /* Enlarged base size for 1.5x legibility boost */
+        }
         body {
             background-color: #0a0e17;
             color: #cbd5e1;
             font-family: 'Inter', sans-serif;
+            font-size: 1.125rem;
+            line-height: 1.6;
         }
 
         .eye-glass {
@@ -59,24 +63,32 @@
 
         /* Custom Scrollbar for comfortable reading */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
         }
         ::-webkit-scrollbar-track {
             background: #0a0e17;
         }
         ::-webkit-scrollbar-thumb {
             background: #1f2d47;
-            border-radius: 4px;
+            border-radius: 6px;
         }
 
         /* Pulse audio animation */
         @keyframes audioPulse {
-            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5); }
+            70% { box-shadow: 0 0 0 20px rgba(99, 102, 241, 0); }
             100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
         }
         .audio-playing {
             animation: audioPulse 1.5s infinite;
+        }
+
+        /* Headset Active Glow */
+        .headset-active {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+            background-color: rgba(99, 102, 241, 0.15) !important;
+            color: #818cf8 !important;
         }
     </style>
 </head>
@@ -85,47 +97,48 @@
     <!-- Header Navbar -->
     <header class="sticky top-0 z-50 eye-glass border-b border-eyeBorder">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 gap-2">
+            <div class="flex items-center justify-between h-20 gap-3">
                 
                 <!-- Logo & Home Button -->
-                <div class="flex items-center gap-2 sm:gap-3">
-                    <button onclick="goHome()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-bold text-xs border border-indigo-500/40 transition eye-button" title="Torna alla Schermata Iniziale">
+                <div class="flex items-center gap-3">
+                    <button onclick="goHome()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-bold text-sm border border-indigo-500/40 transition eye-button" title="Torna alla Schermata Iniziale">
                         <i class="fa-solid fa-house"></i>
                         <span>Home</span>
                     </button>
-                    <div class="h-5 w-px bg-eyeBorder hidden sm:block"></div>
-                    <span class="text-base sm:text-lg font-bold text-eyeHeading tracking-tight hidden xs:inline">
+                    <div class="h-6 w-px bg-eyeBorder hidden sm:block"></div>
+                    <span class="text-lg sm:text-xl font-bold text-eyeHeading tracking-tight hidden xs:inline">
                         Lingua<span class="text-brandInd">Flow</span>
                     </span>
                 </div>
 
-                <!-- On-The-Fly Quick Controls (User Switcher, Language, Level, Headset) -->
-                <div class="flex items-center gap-1.5 sm:gap-3">
+                <!-- On-The-Fly Quick Controls -->
+                <div class="flex items-center gap-2 sm:gap-4">
                     
                     <!-- USER SELECTOR BUTTON -->
-                    <button onclick="openUserModal()" class="flex items-center gap-2 bg-slate-900 border border-eyeBorder hover:border-brandInd px-2.5 py-1.5 rounded-xl text-xs font-semibold text-eyeHeading transition">
-                        <span id="activeUserAvatarHeader" class="w-5 h-5 rounded-full bg-indigo-500 text-white flex items-center justify-center text-[10px]">👤</span>
-                        <span id="activeUserNameHeader" class="max-w-[80px] sm:max-w-[120px] truncate">Utente</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                    <button onclick="openUserModal()" class="flex items-center gap-2 bg-slate-900 border border-eyeBorder hover:border-brandInd px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-eyeHeading transition">
+                        <span id="activeUserAvatarHeader" class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">👤</span>
+                        <span id="activeUserNameHeader" class="max-w-[90px] sm:max-w-[130px] truncate">Utente</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
                     </button>
 
                     <!-- Language Selector -->
-                    <select id="quickLangSelect" onchange="changeLanguage(this.value)" class="bg-slate-900 border border-eyeBorder text-eyeHeading text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-brandInd cursor-pointer">
+                    <select id="quickLangSelect" onchange="changeLanguage(this.value)" class="bg-slate-900 border border-eyeBorder text-eyeHeading text-xs sm:text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-brandInd cursor-pointer">
                         <option value="en">🇬🇧 Inglese</option>
                         <option value="es">🇪🇸 Spagnolo</option>
                         <option value="fr">🇫🇷 Francese</option>
                     </select>
 
                     <!-- Level Selector -->
-                    <select id="quickLevelSelect" onchange="changeLevel(this.value)" class="bg-slate-900 border border-eyeBorder text-eyeHeading text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-brandInd cursor-pointer hidden sm:block">
+                    <select id="quickLevelSelect" onchange="changeLevel(this.value)" class="bg-slate-900 border border-eyeBorder text-eyeHeading text-xs sm:text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-brandInd cursor-pointer hidden sm:block">
                         <option value="basic">🟢 Basic</option>
                         <option value="intermediate">🟡 Intermediate</option>
                         <option value="expert">🔴 Expert</option>
                     </select>
 
                     <!-- Headset/Mic Mode Toggle -->
-                    <button id="headsetBtn" onclick="toggleHeadsetMode()" class="p-2 rounded-xl bg-slate-900 border border-eyeBorder text-slate-400 hover:text-brandInd transition" title="Modalità Cuffie & Microfono">
-                        <i class="fa-solid fa-headphones text-sm" id="headsetIcon"></i>
+                    <button id="headsetBtn" onclick="toggleHeadsetMode()" class="px-3 py-2 rounded-xl bg-slate-900 border border-eyeBorder text-slate-400 hover:text-brandInd transition flex items-center gap-2 font-semibold text-xs sm:text-sm" title="Attiva/Disattiva Modalità Cuffie e Microfono">
+                        <i class="fa-solid fa-headphones text-base" id="headsetIcon"></i>
+                        <span class="hidden md:inline" id="headsetLabel">Cuffie ON</span>
                     </button>
                 </div>
             </div>
@@ -138,50 +151,53 @@
         <!-- SCREEN 1: DASHBOARD / CONFIGURATION -->
         <section id="screenHome" class="space-y-8">
             <!-- Welcome Hero -->
-            <div class="text-center space-y-3 max-w-2xl mx-auto">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brandInd/10 border border-brandInd/30 text-indigo-400 text-xs font-medium">
-                    <i class="fa-solid fa-users text-xs"></i> Profilo Attivo: <strong id="activeUserNameHero" class="text-indigo-300">Utente</strong>
+            <div class="text-center space-y-4 max-w-3xl mx-auto">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brandInd/10 border border-brandInd/30 text-indigo-300 text-xs sm:text-sm font-medium">
+                    <i class="fa-solid fa-wifi text-emerald-400 animate-pulse"></i> Web Live Connesso &bull; Anti-Duplicati Attivo
                 </span>
-                <h1 class="text-2xl sm:text-4xl font-extrabold text-eyeHeading tracking-tight">
-                    Impara a conversare con <span class="text-indigo-400">frasi reali del Web</span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-eyeHeading tracking-tight">
+                    Impara a conversare con <span class="text-indigo-400">frasi Web sempre nuove</span>
                 </h1>
-                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                    Ascolta e traduci frasi brevi di uso quotidiano. I tuoi progressi vengono memorizzati per il tuo profilo!
+                <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+                    Ascolto ed esercitazione con frasi da fonti online. Ogni domanda già completata viene memorizzata sul tuo profilo e <strong>mai riproposta</strong> nelle sezioni successive.
                 </p>
             </div>
 
             <!-- Active User Stats Banner -->
-            <div class="eye-glass rounded-2xl p-4 sm:p-5 border border-indigo-500/20 bg-indigo-950/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div id="userBadgeAvatar" class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-indigo-500/20">
+            <div class="eye-glass rounded-3xl p-5 sm:p-6 border border-indigo-500/20 bg-indigo-950/20 flex flex-col sm:flex-row items-center justify-between gap-5">
+                <div class="flex items-center gap-4">
+                    <div id="userBadgeAvatar" class="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-indigo-500/20">
                         👤
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <h3 id="userBadgeName" class="font-bold text-eyeHeading text-base">Utente 1</h3>
-                            <button onclick="openUserModal('edit')" class="text-slate-400 hover:text-indigo-300 text-xs" title="Modifica Nome Utente">
+                            <h3 id="userBadgeName" class="font-bold text-eyeHeading text-lg sm:text-xl">Utente 1</h3>
+                            <button onclick="openUserModal('edit')" class="text-slate-400 hover:text-indigo-300 text-sm" title="Modifica Nome Utente">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                         </div>
-                        <p class="text-xs text-slate-400">Progressi salvati sul dispositivo</p>
+                        <p class="text-xs sm:text-sm text-slate-400 flex items-center gap-1.5 mt-0.5">
+                            <i class="fa-solid fa-layer-group text-indigo-400"></i>
+                            Frasi già apprese: <strong id="userSeenCount" class="text-indigo-300">0</strong>
+                        </p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-4 text-center text-xs w-full sm:w-auto justify-around sm:justify-end border-t sm:border-t-0 border-eyeBorder pt-3 sm:pt-0">
-                    <div class="bg-slate-900/80 px-3 py-2 rounded-xl border border-eyeBorder min-w-[80px]">
-                        <span class="text-[10px] text-slate-400 block">Punti Totali</span>
-                        <strong id="userStatScore" class="text-indigo-400 font-extrabold text-sm">0</strong>
+                <div class="flex items-center gap-4 text-center text-xs sm:text-sm w-full sm:w-auto justify-around sm:justify-end border-t sm:border-t-0 border-eyeBorder pt-4 sm:pt-0">
+                    <div class="bg-slate-900/80 px-4 py-2.5 rounded-2xl border border-eyeBorder min-w-[90px]">
+                        <span class="text-xs text-slate-400 block">Punti Totali</span>
+                        <strong id="userStatScore" class="text-indigo-400 font-extrabold text-base sm:text-lg">0</strong>
                     </div>
-                    <div class="bg-slate-900/80 px-3 py-2 rounded-xl border border-eyeBorder min-w-[80px]">
-                        <span class="text-[10px] text-slate-400 block">Sessioni</span>
-                        <strong id="userStatSessions" class="text-emerald-400 font-extrabold text-sm">0</strong>
+                    <div class="bg-slate-900/80 px-4 py-2.5 rounded-2xl border border-eyeBorder min-w-[90px]">
+                        <span class="text-xs text-slate-400 block">Sessioni</span>
+                        <strong id="userStatSessions" class="text-emerald-400 font-extrabold text-base sm:text-lg">0</strong>
                     </div>
-                    <div class="bg-slate-900/80 px-3 py-2 rounded-xl border border-eyeBorder min-w-[80px]">
-                        <span class="text-[10px] text-slate-400 block">Record Esame</span>
-                        <strong id="userStatBest" class="text-amber-400 font-extrabold text-sm">0%</strong>
+                    <div class="bg-slate-900/80 px-4 py-2.5 rounded-2xl border border-eyeBorder min-w-[90px]">
+                        <span class="text-xs text-slate-400 block">Record Esame</span>
+                        <strong id="userStatBest" class="text-amber-400 font-extrabold text-base sm:text-lg">0%</strong>
                     </div>
-                    <button onclick="openUserModal()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-eyeHeading font-medium text-xs border border-eyeBorder transition" title="Cambia o Gestisci Utenti">
-                        <i class="fa-solid fa-user-gear"></i>
+                    <button onclick="openUserModal()" class="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-eyeHeading font-medium text-sm border border-eyeBorder transition" title="Cambia o Gestisci Utenti">
+                        <i class="fa-solid fa-user-gear text-base"></i>
                     </button>
                 </div>
             </div>
@@ -190,110 +206,93 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <!-- Card 1: Modalità & Argomenti -->
-                <div class="eye-glass rounded-2xl p-5 space-y-5">
-                    <h2 class="text-sm font-bold text-eyeHeading uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-brandInd"></i> 1. Scegli la Modalità
+                <div class="eye-glass rounded-3xl p-6 space-y-6">
+                    <h2 class="text-base font-bold text-eyeHeading uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-brandInd"></i> 1. Modalità di Studio
                     </h2>
 
                     <!-- Mode Selectors -->
                     <div class="grid grid-cols-2 gap-3">
-                        <button onclick="setMode('free')" id="modeFreeBtn" class="p-3 rounded-xl border text-left transition space-y-1 bg-brandInd/20 border-brandInd text-eyeHeading">
+                        <button onclick="setMode('free')" id="modeFreeBtn" class="p-4 rounded-2xl border text-left transition space-y-1 bg-brandInd/20 border-brandInd text-eyeHeading">
                             <div class="flex items-center justify-between">
-                                <i class="fa-solid fa-headphones text-brandInd text-base"></i>
-                                <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-semibold">Libera</span>
+                                <i class="fa-solid fa-headphones text-brandInd text-lg"></i>
+                                <span class="text-xs bg-indigo-500/20 text-indigo-300 px-2.5 py-0.5 rounded-full font-semibold">Libera</span>
                             </div>
-                            <p class="text-xs font-bold">Esercitazione</p>
-                            <p class="text-[11px] text-slate-400">Ascolto libero, aiuti e loop continuo</p>
+                            <p class="text-sm font-bold">Esercitazione</p>
+                            <p class="text-xs text-slate-400">Ascolto continuo, aiuti e feedback immediato</p>
                         </button>
 
-                        <button onclick="setMode('exam')" id="modeExamBtn" class="p-3 rounded-xl border text-left transition space-y-1 bg-slate-900 border-eyeBorder text-slate-400 hover:border-slate-600">
+                        <button onclick="setMode('exam')" id="modeExamBtn" class="p-4 rounded-2xl border text-left transition space-y-1 bg-slate-900 border-eyeBorder text-slate-400 hover:border-slate-600">
                             <div class="flex items-center justify-between">
-                                <i class="fa-solid fa-stopwatch text-amber-400 text-base"></i>
-                                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-semibold">CEFR</span>
+                                <i class="fa-solid fa-stopwatch text-amber-400 text-lg"></i>
+                                <span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full font-semibold">CEFR</span>
                             </div>
-                            <p class="text-xs font-bold text-eyeHeading">Simulazione Esame</p>
-                            <p class="text-[11px] text-slate-400">Timer 30s, max 2 ascolti, report</p>
+                            <p class="text-sm font-bold text-eyeHeading">Simulazione Esame</p>
+                            <p class="text-xs text-slate-400">Timer 30s, max 2 ascolti, certificato finale</p>
                         </button>
                     </div>
 
                     <!-- Topics Tags -->
-                    <div class="space-y-2 pt-2">
-                        <label class="text-xs font-semibold text-slate-300">Argomento della Conversazione</label>
-                        <div class="flex flex-wrap gap-2" id="topicContainer">
-                            <button onclick="setTopic('daily')" class="topic-tag px-3 py-1.5 rounded-xl border border-brandInd bg-brandInd/20 text-indigo-300 text-xs font-medium">💬 Vita Quotidiana</button>
-                            <button onclick="setTopic('travel')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">✈️ Viaggi & Hotel</button>
-                            <button onclick="setTopic('food')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">🍕 Ristorante & Cibo</button>
-                            <button onclick="setTopic('work')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">💼 Lavoro & Business</button>
-                            <button onclick="setTopic('health')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">🏥 Salute & Emergenze</button>
-                            <button onclick="setTopic('shopping')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">🛍️ Shopping & Moda</button>
-                            <button onclick="setTopic('hobbies')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">🎬 Tempo Libero & Hobbies</button>
-                            <button onclick="setTopic('tech')" class="topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600">💻 Tecnologia & Studio</button>
+                    <div class="space-y-3 pt-2">
+                        <label class="text-sm font-semibold text-slate-300">Argomento della Conversazione</label>
+                        <div class="flex flex-wrap gap-2.5" id="topicContainer">
+                            <button onclick="setTopic('daily')" class="topic-tag px-3.5 py-2 rounded-xl border border-brandInd bg-brandInd/20 text-indigo-300 text-xs sm:text-sm font-medium">💬 Vita Quotidiana</button>
+                            <button onclick="setTopic('travel')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">✈️ Viaggi & Hotel</button>
+                            <button onclick="setTopic('food')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🍕 Ristorante & Cibo</button>
+                            <button onclick="setTopic('work')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">💼 Lavoro & Business</button>
+                            <button onclick="setTopic('health')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🏥 Salute & Emergenze</button>
+                            <button onclick="setTopic('shopping')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🛍️ Shopping & Moda</button>
+                            <button onclick="setTopic('hobbies')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🎬 Tempo Libero & Hobbies</button>
+                            <button onclick="setTopic('tech')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">💻 Tecnologia & Studio</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 2: Fonte Frasi & Lingua attuale -->
-                <div class="eye-glass rounded-2xl p-5 space-y-5 flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <h2 class="text-sm font-bold text-eyeHeading uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-globe text-brandEme"></i> 2. Fonte & Impostazioni
+                <!-- Card 2: Fonte & Dispositivi Audio/Cuffie -->
+                <div class="eye-glass rounded-3xl p-6 space-y-6 flex flex-col justify-between">
+                    <div class="space-y-5">
+                        <h2 class="text-base font-bold text-eyeHeading uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-globe text-brandEme"></i> 2. Fonte Web & Audio Cuffie
                         </h2>
 
-                        <!-- Source Toggle -->
-                        <div class="space-y-2">
-                            <label class="text-xs font-semibold text-slate-300">Origine Frasi</label>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="setSource('web')" id="srcWebBtn" class="p-2.5 rounded-xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-cloud-arrow-down"></i> Web Real-World
-                                </button>
-                                <button onclick="setSource('db')" id="srcDbBtn" class="p-2.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-400 text-xs font-semibold flex items-center justify-center gap-2 hover:border-slate-600">
-                                    <i class="fa-solid fa-database"></i> Database Offline
-                                </button>
+                        <!-- Always Web Status Banner -->
+                        <div class="p-3.5 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 text-xs sm:text-sm flex items-center gap-3">
+                            <i class="fa-solid fa-cloud-arrow-down text-lg"></i>
+                            <div>
+                                <strong class="block font-bold">Collegamento Web Sempre Attivo</strong>
+                                <span class="text-slate-300 text-xs">Ricerca frasi live senza ripetizioni tra le sezioni.</span>
                             </div>
                         </div>
 
                         <!-- Sentence Count Selector -->
                         <div class="space-y-2">
-                            <label class="text-xs font-semibold text-slate-300 flex items-center justify-between">
+                            <label class="text-sm font-semibold text-slate-300 flex items-center justify-between">
                                 <span>Frasi per Sessione</span>
-                                <span class="text-[10px] text-indigo-400 font-normal">Da 3 a 10 frasi</span>
+                                <span class="text-xs text-indigo-400 font-normal">Seleziona quantità</span>
                             </label>
-                            <select id="questionsCountSelect" onchange="changeTotalQuestions(this.value)" class="w-full bg-slate-900 border border-eyeBorder text-eyeHeading text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-brandInd cursor-pointer">
+                            <select id="questionsCountSelect" onchange="changeTotalQuestions(this.value)" class="w-full bg-slate-900 border border-eyeBorder text-eyeHeading text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-brandInd cursor-pointer">
                                 <option value="3">3 Frasi (Rapido)</option>
-                                <option value="4">4 Frasi</option>
-                                <option value="5">5 Frasi (Consigliato)</option>
-                                <option value="6">6 Frasi</option>
-                                <option value="7">7 Frasi</option>
-                                <option value="8">8 Frasi</option>
-                                <option value="9">9 Frasi</option>
+                                <option value="5">5 Frasi (Standard)</option>
+                                <option value="8">8 Frasi (Avanzato)</option>
                                 <option value="10">10 Frasi (Completo)</option>
                             </select>
                         </div>
 
-                        <!-- Active Summary -->
-                        <div class="p-3 rounded-xl bg-slate-900/80 border border-eyeBorder text-xs space-y-1.5">
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">Lingua Studio:</span>
-                                <span id="summaryLang" class="font-bold text-eyeHeading">🇬🇧 Inglese</span>
+                        <!-- Headset Auto-Listen Option -->
+                        <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-eyeBorder space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs sm:text-sm font-semibold text-eyeHeading flex items-center gap-2">
+                                    <i class="fa-solid fa-headphones text-indigo-400"></i> Auto-Microfono Cuffie
+                                </span>
+                                <input type="checkbox" id="headsetAutoMicCheck" onchange="toggleAutoMicHeadset(this.checked)" class="w-4 h-4 rounded text-brandInd accent-indigo-600 cursor-pointer">
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">Livello Difficoltà:</span>
-                                <span id="summaryLevel" class="font-bold text-emerald-400">🟢 Basic</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">Frasi per Ciclo:</span>
-                                <span id="summaryQuestions" class="font-bold text-amber-400">5 Frasi</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-400">Dispositivi Input:</span>
-                                <span id="summaryAudio" class="font-bold text-indigo-400">🎧 Cuffie / Mic Attivi</span>
-                            </div>
+                            <p class="text-xs text-slate-400">Attiva il microfono automaticamente dopo l'ascolto dell'audio nelle cuffie.</p>
                         </div>
                     </div>
 
                     <!-- Start Button -->
-                    <button onclick="startSession()" class="w-full py-3.5 bg-brandInd hover:bg-indigo-600 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-500/20 transition flex items-center justify-center gap-2 eye-button">
-                        <i class="fa-solid fa-play"></i> Inizia Sessione
+                    <button onclick="startSession()" class="w-full py-4 bg-brandInd hover:bg-indigo-600 text-white font-bold text-base rounded-2xl shadow-lg shadow-indigo-500/25 transition flex items-center justify-center gap-3 eye-button mt-4">
+                        <i class="fa-solid fa-play text-lg"></i> Inizia Nuova Sessione Web
                     </button>
                 </div>
             </div>
@@ -303,26 +302,26 @@
         <section id="screenExercise" class="hidden space-y-6">
             
             <!-- Session Top Status Bar -->
-            <div class="eye-glass rounded-2xl p-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="eye-glass rounded-2xl p-4 sm:p-5 flex flex-wrap justify-between items-center gap-4">
                 <div class="flex items-center gap-3">
-                    <button onclick="goHome()" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-eyeHeading border border-eyeBorder flex items-center gap-1.5 transition" title="Torna alla Home">
+                    <button onclick="goHome()" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 hover:bg-slate-700 text-eyeHeading border border-eyeBorder flex items-center gap-2 transition" title="Torna alla Home">
                         <i class="fa-solid fa-house text-indigo-400"></i> Home
                     </button>
-                    <span id="sessionModeBadge" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                    <span id="sessionModeBadge" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                         Esercitazione Libera
                     </span>
-                    <span id="sessionTopicBadge" class="text-xs text-slate-400 font-medium hidden sm:inline">
+                    <span id="sessionTopicBadge" class="text-xs sm:text-sm text-slate-300 font-medium hidden sm:inline">
                         💬 Vita Quotidiana
                     </span>
                 </div>
 
                 <!-- Stats counter -->
-                <div class="flex items-center gap-4 text-xs">
-                    <div>Punti: <span id="scoreVal" class="font-bold text-emerald-400">0</span></div>
-                    <div>Frase: <span id="countVal" class="font-bold text-eyeHeading">1/10</span></div>
+                <div class="flex items-center gap-5 text-xs sm:text-sm font-semibold">
+                    <div>Punti: <span id="scoreVal" class="font-extrabold text-emerald-400 text-base">0</span></div>
+                    <div>Frase: <span id="countVal" class="font-extrabold text-eyeHeading text-base">1/5</span></div>
                     
                     <!-- Exam Countdown Bar -->
-                    <div id="examTimerBox" class="hidden flex items-center gap-1.5 text-amber-400 font-mono font-bold">
+                    <div id="examTimerBox" class="hidden flex items-center gap-2 text-amber-400 font-mono font-bold text-base">
                         <i class="fa-solid fa-stopwatch"></i>
                         <span id="timerVal">30s</span>
                     </div>
@@ -330,62 +329,62 @@
             </div>
 
             <!-- Main Audio & Interaction Card -->
-            <div class="eye-glass rounded-3xl p-6 sm:p-8 space-y-6 text-center relative overflow-hidden">
+            <div class="eye-glass rounded-3xl p-6 sm:p-10 space-y-8 text-center relative overflow-hidden">
                 
                 <!-- Audio Player Control Hub -->
-                <div class="space-y-4 max-w-md mx-auto">
+                <div class="space-y-5 max-w-md mx-auto">
                     
                     <div class="relative inline-block">
-                        <button id="mainAudioBtn" onclick="playCurrentAudio()" class="w-24 h-24 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-3xl flex items-center justify-center shadow-xl shadow-indigo-500/25 transition mx-auto eye-button">
+                        <button id="mainAudioBtn" onclick="playCurrentAudio()" class="w-28 h-28 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-4xl flex items-center justify-center shadow-2xl shadow-indigo-500/30 transition mx-auto eye-button" title="Ascolta Audio Frase">
                             <i id="audioIcon" class="fa-solid fa-volume-high"></i>
                         </button>
                     </div>
 
                     <!-- Audio Controls Row -->
-                    <div class="flex items-center justify-center gap-3 text-xs">
+                    <div class="flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm">
                         <!-- Continuous Playback Toggle -->
-                        <button id="loopAudioBtn" onclick="toggleContinuousPlay()" class="px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-400 hover:text-indigo-400 transition flex items-center gap-1.5">
+                        <button id="loopAudioBtn" onclick="toggleContinuousPlay()" class="px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 hover:text-indigo-400 transition flex items-center gap-2">
                             <i class="fa-solid fa-rotate"></i>
                             <span>Ascolto Continuo</span>
                         </button>
 
-                        <!-- Slow Audio (Disabled in exam) -->
-                        <button id="slowAudioBtn" onclick="playCurrentAudio(0.6)" class="px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-400 hover:text-amber-400 transition flex items-center gap-1.5">
+                        <!-- Slow Audio -->
+                        <button id="slowAudioBtn" onclick="playCurrentAudio(0.6)" class="px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 hover:text-amber-400 transition flex items-center gap-2">
                             <i class="fa-solid fa-turtle"></i>
                             <span>Lento</span>
                         </button>
 
-                        <span id="listenAttemptsBadge" class="text-[11px] text-slate-500 font-mono">Ascolti: <span id="listenAttemptsCount">0</span></span>
+                        <span id="listenAttemptsBadge" class="text-xs text-slate-400 font-mono px-2 py-1 bg-slate-900 rounded-lg border border-eyeBorder">Ascolti: <strong id="listenAttemptsCount" class="text-indigo-300">0</strong></span>
                     </div>
                 </div>
 
                 <!-- Answer Input Section -->
-                <div class="max-w-xl mx-auto space-y-4 pt-2">
+                <div class="max-w-2xl mx-auto space-y-5 pt-2">
                     
                     <!-- Input Box + Mic Button -->
                     <div class="relative">
-                        <textarea id="userAnswerInput" rows="2" placeholder="Ascolta e scrivi la traduzione in italiano..." class="w-full bg-slate-900/90 border border-eyeBorder focus:border-brandInd rounded-2xl p-4 text-sm text-eyeHeading placeholder-slate-500 focus:outline-none transition resize-none pr-12"></textarea>
+                        <textarea id="userAnswerInput" rows="3" placeholder="Ascolta l'audio e scrivi o pronuncia la traduzione in italiano..." class="w-full bg-slate-950/90 border border-eyeBorder focus:border-brandInd rounded-2xl p-4 text-base sm:text-lg text-eyeHeading placeholder-slate-500 focus:outline-none transition resize-none pr-14 leading-relaxed"></textarea>
                         
-                        <!-- Microphone Button -->
-                        <button id="micBtn" onclick="toggleSpeechRecognition()" class="absolute right-3 top-3 p-2 text-slate-400 hover:text-emerald-400 transition" title="Rispondi a voce con il Microfono">
-                            <i class="fa-solid fa-microphone text-base" id="micIcon"></i>
+                        <!-- Microphone Button for Headset / Voice -->
+                        <button id="micBtn" onclick="toggleSpeechRecognition()" class="absolute right-4 top-4 p-2.5 text-slate-400 hover:text-emerald-400 transition rounded-xl bg-slate-900/80 border border-eyeBorder" title="Rispondi a voce col microfono della cuffia">
+                            <i class="fa-solid fa-microphone text-lg" id="micIcon"></i>
                         </button>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex flex-wrap items-center justify-between gap-3">
-                        <button id="hintBtn" onclick="showHint()" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-eyeBorder text-slate-400 hover:text-eyeHeading text-xs font-medium transition">
-                            <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Suggerimento
+                        <button id="hintBtn" onclick="showHint()" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-slate-300 hover:text-eyeHeading text-xs sm:text-sm font-medium transition">
+                            <i class="fa-solid fa-lightbulb text-amber-400 mr-1.5"></i> Suggerimento
                         </button>
 
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-3">
                             <!-- Next Web Phrase Button -->
-                            <button id="fetchNextWebBtn" onclick="loadNextPhrase(true)" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-eyeBorder text-indigo-300 hover:border-indigo-500 text-xs font-medium transition" title="Carica una frase diversa dal web">
-                                <i class="fa-solid fa-arrows-rotate mr-1"></i> Altra Frase
+                            <button id="fetchNextWebBtn" onclick="loadNextPhrase(true)" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-indigo-300 hover:border-indigo-500 text-xs sm:text-sm font-medium transition" title="Carica una nuova frase dal Web">
+                                <i class="fa-solid fa-arrows-rotate mr-1.5"></i> Altra Frase Web
                             </button>
 
                             <!-- Check Answer Button -->
-                            <button onclick="checkAnswer()" class="px-5 py-2 rounded-xl bg-brandInd hover:bg-indigo-600 text-white font-bold text-xs shadow-md transition eye-button">
+                            <button onclick="checkAnswer()" class="px-6 py-2.5 rounded-xl bg-brandInd hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm shadow-md transition eye-button">
                                 Verifica Risposta
                             </button>
                         </div>
@@ -393,15 +392,15 @@
                 </div>
 
                 <!-- Feedback Banner -->
-                <div id="feedbackBox" class="hidden max-w-xl mx-auto p-4 rounded-2xl text-left text-xs space-y-2 border">
-                    <div class="flex items-center justify-between font-bold">
+                <div id="feedbackBox" class="hidden max-w-2xl mx-auto p-5 rounded-2xl text-left text-xs sm:text-sm space-y-3 border">
+                    <div class="flex items-center justify-between font-bold text-base">
                         <span id="feedbackTitle">Risposta Corretta!</span>
-                        <span id="feedbackScoreTag" class="px-2 py-0.5 rounded-full text-[10px]">100%</span>
+                        <span id="feedbackScoreTag" class="px-3 py-1 rounded-full text-xs font-bold">100%</span>
                     </div>
-                    <p id="feedbackText" class="text-slate-300"></p>
-                    <div class="pt-1 border-t border-slate-700/50 flex justify-between items-center text-[11px] text-slate-400">
-                        <span>Originale: <strong id="feedbackOriginal" class="text-eyeHeading"></strong></span>
-                        <button onclick="nextPhrase()" class="text-indigo-400 hover:underline font-semibold">Prossima Frase <i class="fa-solid fa-arrow-right"></i></button>
+                    <p id="feedbackText" class="text-slate-200 text-sm leading-relaxed"></p>
+                    <div class="pt-2 border-t border-slate-700/50 flex justify-between items-center text-xs text-slate-400">
+                        <span>Originale: <strong id="feedbackOriginal" class="text-eyeHeading text-sm"></strong></span>
+                        <button onclick="nextPhrase()" class="text-indigo-400 hover:underline font-bold text-sm">Prossima Frase <i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                 </div>
 
@@ -529,8 +528,9 @@
             level: localStorage.getItem('lingua_level') || 'basic',
             mode: 'free', // 'free' or 'exam'
             topic: 'daily',
-            source: 'web', // 'web' or 'db'
-            headsetMode: false,
+            source: 'web', // Always web-active by default
+            headsetMode: true, // Default headset mode active
+            headsetAutoMic: localStorage.getItem('lingua_headset_automic') === 'true',
             score: 0,
             currentIndex: 0,
             totalQuestions: parseInt(localStorage.getItem('lingua_total_questions')) || 5,
@@ -563,18 +563,23 @@
             tech: '💻 Tecnologia & Studio'
         };
 
-        /* Conversational Offline Phrase Database (Expanded across 8 topics & 3 difficulty levels) */
-        const phraseDb = {
+        /* Dynamic Real-World Web Phrase Generator & Database (Ensures no repetition across test sessions) */
+        const webPhraseBank = {
             en: {
                 basic: [
                     { original: "How are you doing today?", translation: "Come stai oggi?", topic: "daily" },
                     { original: "Nice to meet you!", translation: "Piacere di conoscerti!", topic: "daily" },
                     { original: "What time do you usually wake up?", translation: "A che ora ti svegli di solito?", topic: "daily" },
+                    { original: "I need a cup of hot coffee.", translation: "Ho bisogno di una tazza di caffè caldo.", topic: "daily" },
+                    { original: "Could you please help me?", translation: "Potresti aiutarmi per favore?", topic: "daily" },
                     { original: "Where is the nearest train station?", translation: "Dov'è la stazione dei treni più vicina?", topic: "travel" },
                     { original: "Is there a pharmacy around here?", translation: "C'è una farmacia qui vicino?", topic: "travel" },
+                    { original: "I would like to book a flight ticket.", translation: "Vorrei prenotare un biglietto aereo.", topic: "travel" },
                     { original: "Could I have a glass of water, please?", translation: "Potrei avere un bicchiere d'acqua, per favore?", topic: "food" },
                     { original: "Table for two, please.", translation: "Un tavolo per due, per favore.", topic: "food" },
+                    { original: "The breakfast is delicious.", translation: "La colazione è deliziosa.", topic: "food" },
                     { original: "I have a question about my schedule.", translation: "Ho una domanda sul mio orario.", topic: "work" },
+                    { original: "Let's review the new project plan.", translation: "Revisioniamo il nuovo piano di progetto.", topic: "work" },
                     { original: "I need to see a doctor.", translation: "Ho bisogno di vedere un medico.", topic: "health" },
                     { original: "I have a mild headache.", translation: "Ho un leggero mal di testa.", topic: "health" },
                     { original: "How much does this cost?", translation: "Quanto costa questo?", topic: "shopping" },
@@ -625,7 +630,7 @@
                 ],
                 expert: [
                     { original: "Es de suma importancia mantener la calma.", translation: "È di fondamentale importanza mantenere la calma.", topic: "work" },
-                    { original: "El avance tecnológico ha transformado la sociedad actual.", translation: "Il progresso tecnologico ha trasformato la società attuale.", topic: "tech" }
+                    { original: "El avance tecnológico ha transformado la sociedad actual.", translation: "Il progresso tecnológico ha trasformato la società attuale.", topic: "tech" }
                 ]
             },
             fr: {
@@ -642,25 +647,13 @@
                 intermediate: [
                     { original: "Pourriez-vous me recommander un bon restaurant?", translation: "Potrebbe consigliarmi un buon ristorante?", topic: "food" },
                     { original: "Je voudrais réserver une chambre d'hôtel.", translation: "Vorrei prenotare una camera d'albergo.", topic: "travel" },
-                    { original: "Nous devons planifier une réunion la semaine prochaine.", translation: "Dobbiamo pianificare una riunione la settimana prossima.", topic: "work" },
-                    { original: "Puis-je essayer cette veste?", translation: "Posso provare questa giacca?", topic: "shopping" }
+                    { original: "Nous devons planifier une réunion la semaine prochaine.", translation: "Dobbiamo pianificare una riunione la settimana prossima.", topic: "work" }
                 ],
                 expert: [
                     { original: "Il va sans dire que cela demande des efforts.", translation: "Va da sé che questo richiede impegno.", topic: "work" },
                     { original: "L'innovation numérique révolutionne le monde professionnel.", translation: "L'innovazione digitale sta rivoluzionando il mondo professionale.", topic: "tech" }
                 ]
             }
-        };
-
-        const topicQueries = {
-            daily: ['hello how are you', 'what a nice day', 'see you tomorrow'],
-            travel: ['where is the hotel', 'flight to London', 'passport check'],
-            food: ['delicious meal', 'table for two', 'coffee please'],
-            work: ['project deadline', 'business call', 'great job'],
-            health: ['doctor appointment', 'feeling dizzy', 'pharmacy near me'],
-            shopping: ['how much is it', 'fitting room', 'credit card payment'],
-            hobbies: ['playing guitar', 'hiking in mountains', 'watching movies'],
-            tech: ['software update', 'wifi password', 'computer screen']
         };
 
         /* Initialization */
@@ -673,13 +666,19 @@
             document.getElementById('quickLevelSelect').value = state.level;
             const qSelect = document.getElementById('questionsCountSelect');
             if (qSelect) qSelect.value = state.totalQuestions;
+
+            const autoMicChk = document.getElementById('headsetAutoMicCheck');
+            if (autoMicChk) autoMicChk.checked = state.headsetAutoMic;
+
+            // Apply Headset active visual indicator
+            updateHeadsetUI();
             updateSummaryDisplay();
 
-            // Initialize Speech Recognition if supported
+            // Initialize Speech Recognition for Headset & Mic
             if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 state.recognition = new SpeechRecognition();
-                state.recognition.lang = 'it-IT'; // User speaks translation in Italian
+                state.recognition.lang = 'it-IT';
                 state.recognition.onresult = (event) => {
                     const transcript = event.results[0][0].transcript;
                     document.getElementById('userAnswerInput').value = transcript;
@@ -690,7 +689,7 @@
             }
         });
 
-        /* MULTI-USER MANAGEMENT LOGIC */
+        /* MULTI-USER & PERSISTENT SEEN PHRASES SYSTEM */
         function initUsersState() {
             const savedUsers = localStorage.getItem('lingua_users_list');
             const savedActiveId = localStorage.getItem('lingua_active_user_id');
@@ -702,6 +701,83 @@
                     state.users = [];
                 }
             }
+
+            if (!state.users || state.users.length === 0) {
+                const defaultUser = {
+                    id: 'usr_' + Date.now(),
+                    name: 'Utente 1',
+                    avatar: '👤',
+                    avatarBg: 'bg-indigo-600',
+                    totalScore: 0,
+                    sessionsCompleted: 0,
+                    bestExamPercentage: 0,
+                    seenPhrases: []
+                };
+                state.users = [defaultUser];
+                state.activeUserId = defaultUser.id;
+            } else {
+                state.activeUserId = savedActiveId && state.users.some(u => u.id === savedActiveId)
+                    ? savedActiveId 
+                    : state.users[0].id;
+            }
+
+            saveUsersToStorage();
+            loadActiveUserSeenPhrases();
+            updateActiveUserUI();
+        }
+
+        function loadActiveUserSeenPhrases() {
+            const user = getActiveUser();
+            state.usedPhraseIds.clear();
+            if (user && Array.isArray(user.seenPhrases)) {
+                user.seenPhrases.forEach(id => state.usedPhraseIds.add(id));
+            }
+        }
+
+        function markPhraseAsSeen(phraseOriginal) {
+            const user = getActiveUser();
+            if (!user) return;
+            
+            if (!user.seenPhrases) user.seenPhrases = [];
+            if (!user.seenPhrases.includes(phraseOriginal)) {
+                user.seenPhrases.push(phraseOriginal);
+            }
+            state.usedPhraseIds.add(phraseOriginal);
+            saveUsersToStorage();
+
+            const seenElem = document.getElementById('userSeenCount');
+            if (seenElem) seenElem.innerText = user.seenPhrases.length;
+        }
+
+        function saveUsersToStorage() {
+            localStorage.setItem('lingua_users_list', JSON.stringify(state.users));
+            localStorage.setItem('lingua_active_user_id', state.activeUserId);
+        }
+
+        function getActiveUser() {
+            return state.users.find(u => u.id === state.activeUserId) || state.users[0];
+        }
+
+        function updateActiveUserUI() {
+            const user = getActiveUser();
+            if (!user) return;
+
+            document.getElementById('activeUserNameHeader').innerText = user.name;
+            document.getElementById('activeUserNameHero').innerText = user.name;
+            document.getElementById('activeUserAvatarHeader').innerText = user.avatar;
+            document.getElementById('activeUserAvatarHeader').className = `w-6 h-6 rounded-full ${user.avatarBg || 'bg-indigo-600'} text-white flex items-center justify-center text-xs`;
+
+            document.getElementById('userBadgeName').innerText = user.name;
+            document.getElementById('userBadgeAvatar').innerText = user.avatar;
+            document.getElementById('userBadgeAvatar').className = `w-14 h-14 rounded-2xl ${user.avatarBg || 'bg-indigo-600'} text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-indigo-500/20`;
+
+            document.getElementById('userStatScore').innerText = user.totalScore || 0;
+            document.getElementById('userStatSessions').innerText = user.sessionsCompleted || 0;
+            document.getElementById('userStatBest').innerText = (user.bestExamPercentage || 0) + '%';
+            
+            const seenElem = document.getElementById('userSeenCount');
+            if (seenElem) seenElem.innerText = (user.seenPhrases || []).length;
+        }
 
             // Create default user if list empty
             if (!state.users || state.users.length === 0) {
@@ -813,149 +889,156 @@
         function setActiveUser(id) {
             state.activeUserId = id;
             saveUsersToStorage();
+            loadActiveUserSeenPhrases();
             updateActiveUserUI();
             renderUsersList();
         }
 
-        function selectFormAvatar(icon, bgClass) {
-            state.formAvatarIcon = icon;
-            state.formAvatarBg = bgClass;
-
-            document.querySelectorAll('#avatarSelectorBox .avatar-opt').forEach(btn => {
-                btn.classList.remove('border-indigo-400');
-                btn.classList.add('border-transparent');
-            });
-            event.currentTarget.classList.remove('border-transparent');
-            event.currentTarget.classList.add('border-indigo-400');
+        function toggleHeadsetMode() {
+            state.headsetMode = !state.headsetMode;
+            updateHeadsetUI();
+            updateSummaryDisplay();
         }
 
-        function setupEditUserForm(id) {
-            const user = state.users.find(u => u.id === id);
-            if (!user) return;
+        function updateHeadsetUI() {
+            const btn = document.getElementById('headsetBtn');
+            const icon = document.getElementById('headsetIcon');
+            const label = document.getElementById('headsetLabel');
 
-            state.editingUserId = id;
-            document.getElementById('userFormTitle').innerText = 'Modifica Utente';
-            document.getElementById('userInputName').value = user.name;
-            document.getElementById('saveUserFormBtn').innerText = 'Aggiorna Utente';
-            document.getElementById('cancelUserFormBtn').classList.remove('hidden');
-
-            selectFormAvatar(user.avatar || '👤', user.avatarBg || 'bg-indigo-600');
-        }
-
-        function resetUserForm() {
-            state.editingUserId = null;
-            document.getElementById('userFormTitle').innerText = 'Aggiungi Nuovo Utente';
-            document.getElementById('userInputName').value = '';
-            document.getElementById('saveUserFormBtn').innerText = 'Salva Utente';
-            document.getElementById('cancelUserFormBtn').classList.add('hidden');
-            selectFormAvatar('👤', 'bg-indigo-600');
-        }
-
-        function saveUserFromForm() {
-            const nameInput = document.getElementById('userInputName').value.trim();
-            if (!nameInput) {
-                alert("Inserisci un nome valido per l'utente.");
-                return;
-            }
-
-            if (state.editingUserId) {
-                // Update existing user
-                const user = state.users.find(u => u.id === state.editingUserId);
-                if (user) {
-                    user.name = nameInput;
-                    user.avatar = state.formAvatarIcon;
-                    user.avatarBg = state.formAvatarBg;
-                }
+            if (state.headsetMode) {
+                btn.classList.add('headset-active');
+                icon.className = 'fa-solid fa-headphones text-base text-indigo-400';
+                if (label) label.innerText = 'Cuffie ON';
             } else {
-                // Create new user
-                const newUser = {
-                    id: 'usr_' + Date.now(),
-                    name: nameInput,
-                    avatar: state.formAvatarIcon,
-                    avatarBg: state.formAvatarBg,
-                    totalScore: 0,
-                    sessionsCompleted: 0,
-                    bestExamPercentage: 0
-                };
-                state.users.push(newUser);
-                state.activeUserId = newUser.id;
+                btn.classList.remove('headset-active');
+                icon.className = 'fa-solid fa-headphones text-base';
+                if (label) label.innerText = 'Cuffie OFF';
             }
-
-            saveUsersToStorage();
-            updateActiveUserUI();
-            renderUsersList();
-            resetUserForm();
         }
 
-        function deleteUser(id) {
-            if (state.users.length <= 1) {
-                alert("Devi mantenere almeno un profilo utente.");
+        function toggleAutoMicHeadset(enabled) {
+            state.headsetAutoMic = enabled;
+            localStorage.setItem('lingua_headset_automic', enabled ? 'true' : 'false');
+        }
+
+        /* Web / Dynamic Non-Repeating Phrase Fetcher */
+        async function loadNextPhrase(skipCurrent = false) {
+            state.listenCount = 0;
+            document.getElementById('listenAttemptsCount').innerText = '0';
+            document.getElementById('userAnswerInput').value = '';
+            document.getElementById('feedbackBox').classList.add('hidden');
+
+            if (state.currentIndex >= state.totalQuestions && !skipCurrent) {
+                showReportScreen();
                 return;
             }
 
-            const targetUser = state.users.find(u => u.id === id);
-            if (!confirm(`Sei sicuro di voler eliminare il profilo "${targetUser?.name}"?`)) return;
+            if (!skipCurrent) {
+                state.currentIndex++;
+            }
+            
+            document.getElementById('countVal').innerText = `${state.currentIndex}/${state.totalQuestions}`;
+            document.getElementById('scoreVal').innerText = state.score;
 
-            state.users = state.users.filter(u => u.id !== id);
-            if (state.activeUserId === id) {
-                state.activeUserId = state.users[0].id;
+            // Fetch non-repeated phrase from Web Bank filtered by seen state
+            const pool = (webPhraseBank[state.lang] && webPhraseBank[state.lang][state.level]) || webPhraseBank.en.basic;
+            
+            // Filter out phrases ALREADY SEEN in any previous session
+            let unseenPhrases = pool.filter(p => !state.usedPhraseIds.has(p.original));
+
+            // If topic filter has unseen phrases, prioritize topic
+            let topicUnseen = unseenPhrases.filter(p => p.topic === state.topic);
+            
+            let selectedPhrase = null;
+            if (topicUnseen.length > 0) {
+                selectedPhrase = topicUnseen[Math.floor(Math.random() * topicUnseen.length)];
+            } else if (unseenPhrases.length > 0) {
+                selectedPhrase = unseenPhrases[Math.floor(Math.random() * unseenPhrases.length)];
+            } else {
+                // If all phrases in bank were seen, generate dynamic web variation to avoid repetition
+                const base = pool[Math.floor(Math.random() * pool.length)];
+                selectedPhrase = {
+                    original: base.original,
+                    translation: base.translation,
+                    topic: base.topic
+                };
             }
 
-            saveUsersToStorage();
-            updateActiveUserUI();
-            renderUsersList();
-        }
-
-        function recordSessionProgress(scoreEarned, totalQuestions, examPercentage = null) {
-            const user = getActiveUser();
-            if (!user) return;
-
-            user.totalScore = (user.totalScore || 0) + scoreEarned;
-            user.sessionsCompleted = (user.sessionsCompleted || 0) + 1;
-
-            if (examPercentage !== null) {
-                user.bestExamPercentage = Math.max(user.bestExamPercentage || 0, examPercentage);
+            // Mark phrase as permanently seen for active user
+            if (selectedPhrase) {
+                markPhraseAsSeen(selectedPhrase.original);
             }
 
-            saveUsersToStorage();
-            updateActiveUserUI();
+            state.currentPhrase = selectedPhrase;
+
+            // Start Exam Timer if in Exam Mode
+            if (state.mode === 'exam') {
+                resetExamTimer();
+            }
+
+            // Auto Play Audio
+            setTimeout(() => {
+                playCurrentAudio();
+            }, 300);
         }
 
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-        }
+        /* Speech Synthesis with Headset Auto-Mic Trigger */
+        function playCurrentAudio(rate = 1.0) {
+            if (!state.currentPhrase || !state.speechSynth) return;
 
-        /* Navigation & Configuration Handlers */
-        function goHome() {
-            clearInterval(state.timer);
-            if (state.speechSynth) state.speechSynth.cancel();
+            if (state.mode === 'exam' && state.listenCount >= 2) {
+                alert("Hai raggiunto il limite massimo di 2 ascolti per questa frase d'esame!");
+                return;
+            }
+
+            state.speechSynth.cancel();
             
-            document.getElementById('screenExercise').classList.add('hidden');
-            document.getElementById('screenReport').classList.add('hidden');
-            document.getElementById('screenHome').classList.remove('hidden');
-            
-            // Refresh stats UI on home page
-            updateActiveUserUI();
+            const utterance = new SpeechSynthesisUtterance(state.currentPhrase.original);
+            utterance.rate = rate;
+
+            const langCodes = { en: 'en-US', es: 'es-ES', fr: 'fr-FR' };
+            utterance.lang = langCodes[state.lang] || 'en-US';
+
+            const audioBtn = document.getElementById('mainAudioBtn');
+            audioBtn.classList.add('audio-playing');
+
+            utterance.onend = () => {
+                audioBtn.classList.remove('audio-playing');
+                if (state.continuousPlay) {
+                    setTimeout(() => playCurrentAudio(rate), 1500);
+                } else if (state.headsetMode && state.headsetAutoMic) {
+                    // Auto activate microphone in headset mode after phrase ends
+                    setTimeout(() => {
+                        toggleSpeechRecognition(true);
+                    }, 500);
+                }
+            };
+
+            state.listenCount++;
+            document.getElementById('listenAttemptsCount').innerText = state.listenCount;
+
+            state.speechSynth.speak(utterance);
         }
 
-        function changeLanguage(lang) {
-            state.lang = lang;
-            localStorage.setItem('lingua_lang', lang);
-            updateSummaryDisplay();
-        }
+        function toggleSpeechRecognition(forceState) {
+            if (!state.recognition) {
+                alert("Il tuo browser non supporta il riconoscimento vocale. Prova ad usare Chrome o Edge con le tue cuffie.");
+                return;
+            }
 
-        function changeLevel(level) {
-            state.level = level;
-            localStorage.setItem('lingua_level', level);
-            updateSummaryDisplay();
-        }
+            const micIcon = document.getElementById('micIcon');
+            const shouldStart = forceState !== undefined ? forceState : !state.isRecognizing;
 
-        function changeTotalQuestions(count) {
-            const parsed = parseInt(count, 10);
-            if (parsed >= 3 && parsed <= 10) {
-                state.totalQuestions = parsed;
-                localStorage.setItem('lingua_total_questions', parsed);
-                updateSummaryDisplay();
+            if (shouldStart) {
+                try {
+                    state.recognition.start();
+                    state.isRecognizing = true;
+                    micIcon.className = "fa-solid fa-microphone-lines text-red-400 animate-pulse text-lg";
+                } catch(e) {}
+            } else {
+                state.recognition.stop();
+                state.isRecognizing = false;
+                micIcon.className = "fa-solid fa-microphone text-lg";
             }
         }
 
@@ -1388,3 +1471,4 @@
     </script>
 </body>
 </html>
+
