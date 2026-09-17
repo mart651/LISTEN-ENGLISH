@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it" class="dark">
 <head>
@@ -38,7 +39,7 @@
 
     <style>
         html {
-            font-size: 18px; /* Enlarged base size for 1.5x legibility boost */
+            font-size: 18px; /* Enlarged base size for legibility */
         }
         body {
             background-color: #0a0e17;
@@ -61,7 +62,7 @@
             transform: scale(0.97);
         }
 
-        /* Custom Scrollbar for comfortable reading */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -111,9 +112,8 @@
                     </span>
                 </div>
 
-                <!-- On-The-Fly Quick Controls -->
+                <!-- Quick Controls -->
                 <div class="flex items-center gap-2 sm:gap-4">
-                    
                     <!-- USER SELECTOR BUTTON -->
                     <button onclick="openUserModal()" class="flex items-center gap-2 bg-slate-900 border border-eyeBorder hover:border-brandInd px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-eyeHeading transition">
                         <span id="activeUserAvatarHeader" class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">👤</span>
@@ -135,7 +135,7 @@
                         <option value="expert">🔴 Expert</option>
                     </select>
 
-                    <!-- Headset/Mic Mode Toggle -->
+                    <!-- Headset Mode Toggle -->
                     <button id="headsetBtn" onclick="toggleHeadsetMode()" class="px-3 py-2 rounded-xl bg-slate-900 border border-eyeBorder text-slate-400 hover:text-brandInd transition flex items-center gap-2 font-semibold text-xs sm:text-sm" title="Attiva/Disattiva Modalità Cuffie e Microfono">
                         <i class="fa-solid fa-headphones text-base" id="headsetIcon"></i>
                         <span class="hidden md:inline" id="headsetLabel">Cuffie ON</span>
@@ -150,7 +150,6 @@
 
         <!-- SCREEN 1: DASHBOARD / CONFIGURATION -->
         <section id="screenHome" class="space-y-8">
-            <!-- Welcome Hero -->
             <div class="text-center space-y-4 max-w-3xl mx-auto">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brandInd/10 border border-brandInd/30 text-indigo-300 text-xs sm:text-sm font-medium">
                     <i class="fa-solid fa-wifi text-emerald-400 animate-pulse"></i> Web Live Connesso &bull; Anti-Duplicati Attivo
@@ -236,26 +235,25 @@
                     <div class="space-y-3 pt-2">
                         <label class="text-sm font-semibold text-slate-300">Argomento della Conversazione</label>
                         <div class="flex flex-wrap gap-2.5" id="topicContainer">
-                            <button onclick="setTopic('daily')" class="topic-tag px-3.5 py-2 rounded-xl border border-brandInd bg-brandInd/20 text-indigo-300 text-xs sm:text-sm font-medium">💬 Vita Quotidiana</button>
-                            <button onclick="setTopic('travel')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">✈️ Viaggi & Hotel</button>
-                            <button onclick="setTopic('food')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🍕 Ristorante & Cibo</button>
-                            <button onclick="setTopic('work')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">💼 Lavoro & Business</button>
-                            <button onclick="setTopic('health')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🏥 Salute & Emergenze</button>
-                            <button onclick="setTopic('shopping')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🛍️ Shopping & Moda</button>
-                            <button onclick="setTopic('hobbies')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🎬 Tempo Libero & Hobbies</button>
-                            <button onclick="setTopic('tech')" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">💻 Tecnologia & Studio</button>
+                            <button onclick="setTopic('daily', event)" class="topic-tag px-3.5 py-2 rounded-xl border border-brandInd bg-brandInd/20 text-indigo-300 text-xs sm:text-sm font-medium">💬 Vita Quotidiana</button>
+                            <button onclick="setTopic('travel', event)" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">✈️ Viaggi & Hotel</button>
+                            <button onclick="setTopic('food', event)" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🍕 Ristorante & Cibo</button>
+                            <button onclick="setTopic('work', event)" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">💼 Lavoro & Business</button>
+                            <button onclick="setTopic('health', event)" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🏥 Salute & Emergenze</button>
+                            <button onclick="setTopic('shopping', event)" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🛍️ Shopping & Moda</button>
+                            <button onclick="setTopic('hobbies', event)" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">🎬 Tempo Libero & Hobbies</button>
+                            <button onclick="setTopic('tech', event)" class="topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600">💻 Tecnologia & Studio</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 2: Fonte & Dispositivi Audio/Cuffie -->
+                <!-- Card 2: Fonte & Audio Cuffie -->
                 <div class="eye-glass rounded-3xl p-6 space-y-6 flex flex-col justify-between">
                     <div class="space-y-5">
                         <h2 class="text-base font-bold text-eyeHeading uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-globe text-brandEme"></i> 2. Fonte Web & Audio Cuffie
                         </h2>
 
-                        <!-- Always Web Status Banner -->
                         <div class="p-3.5 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 text-xs sm:text-sm flex items-center gap-3">
                             <i class="fa-solid fa-cloud-arrow-down text-lg"></i>
                             <div>
@@ -272,7 +270,7 @@
                             </label>
                             <select id="questionsCountSelect" onchange="changeTotalQuestions(this.value)" class="w-full bg-slate-900 border border-eyeBorder text-eyeHeading text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-brandInd cursor-pointer">
                                 <option value="3">3 Frasi (Rapido)</option>
-                                <option value="5">5 Frasi (Standard)</option>
+                                <option value="5" selected>5 Frasi (Standard)</option>
                                 <option value="8">8 Frasi (Avanzato)</option>
                                 <option value="10">10 Frasi (Completo)</option>
                             </select>
@@ -301,7 +299,7 @@
         <!-- SCREEN 2: EXERCISE / EXAM SESSION -->
         <section id="screenExercise" class="hidden space-y-6">
             
-            <!-- Session Top Status Bar -->
+            <!-- Session Status Bar -->
             <div class="eye-glass rounded-2xl p-4 sm:p-5 flex flex-wrap justify-between items-center gap-4">
                 <div class="flex items-center gap-3">
                     <button onclick="goHome()" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 hover:bg-slate-700 text-eyeHeading border border-eyeBorder flex items-center gap-2 transition" title="Torna alla Home">
@@ -320,7 +318,6 @@
                     <div>Punti: <span id="scoreVal" class="font-extrabold text-emerald-400 text-base">0</span></div>
                     <div>Frase: <span id="countVal" class="font-extrabold text-eyeHeading text-base">1/5</span></div>
                     
-                    <!-- Exam Countdown Bar -->
                     <div id="examTimerBox" class="hidden flex items-center gap-2 text-amber-400 font-mono font-bold text-base">
                         <i class="fa-solid fa-stopwatch"></i>
                         <span id="timerVal">30s</span>
@@ -331,24 +328,19 @@
             <!-- Main Audio & Interaction Card -->
             <div class="eye-glass rounded-3xl p-6 sm:p-10 space-y-8 text-center relative overflow-hidden">
                 
-                <!-- Audio Player Control Hub -->
                 <div class="space-y-5 max-w-md mx-auto">
-                    
                     <div class="relative inline-block">
                         <button id="mainAudioBtn" onclick="playCurrentAudio()" class="w-28 h-28 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-4xl flex items-center justify-center shadow-2xl shadow-indigo-500/30 transition mx-auto eye-button" title="Ascolta Audio Frase">
                             <i id="audioIcon" class="fa-solid fa-volume-high"></i>
                         </button>
                     </div>
 
-                    <!-- Audio Controls Row -->
                     <div class="flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm">
-                        <!-- Continuous Playback Toggle -->
                         <button id="loopAudioBtn" onclick="toggleContinuousPlay()" class="px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 hover:text-indigo-400 transition flex items-center gap-2">
                             <i class="fa-solid fa-rotate"></i>
                             <span>Ascolto Continuo</span>
                         </button>
 
-                        <!-- Slow Audio -->
                         <button id="slowAudioBtn" onclick="playCurrentAudio(0.6)" class="px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 hover:text-amber-400 transition flex items-center gap-2">
                             <i class="fa-solid fa-turtle"></i>
                             <span>Lento</span>
@@ -360,30 +352,24 @@
 
                 <!-- Answer Input Section -->
                 <div class="max-w-2xl mx-auto space-y-5 pt-2">
-                    
-                    <!-- Input Box + Mic Button -->
                     <div class="relative">
                         <textarea id="userAnswerInput" rows="3" placeholder="Ascolta l'audio e scrivi o pronuncia la traduzione in italiano..." class="w-full bg-slate-950/90 border border-eyeBorder focus:border-brandInd rounded-2xl p-4 text-base sm:text-lg text-eyeHeading placeholder-slate-500 focus:outline-none transition resize-none pr-14 leading-relaxed"></textarea>
                         
-                        <!-- Microphone Button for Headset / Voice -->
                         <button id="micBtn" onclick="toggleSpeechRecognition()" class="absolute right-4 top-4 p-2.5 text-slate-400 hover:text-emerald-400 transition rounded-xl bg-slate-900/80 border border-eyeBorder" title="Rispondi a voce col microfono della cuffia">
                             <i class="fa-solid fa-microphone text-lg" id="micIcon"></i>
                         </button>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <button id="hintBtn" onclick="showHint()" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-slate-300 hover:text-eyeHeading text-xs sm:text-sm font-medium transition">
                             <i class="fa-solid fa-lightbulb text-amber-400 mr-1.5"></i> Suggerimento
                         </button>
 
                         <div class="flex items-center gap-3">
-                            <!-- Next Web Phrase Button -->
                             <button id="fetchNextWebBtn" onclick="loadNextPhrase(true)" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-indigo-300 hover:border-indigo-500 text-xs sm:text-sm font-medium transition" title="Carica una nuova frase dal Web">
                                 <i class="fa-solid fa-arrows-rotate mr-1.5"></i> Altra Frase Web
                             </button>
 
-                            <!-- Check Answer Button -->
                             <button onclick="checkAnswer()" class="px-6 py-2.5 rounded-xl bg-brandInd hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm shadow-md transition eye-button">
                                 Verifica Risposta
                             </button>
@@ -409,7 +395,6 @@
 
         <!-- SCREEN 3: EXAM REPORT & CERTIFICATE -->
         <section id="screenReport" class="hidden space-y-8 max-w-2xl mx-auto text-center">
-            
             <div class="eye-glass rounded-3xl p-8 space-y-6 border border-brandInd/30">
                 <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mx-auto">
                     <i class="fa-solid fa-award"></i>
@@ -417,16 +402,14 @@
 
                 <div class="space-y-2">
                     <h2 class="text-2xl font-extrabold text-eyeHeading">Report Finale d'Esame</h2>
-                    <p class="text-xs text-slate-400" id="reportSubtitle">Certificazione del livello di ascolto e traduzione per <strong id="reportUserName" class="text-indigo-300">Utente</strong></p>
+                    <p class="text-xs text-slate-400">Certificazione del livello di ascolto e traduzione per <strong id="reportUserName" class="text-indigo-300">Utente</strong></p>
                 </div>
 
-                <!-- Score Badge -->
                 <div class="p-4 rounded-2xl bg-slate-900 border border-eyeBorder space-y-1">
                     <span class="text-xs text-slate-400">Esito finale:</span>
                     <p id="reportResult" class="text-3xl font-black text-emerald-400">SUPERATO (85%)</p>
                 </div>
 
-                <!-- Metrics breakdown -->
                 <div class="grid grid-cols-3 gap-3 text-xs">
                     <div class="p-3 rounded-xl bg-slate-900 border border-eyeBorder">
                         <span class="text-slate-400 block text-[10px]">Punteggio</span>
@@ -442,7 +425,6 @@
                     </div>
                 </div>
 
-                <!-- Actions -->
                 <div class="flex gap-4 pt-2">
                     <button onclick="goHome()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-eyeHeading text-xs font-bold rounded-xl transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-house"></i> Torna alla Home
@@ -452,7 +434,6 @@
                     </button>
                 </div>
             </div>
-
         </section>
 
     </main>
@@ -460,7 +441,6 @@
     <!-- USER MANAGEMENT MODAL -->
     <div id="userModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="eye-glass max-w-md w-full rounded-3xl p-6 space-y-5 border border-eyeBorder shadow-2xl relative">
-            
             <button onclick="closeUserModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white text-base">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -472,12 +452,8 @@
                 <p class="text-xs text-slate-400">Seleziona, aggiungi o modifica i profili salvati.</p>
             </div>
 
-            <!-- Users List -->
-            <div id="usersListContainer" class="space-y-2 max-h-56 overflow-y-auto pr-1">
-                <!-- Dynamically populated -->
-            </div>
+            <div id="usersListContainer" class="space-y-2 max-h-56 overflow-y-auto pr-1"></div>
 
-            <!-- Add / Edit Form -->
             <div id="userFormContainer" class="p-4 rounded-2xl bg-slate-900/90 border border-eyeBorder space-y-3">
                 <h4 id="userFormTitle" class="text-xs font-bold text-indigo-300 uppercase tracking-wider">Aggiungi Nuovo Utente</h4>
                 
@@ -506,7 +482,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -526,10 +501,9 @@
         const state = {
             lang: localStorage.getItem('lingua_lang') || 'en',
             level: localStorage.getItem('lingua_level') || 'basic',
-            mode: 'free', // 'free' or 'exam'
+            mode: 'free',
             topic: 'daily',
-            source: 'web', // Always web-active by default
-            headsetMode: true, // Default headset mode active
+            headsetMode: true,
             headsetAutoMic: localStorage.getItem('lingua_headset_automic') === 'true',
             score: 0,
             currentIndex: 0,
@@ -563,7 +537,7 @@
             tech: '💻 Tecnologia & Studio'
         };
 
-        /* Dynamic Real-World Web Phrase Generator & Database (Ensures no repetition across test sessions) */
+        /* Web Phrase Database */
         const webPhraseBank = {
             en: {
                 basic: [
@@ -630,7 +604,7 @@
                 ],
                 expert: [
                     { original: "Es de suma importancia mantener la calma.", translation: "È di fondamentale importanza mantenere la calma.", topic: "work" },
-                    { original: "El avance tecnológico ha transformado la sociedad actual.", translation: "Il progresso tecnológico ha trasformato la società attuale.", topic: "tech" }
+                    { original: "El avance tecnológico ha transformado la sociedad actual.", translation: "Il progresso tecnologico ha trasformato la società attuale.", topic: "tech" }
                 ]
             },
             fr: {
@@ -658,10 +632,8 @@
 
         /* Initialization */
         window.addEventListener('DOMContentLoaded', () => {
-            // Load saved multi-user state
             initUsersState();
 
-            // Load saved settings
             document.getElementById('quickLangSelect').value = state.lang;
             document.getElementById('quickLevelSelect').value = state.level;
             const qSelect = document.getElementById('questionsCountSelect');
@@ -670,11 +642,8 @@
             const autoMicChk = document.getElementById('headsetAutoMicCheck');
             if (autoMicChk) autoMicChk.checked = state.headsetAutoMic;
 
-            // Apply Headset active visual indicator
             updateHeadsetUI();
-            updateSummaryDisplay();
 
-            // Initialize Speech Recognition for Headset & Mic
             if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 state.recognition = new SpeechRecognition();
@@ -689,7 +658,7 @@
             }
         });
 
-        /* MULTI-USER & PERSISTENT SEEN PHRASES SYSTEM */
+        /* MULTI-USER SYSTEM */
         function initUsersState() {
             const savedUsers = localStorage.getItem('lingua_users_list');
             const savedActiveId = localStorage.getItem('lingua_active_user_id');
@@ -763,7 +732,6 @@
             if (!user) return;
 
             document.getElementById('activeUserNameHeader').innerText = user.name;
-            document.getElementById('activeUserNameHero').innerText = user.name;
             document.getElementById('activeUserAvatarHeader').innerText = user.avatar;
             document.getElementById('activeUserAvatarHeader').className = `w-6 h-6 rounded-full ${user.avatarBg || 'bg-indigo-600'} text-white flex items-center justify-center text-xs`;
 
@@ -777,56 +745,6 @@
             
             const seenElem = document.getElementById('userSeenCount');
             if (seenElem) seenElem.innerText = (user.seenPhrases || []).length;
-        }
-
-            // Create default user if list empty
-            if (!state.users || state.users.length === 0) {
-                const defaultUser = {
-                    id: 'usr_' + Date.now(),
-                    name: 'Utente 1',
-                    avatar: '👤',
-                    avatarBg: 'bg-indigo-600',
-                    totalScore: 0,
-                    sessionsCompleted: 0,
-                    bestExamPercentage: 0
-                };
-                state.users = [defaultUser];
-                state.activeUserId = defaultUser.id;
-            } else {
-                state.activeUserId = savedActiveId && state.users.some(u => u.id === savedActiveId)
-                    ? savedActiveId 
-                    : state.users[0].id;
-            }
-
-            saveUsersToStorage();
-            updateActiveUserUI();
-        }
-
-        function saveUsersToStorage() {
-            localStorage.setItem('lingua_users_list', JSON.stringify(state.users));
-            localStorage.setItem('lingua_active_user_id', state.activeUserId);
-        }
-
-        function getActiveUser() {
-            return state.users.find(u => u.id === state.activeUserId) || state.users[0];
-        }
-
-        function updateActiveUserUI() {
-            const user = getActiveUser();
-            if (!user) return;
-
-            document.getElementById('activeUserNameHeader').innerText = user.name;
-            document.getElementById('activeUserNameHero').innerText = user.name;
-            document.getElementById('activeUserAvatarHeader').innerText = user.avatar;
-            document.getElementById('activeUserAvatarHeader').className = `w-5 h-5 rounded-full ${user.avatarBg || 'bg-indigo-600'} text-white flex items-center justify-center text-[10px]`;
-
-            document.getElementById('userBadgeName').innerText = user.name;
-            document.getElementById('userBadgeAvatar').innerText = user.avatar;
-            document.getElementById('userBadgeAvatar').className = `w-12 h-12 rounded-2xl ${user.avatarBg || 'bg-indigo-600'} text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-indigo-500/20`;
-
-            document.getElementById('userStatScore').innerText = user.totalScore || 0;
-            document.getElementById('userStatSessions').innerText = user.sessionsCompleted || 0;
-            document.getElementById('userStatBest').innerText = (user.bestExamPercentage || 0) + '%';
         }
 
         function openUserModal(action = 'list') {
@@ -886,6 +804,12 @@
             });
         }
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+
         function setActiveUser(id) {
             state.activeUserId = id;
             saveUsersToStorage();
@@ -894,10 +818,109 @@
             renderUsersList();
         }
 
+        function selectFormAvatar(avatar, bgClass) {
+            state.formAvatarIcon = avatar;
+            state.formAvatarBg = bgClass;
+
+            document.querySelectorAll('.avatar-opt').forEach(btn => {
+                btn.classList.remove('border-indigo-400');
+                btn.classList.add('border-transparent');
+            });
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.remove('border-transparent');
+                event.currentTarget.classList.add('border-indigo-400');
+            }
+        }
+
+        function setupEditUserForm(userId) {
+            const user = state.users.find(u => u.id === userId);
+            if (!user) return;
+
+            state.editingUserId = userId;
+            document.getElementById('userFormTitle').innerText = "Modifica Utente";
+            document.getElementById('userInputName').value = user.name;
+            selectFormAvatar(user.avatar || '👤', user.avatarBg || 'bg-indigo-600');
+            document.getElementById('cancelUserFormBtn').classList.remove('hidden');
+        }
+
+        function resetUserForm() {
+            state.editingUserId = null;
+            document.getElementById('userFormTitle').innerText = "Aggiungi Nuovo Utente";
+            document.getElementById('userInputName').value = '';
+            selectFormAvatar('👤', 'bg-indigo-600');
+            document.getElementById('cancelUserFormBtn').classList.add('hidden');
+        }
+
+        function saveUserFromForm() {
+            const nameInput = document.getElementById('userInputName').value.trim();
+            if (!nameInput) {
+                alert("Inserisci un nome valido per il profilo.");
+                return;
+            }
+
+            if (state.editingUserId) {
+                const user = state.users.find(u => u.id === state.editingUserId);
+                if (user) {
+                    user.name = nameInput;
+                    user.avatar = state.formAvatarIcon;
+                    user.avatarBg = state.formAvatarBg;
+                }
+            } else {
+                const newUser = {
+                    id: 'usr_' + Date.now(),
+                    name: nameInput,
+                    avatar: state.formAvatarIcon,
+                    avatarBg: state.formAvatarBg,
+                    totalScore: 0,
+                    sessionsCompleted: 0,
+                    bestExamPercentage: 0,
+                    seenPhrases: []
+                };
+                state.users.push(newUser);
+                state.activeUserId = newUser.id;
+            }
+
+            saveUsersToStorage();
+            loadActiveUserSeenPhrases();
+            updateActiveUserUI();
+            renderUsersList();
+            resetUserForm();
+        }
+
+        function deleteUser(userId) {
+            if (state.users.length <= 1) return;
+            if (!confirm("Sei sicuro di voler eliminare questo profilo?")) return;
+
+            state.users = state.users.filter(u => u.id !== userId);
+            if (state.activeUserId === userId) {
+                state.activeUserId = state.users[0].id;
+            }
+
+            saveUsersToStorage();
+            loadActiveUserSeenPhrases();
+            updateActiveUserUI();
+            renderUsersList();
+        }
+
+        /* Controls Handlers */
+        function changeLanguage(val) {
+            state.lang = val;
+            localStorage.setItem('lingua_lang', val);
+        }
+
+        function changeLevel(val) {
+            state.level = val;
+            localStorage.setItem('lingua_level', val);
+        }
+
+        function changeTotalQuestions(val) {
+            state.totalQuestions = parseInt(val) || 5;
+            localStorage.setItem('lingua_total_questions', state.totalQuestions);
+        }
+
         function toggleHeadsetMode() {
             state.headsetMode = !state.headsetMode;
             updateHeadsetUI();
-            updateSummaryDisplay();
         }
 
         function updateHeadsetUI() {
@@ -921,7 +944,61 @@
             localStorage.setItem('lingua_headset_automic', enabled ? 'true' : 'false');
         }
 
-        /* Web / Dynamic Non-Repeating Phrase Fetcher */
+        function setMode(mode) {
+            state.mode = mode;
+            document.getElementById('modeFreeBtn').className = mode === 'free' 
+                ? 'p-4 rounded-2xl border text-left transition space-y-1 bg-brandInd/20 border-brandInd text-eyeHeading'
+                : 'p-4 rounded-2xl border text-left transition space-y-1 bg-slate-900 border-eyeBorder text-slate-400 hover:border-slate-600';
+
+            document.getElementById('modeExamBtn').className = mode === 'exam' 
+                ? 'p-4 rounded-2xl border text-left transition space-y-1 bg-amber-500/20 border-amber-500 text-eyeHeading'
+                : 'p-4 rounded-2xl border text-left transition space-y-1 bg-slate-900 border-eyeBorder text-slate-400 hover:border-slate-600';
+        }
+
+        function setTopic(topic, evt) {
+            state.topic = topic;
+            document.querySelectorAll('.topic-tag').forEach(btn => {
+                btn.className = 'topic-tag px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs sm:text-sm font-medium hover:border-slate-600';
+            });
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.className = 'topic-tag px-3.5 py-2 rounded-xl border border-brandInd bg-brandInd/20 text-indigo-300 text-xs sm:text-sm font-medium';
+            }
+        }
+
+        function goHome() {
+            if (state.speechSynth) state.speechSynth.cancel();
+            clearInterval(state.timer);
+
+            document.getElementById('screenExercise').classList.add('hidden');
+            document.getElementById('screenReport').classList.add('hidden');
+            document.getElementById('screenHome').classList.remove('hidden');
+            updateActiveUserUI();
+        }
+
+        /* Session Start */
+        function startSession() {
+            state.score = 0;
+            state.currentIndex = 0;
+
+            document.getElementById('screenHome').classList.add('hidden');
+            document.getElementById('screenReport').classList.add('hidden');
+            document.getElementById('screenExercise').classList.remove('hidden');
+
+            document.getElementById('sessionModeBadge').innerText = state.mode === 'exam' ? 'Simulazione Esame' : 'Esercitazione Libera';
+            document.getElementById('sessionModeBadge').className = state.mode === 'exam' 
+                ? 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                : 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
+
+            document.getElementById('sessionTopicBadge').innerText = topicTitles[state.topic] || '💬 Vita Quotidiana';
+
+            document.getElementById('examTimerBox').style.display = state.mode === 'exam' ? 'flex' : 'none';
+            document.getElementById('slowAudioBtn').style.display = state.mode === 'exam' ? 'none' : 'inline-flex';
+            document.getElementById('hintBtn').style.display = state.mode === 'exam' ? 'none' : 'inline-flex';
+
+            loadNextPhrase();
+        }
+
+        /* Load & Fetch Phrase */
         async function loadNextPhrase(skipCurrent = false) {
             state.listenCount = 0;
             document.getElementById('listenAttemptsCount').innerText = '0';
@@ -940,13 +1017,8 @@
             document.getElementById('countVal').innerText = `${state.currentIndex}/${state.totalQuestions}`;
             document.getElementById('scoreVal').innerText = state.score;
 
-            // Fetch non-repeated phrase from Web Bank filtered by seen state
             const pool = (webPhraseBank[state.lang] && webPhraseBank[state.lang][state.level]) || webPhraseBank.en.basic;
-            
-            // Filter out phrases ALREADY SEEN in any previous session
             let unseenPhrases = pool.filter(p => !state.usedPhraseIds.has(p.original));
-
-            // If topic filter has unseen phrases, prioritize topic
             let topicUnseen = unseenPhrases.filter(p => p.topic === state.topic);
             
             let selectedPhrase = null;
@@ -955,7 +1027,6 @@
             } else if (unseenPhrases.length > 0) {
                 selectedPhrase = unseenPhrases[Math.floor(Math.random() * unseenPhrases.length)];
             } else {
-                // If all phrases in bank were seen, generate dynamic web variation to avoid repetition
                 const base = pool[Math.floor(Math.random() * pool.length)];
                 selectedPhrase = {
                     original: base.original,
@@ -964,25 +1035,22 @@
                 };
             }
 
-            // Mark phrase as permanently seen for active user
             if (selectedPhrase) {
                 markPhraseAsSeen(selectedPhrase.original);
             }
 
             state.currentPhrase = selectedPhrase;
 
-            // Start Exam Timer if in Exam Mode
             if (state.mode === 'exam') {
                 resetExamTimer();
             }
 
-            // Auto Play Audio
             setTimeout(() => {
                 playCurrentAudio();
             }, 300);
         }
 
-        /* Speech Synthesis with Headset Auto-Mic Trigger */
+        /* Speech & Audio Controls */
         function playCurrentAudio(rate = 1.0) {
             if (!state.currentPhrase || !state.speechSynth) return;
 
@@ -1007,219 +1075,9 @@
                 if (state.continuousPlay) {
                     setTimeout(() => playCurrentAudio(rate), 1500);
                 } else if (state.headsetMode && state.headsetAutoMic) {
-                    // Auto activate microphone in headset mode after phrase ends
                     setTimeout(() => {
                         toggleSpeechRecognition(true);
                     }, 500);
-                }
-            };
-
-            state.listenCount++;
-            document.getElementById('listenAttemptsCount').innerText = state.listenCount;
-
-            state.speechSynth.speak(utterance);
-        }
-
-        function toggleSpeechRecognition(forceState) {
-            if (!state.recognition) {
-                alert("Il tuo browser non supporta il riconoscimento vocale. Prova ad usare Chrome o Edge con le tue cuffie.");
-                return;
-            }
-
-            const micIcon = document.getElementById('micIcon');
-            const shouldStart = forceState !== undefined ? forceState : !state.isRecognizing;
-
-            if (shouldStart) {
-                try {
-                    state.recognition.start();
-                    state.isRecognizing = true;
-                    micIcon.className = "fa-solid fa-microphone-lines text-red-400 animate-pulse text-lg";
-                } catch(e) {}
-            } else {
-                state.recognition.stop();
-                state.isRecognizing = false;
-                micIcon.className = "fa-solid fa-microphone text-lg";
-            }
-        }
-
-        function setMode(mode) {
-            state.mode = mode;
-            document.getElementById('modeFreeBtn').className = mode === 'free' 
-                ? 'p-3 rounded-xl border text-left transition space-y-1 bg-brandInd/20 border-brandInd text-eyeHeading'
-                : 'p-3 rounded-xl border text-left transition space-y-1 bg-slate-900 border-eyeBorder text-slate-400 hover:border-slate-600';
-
-            document.getElementById('modeExamBtn').className = mode === 'exam' 
-                ? 'p-3 rounded-xl border text-left transition space-y-1 bg-amber-500/20 border-amber-500 text-eyeHeading'
-                : 'p-3 rounded-xl border text-left transition space-y-1 bg-slate-900 border-eyeBorder text-slate-400 hover:border-slate-600';
-        }
-
-        function setTopic(topic) {
-            state.topic = topic;
-            document.querySelectorAll('.topic-tag').forEach(btn => {
-                btn.className = 'topic-tag px-3 py-1.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 text-xs font-medium hover:border-slate-600';
-            });
-            event.target.className = 'topic-tag px-3 py-1.5 rounded-xl border border-brandInd bg-brandInd/20 text-indigo-300 text-xs font-medium';
-        }
-
-        function setSource(src) {
-            state.source = src;
-            document.getElementById('srcWebBtn').className = src === 'web'
-                ? 'p-2.5 rounded-xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-2'
-                : 'p-2.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-400 text-xs font-semibold flex items-center justify-center gap-2 hover:border-slate-600';
-
-            document.getElementById('srcDbBtn').className = src === 'db'
-                ? 'p-2.5 rounded-xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-2'
-                : 'p-2.5 rounded-xl border border-eyeBorder bg-slate-900 text-slate-400 text-xs font-semibold flex items-center justify-center gap-2 hover:border-slate-600';
-        }
-
-        function toggleHeadsetMode() {
-            state.headsetMode = !state.headsetMode;
-            const btn = document.getElementById('headsetBtn');
-            const icon = document.getElementById('headsetIcon');
-            
-            if (state.headsetMode) {
-                btn.classList.add('text-indigo-400', 'border-brandInd');
-                icon.className = 'fa-solid fa-headphones text-sm';
-            } else {
-                btn.classList.remove('text-indigo-400', 'border-brandInd');
-                icon.className = 'fa-solid fa-headphones text-sm';
-            }
-            updateSummaryDisplay();
-        }
-
-        function updateSummaryDisplay() {
-            const langNames = { en: '🇬🇧 Inglese', es: '🇪🇸 Spagnolo', fr: '🇫🇷 Francese' };
-            const levelNames = { basic: '🟢 Basic', intermediate: '🟡 Intermediate', expert: '🔴 Expert' };
-            
-            document.getElementById('summaryLang').innerText = langNames[state.lang];
-            document.getElementById('summaryLevel').innerText = levelNames[state.level];
-            const qElem = document.getElementById('summaryQuestions');
-            if (qElem) qElem.innerText = `${state.totalQuestions} Frasi`;
-            document.getElementById('summaryAudio').innerText = state.headsetMode ? '🎧 Cuffie / Mic: Attivi' : '🔊 Altoparlanti Standard';
-        }
-
-        /* Session Start */
-        function startSession() {
-            state.score = 0;
-            state.currentIndex = 0;
-            state.usedPhraseIds.clear();
-
-            document.getElementById('screenHome').classList.add('hidden');
-            document.getElementById('screenReport').classList.add('hidden');
-            document.getElementById('screenExercise').classList.remove('hidden');
-
-            // Setup session view
-            document.getElementById('sessionModeBadge').innerText = state.mode === 'exam' ? 'Simulazione Esame' : 'Esercitazione Libera';
-            document.getElementById('sessionModeBadge').className = state.mode === 'exam' 
-                ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
-
-            // Set dynamic topic badge title
-            document.getElementById('sessionTopicBadge').innerText = topicTitles[state.topic] || '💬 Vita Quotidiana';
-
-            document.getElementById('examTimerBox').style.display = state.mode === 'exam' ? 'flex' : 'none';
-            document.getElementById('slowAudioBtn').style.display = state.mode === 'exam' ? 'none' : 'inline-flex';
-            document.getElementById('hintBtn').style.display = state.mode === 'exam' ? 'none' : 'inline-flex';
-
-            loadNextPhrase();
-        }
-
-        /* Web / Database Phrase Provider */
-        async function loadNextPhrase(skipCurrent = false) {
-            state.listenCount = 0;
-            document.getElementById('listenAttemptsCount').innerText = '0';
-            document.getElementById('userAnswerInput').value = '';
-            document.getElementById('feedbackBox').classList.add('hidden');
-
-            if (state.currentIndex >= state.totalQuestions && !skipCurrent) {
-                showReportScreen();
-                return;
-            }
-
-            if (!skipCurrent) {
-                state.currentIndex++;
-            }
-            
-            document.getElementById('countVal').innerText = `${state.currentIndex}/${state.totalQuestions}`;
-            document.getElementById('scoreVal').innerText = state.score;
-
-            // Fetch conversational phrase (Web or Offline DB)
-            let phrase = null;
-            if (state.source === 'web') {
-                phrase = await fetchConversationalWebPhrase();
-            }
-
-            if (!phrase) {
-                // Fallback to offline database with active topic filtering
-                const langPool = (phraseDb[state.lang] && phraseDb[state.lang][state.level]) || phraseDb.en.basic;
-                
-                // Filter by current topic if available
-                const topicFiltered = langPool.filter(p => p.topic === state.topic && !state.usedPhraseIds.has(p.original));
-                const generalFiltered = langPool.filter(p => !state.usedPhraseIds.has(p.original));
-                
-                const candidates = topicFiltered.length > 0 ? topicFiltered : (generalFiltered.length > 0 ? generalFiltered : langPool);
-                phrase = candidates[Math.floor(Math.random() * candidates.length)];
-            }
-
-            if (phrase) {
-                state.usedPhraseIds.add(phrase.original);
-            }
-
-            state.currentPhrase = phrase;
-
-            // Start Exam Timer if in Exam Mode
-            if (state.mode === 'exam') {
-                resetExamTimer();
-            }
-
-            // Auto Play Audio
-            setTimeout(() => {
-                playCurrentAudio();
-            }, 300);
-        }
-
-        /* Real-World Conversational Web Fetcher (Filtered for short daily sentences) */
-        async function fetchConversationalWebPhrase() {
-            try {
-                const queries = topicQueries[state.topic] || topicQueries.daily;
-                const fallbackSentences = phraseDb[state.lang]?.[state.level] || phraseDb.en.basic;
-                const topicFiltered = fallbackSentences.filter(p => p.topic === state.topic && !state.usedPhraseIds.has(p.original));
-                
-                if (topicFiltered.length > 0) {
-                    const selected = topicFiltered[Math.floor(Math.random() * topicFiltered.length)];
-                    return selected;
-                }
-            } catch (e) {
-                console.log("Web fetch fallback used");
-            }
-            return null;
-        }
-
-        /* Speech & Audio Controller */
-        function playCurrentAudio(rate = 1.0) {
-            if (!state.currentPhrase || !state.speechSynth) return;
-
-            // Check listen limits for Exam Mode
-            if (state.mode === 'exam' && state.listenCount >= 2) {
-                alert("Hai raggiunto il limite massimo di 2 ascolti per questa frase d'esame!");
-                return;
-            }
-
-            state.speechSynth.cancel();
-            
-            const utterance = new SpeechSynthesisUtterance(state.currentPhrase.original);
-            utterance.rate = rate;
-
-            const langCodes = { en: 'en-US', es: 'es-ES', fr: 'fr-FR' };
-            utterance.lang = langCodes[state.lang] || 'en-US';
-
-            const audioBtn = document.getElementById('mainAudioBtn');
-            audioBtn.classList.add('audio-playing');
-
-            utterance.onend = () => {
-                audioBtn.classList.remove('audio-playing');
-                if (state.continuousPlay) {
-                    setTimeout(() => playCurrentAudio(rate), 1500);
                 }
             };
 
@@ -1252,16 +1110,16 @@
                 try {
                     state.recognition.start();
                     state.isRecognizing = true;
-                    micIcon.className = "fa-solid fa-microphone-lines text-red-400 animate-pulse";
+                    micIcon.className = "fa-solid fa-microphone-lines text-red-400 animate-pulse text-lg";
                 } catch(e) {}
             } else {
                 state.recognition.stop();
                 state.isRecognizing = false;
-                micIcon.className = "fa-solid fa-microphone text-base";
+                micIcon.className = "fa-solid fa-microphone text-lg";
             }
         }
 
-        /* Valutazione del Senso e Punteggio Flessibile */
+        /* Check Answer Logic */
         function checkAnswer() {
             if (!state.currentPhrase) return;
             
@@ -1270,7 +1128,6 @@
             const userText = document.getElementById('userAnswerInput').value.trim();
             const correctText = state.currentPhrase.translation;
 
-            // Valutazione semantica del senso
             const result = evaluateSense(userText, correctText);
 
             const feedbackBox = document.getElementById('feedbackBox');
@@ -1284,23 +1141,23 @@
             state.score += result.points;
 
             if (result.points === 10) {
-                feedbackBox.className = "max-w-xl mx-auto p-4 rounded-2xl text-left text-xs space-y-2 border border-emerald-500/40 bg-emerald-500/10";
+                feedbackBox.className = "max-w-2xl mx-auto p-5 rounded-2xl text-left text-xs sm:text-sm space-y-3 border border-emerald-500/40 bg-emerald-500/10";
                 feedbackTitle.innerText = "Ottimo! Senso della frase corretto";
                 feedbackTitle.className = "text-emerald-400 font-bold";
                 feedbackScoreTag.innerText = "+10 Punti";
-                feedbackScoreTag.className = "px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 font-bold";
+                feedbackScoreTag.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300";
             } else if (result.points >= 5) {
-                feedbackBox.className = "max-w-xl mx-auto p-4 rounded-2xl text-left text-xs space-y-2 border border-amber-500/40 bg-amber-500/10";
+                feedbackBox.className = "max-w-2xl mx-auto p-5 rounded-2xl text-left text-xs sm:text-sm space-y-3 border border-amber-500/40 bg-amber-500/10";
                 feedbackTitle.innerText = "Buono! Hai colto il senso generale";
                 feedbackTitle.className = "text-amber-400 font-bold";
                 feedbackScoreTag.innerText = `+${result.points} Punti`;
-                feedbackScoreTag.className = "px-2 py-0.5 rounded-full text-[10px] bg-amber-500/20 text-amber-300 font-bold";
+                feedbackScoreTag.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300";
             } else {
-                feedbackBox.className = "max-w-xl mx-auto p-4 rounded-2xl text-left text-xs space-y-2 border border-red-500/40 bg-red-500/10";
+                feedbackBox.className = "max-w-2xl mx-auto p-5 rounded-2xl text-left text-xs sm:text-sm space-y-3 border border-red-500/40 bg-red-500/10";
                 feedbackTitle.innerText = "Risposta fuori senso o incompleta";
                 feedbackTitle.className = "text-red-400 font-bold";
                 feedbackScoreTag.innerText = "0 Punti";
-                feedbackScoreTag.className = "px-2 py-0.5 rounded-full text-[10px] bg-red-500/20 text-red-300 font-bold";
+                feedbackScoreTag.className = "px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-300";
             }
 
             feedbackText.innerText = `Traduzione di riferimento: "${state.currentPhrase.translation}"`;
@@ -1309,11 +1166,9 @@
             document.getElementById('scoreVal').innerText = state.score;
         }
 
-        /* Algoritmo di Analisi Semantica del Senso (Keyword & Stemming Matching) */
         function evaluateSense(userInput, targetTranslation) {
             if (!userInput) return { points: 0, score: 0 };
 
-            // Pulizia del testo e normalizzazione (no accenti, no punteggiatura)
             const clean = (str) => str.toLowerCase()
                 .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?!]/g, "")
@@ -1322,12 +1177,10 @@
             const cleanUser = clean(userInput);
             const cleanTarget = clean(targetTranslation);
 
-            // Se è esattamente uguale o quasi identica
             if (cleanUser === cleanTarget || cleanTarget.includes(cleanUser) || cleanUser.includes(cleanTarget)) {
                 return { points: 10, score: 1.0 };
             }
 
-            // Stopwords italiane trascurabili per l'estrazione del senso
             const stopWords = new Set([
                 'il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'uno', 'una', 'un\'',
                 'di', 'a', 'da', 'in', 'con', 'su', 'per', 'tra', 'fra',
@@ -1347,12 +1200,10 @@
             const targetKeys = getKeywords(cleanTarget);
 
             if (targetKeys.length === 0) {
-                // Fallback a confronto di caratteri
                 const sim = calculateSimilarity(cleanUser, cleanTarget);
                 return { points: sim > 0.5 ? 10 : (sim > 0.3 ? 5 : 0), score: sim };
             }
 
-            // Calcolo delle concordanze di senso (trova parole o radici di parole)
             let matchedKeys = 0;
             targetKeys.forEach(tKey => {
                 const tStem = tKey.substring(0, Math.min(4, tKey.length));
@@ -1366,14 +1217,24 @@
             const matchRatio = matchedKeys / targetKeys.length;
 
             if (matchRatio >= 0.65) {
-                return { points: 10, score: matchRatio }; // Senso colto appieno
+                return { points: 10, score: matchRatio };
             } else if (matchRatio >= 0.35) {
-                return { points: 7, score: matchRatio };  // Buona parte del senso
+                return { points: 7, score: matchRatio };
             } else if (matchRatio > 0) {
-                return { points: 5, score: matchRatio };  // Idea di base presente
+                return { points: 5, score: matchRatio };
             }
 
             return { points: 0, score: 0 };
+        }
+
+        function calculateSimilarity(str1, str2) {
+            let matches = 0;
+            const words1 = str1.split(' ');
+            const words2 = str2.split(' ');
+            words1.forEach(w => {
+                if (words2.includes(w)) matches++;
+            });
+            return matches / Math.max(words1.length, words2.length);
         }
 
         function showHint() {
@@ -1382,36 +1243,10 @@
             alert(`Suggerimento: La traduzione inizia con "${hint}"`);
         }
 
-        /* Next Phrase Handler & Keyboard Shortcuts */
         function nextPhrase() {
             document.getElementById('feedbackBox').classList.add('hidden');
             loadNextPhrase();
         }
-
-        // Support physical Arrow Down, Arrow Right and Enter keys to move forward
-        document.addEventListener('keydown', (e) => {
-            const exerciseScreen = document.getElementById('screenExercise');
-            if (!exerciseScreen || exerciseScreen.classList.contains('hidden')) return;
-
-            const feedbackBox = document.getElementById('feedbackBox');
-            const isFeedbackVisible = feedbackBox && !feedbackBox.classList.contains('hidden');
-
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                if (isFeedbackVisible) {
-                    e.preventDefault();
-                    nextPhrase();
-                }
-            } else if (e.key === 'Enter' && !e.shiftKey) {
-                if (document.activeElement.id === 'userAnswerInput') {
-                    e.preventDefault();
-                    if (isFeedbackVisible) {
-                        nextPhrase();
-                    } else {
-                        checkAnswer();
-                    }
-                }
-            }
-        });
 
         function resetExamTimer() {
             clearInterval(state.timer);
@@ -1429,17 +1264,23 @@
             }, 1000);
         }
 
-        function calculateSimilarity(str1, str2) {
-            let matches = 0;
-            const words1 = str1.split(' ');
-            const words2 = str2.split(' ');
-            words1.forEach(w => {
-                if (words2.includes(w)) matches++;
-            });
-            return matches / Math.max(words1.length, words2.length);
+        function recordSessionProgress(scoreObtained, questionsCount, examPercentage) {
+            const user = getActiveUser();
+            if (!user) return;
+
+            user.totalScore = (user.totalScore || 0) + scoreObtained;
+            user.sessionsCompleted = (user.sessionsCompleted || 0) + 1;
+
+            if (examPercentage !== null && examPercentage !== undefined) {
+                if (!user.bestExamPercentage || examPercentage > user.bestExamPercentage) {
+                    user.bestExamPercentage = examPercentage;
+                }
+            }
+
+            saveUsersToStorage();
+            updateActiveUserUI();
         }
 
-        /* Exam Report Screen */
         function showReportScreen() {
             document.getElementById('screenExercise').classList.add('hidden');
             document.getElementById('screenReport').classList.remove('hidden');
@@ -1465,10 +1306,33 @@
             document.getElementById('repLevel').innerText = state.level.toUpperCase();
             document.getElementById('repTime').innerText = `14s / frase`;
 
-            // Record progress persistently for current user
             recordSessionProgress(state.score, state.totalQuestions, state.mode === 'exam' ? percentage : null);
         }
+
+        /* Keyboard listener */
+        document.addEventListener('keydown', (e) => {
+            const exerciseScreen = document.getElementById('screenExercise');
+            if (!exerciseScreen || exerciseScreen.classList.contains('hidden')) return;
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            const isFeedbackVisible = feedbackBox && !feedbackBox.classList.contains('hidden');
+
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (isFeedbackVisible) {
+                    e.preventDefault();
+                    nextPhrase();
+                }
+            } else if (e.key === 'Enter' && !e.shiftKey) {
+                if (document.activeElement.id === 'userAnswerInput') {
+                    e.preventDefault();
+                    if (isFeedbackVisible) {
+                        nextPhrase();
+                    } else {
+                        checkAnswer();
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
-
