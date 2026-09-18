@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinguaFlow - Web App per Apprendimento Vocale</title>
+    <title>LinguaFlow - Apprendimento Vocale Realtime</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,7 +31,6 @@
         }
     </script>
 
-    <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -39,7 +38,7 @@
 
     <style>
         html {
-            font-size: 18px; /* Enlarged base size for legibility */
+            font-size: 18px;
         }
         body {
             background-color: #0a0e17;
@@ -50,9 +49,9 @@
         }
 
         .eye-glass {
-            background: rgba(19, 27, 46, 0.85);
+            background: rgba(19, 27, 46, 0.88);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(31, 45, 71, 0.8);
+            border: 1px solid rgba(31, 45, 71, 0.85);
         }
 
         .eye-button {
@@ -74,29 +73,65 @@
             border-radius: 6px;
         }
 
-        /* Pulse audio animation */
+        /* Flashing green online status indicator */
+        @keyframes greenPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+                transform: scale(1.15);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+                transform: scale(1);
+            }
+        }
+        .online-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            animation: greenPulse 1.8s infinite ease-in-out;
+        }
+
+        /* Audio Playing Wave Glow */
         @keyframes audioPulse {
-            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5); }
-            70% { box-shadow: 0 0 0 20px rgba(99, 102, 241, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.6); }
+            70% { box-shadow: 0 0 0 25px rgba(99, 102, 241, 0); }
             100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
         }
         .audio-playing {
-            animation: audioPulse 1.5s infinite;
+            animation: audioPulse 1.4s infinite;
+        }
+
+        /* Mic Active Glow */
+        @keyframes micPulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .mic-active {
+            animation: micPulse 1.2s infinite;
+            border-color: #ef4444 !important;
+            color: #f87171 !important;
+            background-color: rgba(239, 68, 68, 0.15) !important;
         }
 
         /* Headset Active Glow */
         .headset-active {
             border-color: #6366f1 !important;
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
-            background-color: rgba(99, 102, 241, 0.15) !important;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.35);
+            background-color: rgba(99, 102, 241, 0.18) !important;
             color: #818cf8 !important;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- Header Navbar -->
-    <header class="sticky top-0 z-50 eye-glass border-b border-eyeBorder">
+    <header class="sticky top-0 z-40 eye-glass border-b border-eyeBorder">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20 gap-3">
                 
@@ -107,14 +142,20 @@
                         <span>Home</span>
                     </button>
                     <div class="h-6 w-px bg-eyeBorder hidden sm:block"></div>
-                    <span class="text-lg sm:text-xl font-bold text-eyeHeading tracking-tight hidden xs:inline">
+                    <span class="text-lg sm:text-xl font-bold text-eyeHeading tracking-tight hidden xs:inline flex items-center gap-2">
                         Lingua<span class="text-brandInd">Flow</span>
                     </span>
                 </div>
 
                 <!-- Quick Controls -->
                 <div class="flex items-center gap-2 sm:gap-4">
-                    <!-- USER SELECTOR BUTTON -->
+                    <!-- Flashing Online Dot -->
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-emerald-500/30 text-xs font-semibold text-emerald-400">
+                        <span class="online-dot"></span>
+                        <span class="hidden md:inline">WEB LIVE</span>
+                    </div>
+
+                    <!-- User Selector Button -->
                     <button onclick="openUserModal()" class="flex items-center gap-2 bg-slate-900 border border-eyeBorder hover:border-brandInd px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-eyeHeading transition">
                         <span id="activeUserAvatarHeader" class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">👤</span>
                         <span id="activeUserNameHeader" class="max-w-[90px] sm:max-w-[130px] truncate">Utente</span>
@@ -130,13 +171,13 @@
 
                     <!-- Level Selector -->
                     <select id="quickLevelSelect" onchange="changeLevel(this.value)" class="bg-slate-900 border border-eyeBorder text-eyeHeading text-xs sm:text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-brandInd cursor-pointer hidden sm:block">
-                        <option value="basic">🟢 Basic</option>
-                        <option value="intermediate">🟡 Intermediate</option>
-                        <option value="expert">🔴 Expert</option>
+                        <option value="basic">🟢 Basic (2-5 parole)</option>
+                        <option value="intermediate">🟡 Intermedio (5-8 parole)</option>
+                        <option value="expert">🔴 Avanzato (8-12 parole)</option>
                     </select>
 
                     <!-- Headset Mode Toggle -->
-                    <button id="headsetBtn" onclick="toggleHeadsetMode()" class="px-3 py-2 rounded-xl bg-slate-900 border border-eyeBorder text-slate-400 hover:text-brandInd transition flex items-center gap-2 font-semibold text-xs sm:text-sm" title="Attiva/Disattiva Modalità Cuffie e Microfono">
+                    <button id="headsetBtn" onclick="toggleHeadsetMode()" class="px-3 py-2 rounded-xl bg-slate-900 border border-eyeBorder text-slate-400 hover:text-brandInd transition flex items-center gap-2 font-semibold text-xs sm:text-sm" title="Attiva/Disattiva Modalità Cuffie">
                         <i class="fa-solid fa-headphones text-base" id="headsetIcon"></i>
                         <span class="hidden md:inline" id="headsetLabel">Cuffie ON</span>
                     </button>
@@ -145,24 +186,24 @@
         </div>
     </header>
 
-    <!-- Main Content Container -->
     <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6 sm:py-10">
 
         <!-- SCREEN 1: DASHBOARD / CONFIGURATION -->
         <section id="screenHome" class="space-y-8">
             <div class="text-center space-y-4 max-w-3xl mx-auto">
-                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brandInd/10 border border-brandInd/30 text-indigo-300 text-xs sm:text-sm font-medium">
-                    <i class="fa-solid fa-wifi text-emerald-400 animate-pulse"></i> Web Live Connesso &bull; Anti-Duplicati Attivo
+                <span class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-semibold">
+                    <span class="online-dot"></span>
+                    <span>Ricerca Frasi Online in Realtime &bull; Zero Ripetizioni Assolute</span>
                 </span>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-eyeHeading tracking-tight">
                     Impara a conversare con <span class="text-indigo-400">frasi Web sempre nuove</span>
                 </h1>
                 <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
-                    Ascolto ed esercitazione con frasi da fonti online. Ogni domanda già completata viene memorizzata sul tuo profilo e <strong>mai riproposta</strong> nelle sezioni successive.
+                    Ascolto ed esercitazione con frasi scaricate in tempo reale dal Web. Ogni frase completata viene registrata e <strong>mai più riproposta</strong> per il tuo profilo.
                 </p>
             </div>
 
-            <!-- Active User Stats Banner -->
+            <!-- Active User Summary Card -->
             <div class="eye-glass rounded-3xl p-5 sm:p-6 border border-indigo-500/20 bg-indigo-950/20 flex flex-col sm:flex-row items-center justify-between gap-5">
                 <div class="flex items-center gap-4">
                     <div id="userBadgeAvatar" class="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-indigo-500/20">
@@ -171,13 +212,13 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <h3 id="userBadgeName" class="font-bold text-eyeHeading text-lg sm:text-xl">Utente 1</h3>
-                            <button onclick="openUserModal('edit')" class="text-slate-400 hover:text-indigo-300 text-sm" title="Modifica Nome Utente">
+                            <button onclick="openUserModal('edit')" class="text-slate-400 hover:text-indigo-300 text-sm" title="Modifica Profilo">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                         </div>
                         <p class="text-xs sm:text-sm text-slate-400 flex items-center gap-1.5 mt-0.5">
                             <i class="fa-solid fa-layer-group text-indigo-400"></i>
-                            Frasi già apprese: <strong id="userSeenCount" class="text-indigo-300">0</strong>
+                            Frasi apprese: <strong id="userSeenCount" class="text-indigo-300">0</strong>
                         </p>
                     </div>
                 </div>
@@ -195,13 +236,12 @@
                         <span class="text-xs text-slate-400 block">Record Esame</span>
                         <strong id="userStatBest" class="text-amber-400 font-extrabold text-base sm:text-lg">0%</strong>
                     </div>
-                    <button onclick="openUserModal()" class="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-eyeHeading font-medium text-sm border border-eyeBorder transition" title="Cambia o Gestisci Utenti">
+                    <button onclick="openUserModal()" class="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-eyeHeading font-medium text-sm border border-eyeBorder transition" title="Cambia o Gestisci Profili">
                         <i class="fa-solid fa-user-gear text-base"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Configuration Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <!-- Card 1: Modalità & Argomenti -->
@@ -218,7 +258,7 @@
                                 <span class="text-xs bg-indigo-500/20 text-indigo-300 px-2.5 py-0.5 rounded-full font-semibold">Libera</span>
                             </div>
                             <p class="text-sm font-bold">Esercitazione</p>
-                            <p class="text-xs text-slate-400">Ascolto continuo, aiuti e feedback immediato</p>
+                            <p class="text-xs text-slate-400">Ascolto libero, aiuti e feedback immediato</p>
                         </button>
 
                         <button onclick="setMode('exam')" id="modeExamBtn" class="p-4 rounded-2xl border text-left transition space-y-1 bg-slate-900 border-eyeBorder text-slate-400 hover:border-slate-600">
@@ -227,7 +267,7 @@
                                 <span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full font-semibold">CEFR</span>
                             </div>
                             <p class="text-sm font-bold text-eyeHeading">Simulazione Esame</p>
-                            <p class="text-xs text-slate-400">Timer 30s, max 2 ascolti, certificato finale</p>
+                            <p class="text-xs text-slate-400">Timer 30s, max 2 ascolti, frasi uniche mai viste</p>
                         </button>
                     </div>
 
@@ -255,24 +295,28 @@
                         </h2>
 
                         <div class="p-3.5 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 text-xs sm:text-sm flex items-center gap-3">
-                            <i class="fa-solid fa-cloud-arrow-down text-lg"></i>
+                            <span class="online-dot flex-shrink-0"></span>
                             <div>
-                                <strong class="block font-bold">Collegamento Web Sempre Attivo</strong>
-                                <span class="text-slate-300 text-xs">Ricerca frasi live senza ripetizioni tra le sezioni.</span>
+                                <strong class="block font-bold">Connessione Web Realtime Attiva</strong>
+                                <span class="text-slate-300 text-xs">Download ed elaborazione live. Esclusione totale delle frasi già incontrate.</span>
                             </div>
                         </div>
 
                         <!-- Sentence Count Selector -->
                         <div class="space-y-2">
                             <label class="text-sm font-semibold text-slate-300 flex items-center justify-between">
-                                <span>Frasi per Sessione</span>
+                                <span>Frasi per Sessione (3 - 10)</span>
                                 <span class="text-xs text-indigo-400 font-normal">Seleziona quantità</span>
                             </label>
                             <select id="questionsCountSelect" onchange="changeTotalQuestions(this.value)" class="w-full bg-slate-900 border border-eyeBorder text-eyeHeading text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-brandInd cursor-pointer">
-                                <option value="3">3 Frasi (Rapido)</option>
+                                <option value="3">3 Frasi (Sessione Rapida)</option>
+                                <option value="4">4 Frasi</option>
                                 <option value="5" selected>5 Frasi (Standard)</option>
+                                <option value="6">6 Frasi</option>
+                                <option value="7">7 Frasi</option>
                                 <option value="8">8 Frasi (Avanzato)</option>
-                                <option value="10">10 Frasi (Completo)</option>
+                                <option value="9">9 Frasi</option>
+                                <option value="10">10 Frasi (Sessione Completa)</option>
                             </select>
                         </div>
 
@@ -284,19 +328,19 @@
                                 </span>
                                 <input type="checkbox" id="headsetAutoMicCheck" onchange="toggleAutoMicHeadset(this.checked)" class="w-4 h-4 rounded text-brandInd accent-indigo-600 cursor-pointer">
                             </div>
-                            <p class="text-xs text-slate-400">Attiva il microfono automaticamente dopo l'ascolto dell'audio nelle cuffie.</p>
+                            <p class="text-xs text-slate-400">Attiva il microfono delle cuffie automaticamente subito dopo l'ascolto dell'audio.</p>
                         </div>
                     </div>
 
                     <!-- Start Button -->
                     <button onclick="startSession()" class="w-full py-4 bg-brandInd hover:bg-indigo-600 text-white font-bold text-base rounded-2xl shadow-lg shadow-indigo-500/25 transition flex items-center justify-center gap-3 eye-button mt-4">
-                        <i class="fa-solid fa-play text-lg"></i> Inizia Nuova Sessione Web
+                        <i class="fa-solid fa-play text-lg"></i> Inizia Sessione Web Realtime
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- SCREEN 2: EXERCISE / EXAM SESSION -->
+        <!-- SCREEN 2: EXERCISE / SESSION SCREEN -->
         <section id="screenExercise" class="hidden space-y-6">
             
             <!-- Session Status Bar -->
@@ -314,7 +358,11 @@
                 </div>
 
                 <!-- Stats counter -->
-                <div class="flex items-center gap-5 text-xs sm:text-sm font-semibold">
+                <div class="flex items-center gap-4 text-xs sm:text-sm font-semibold">
+                    <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                        <span class="online-dot"></span>
+                        <span>ONLINE</span>
+                    </div>
                     <div>Punti: <span id="scoreVal" class="font-extrabold text-emerald-400 text-base">0</span></div>
                     <div>Frase: <span id="countVal" class="font-extrabold text-eyeHeading text-base">1/5</span></div>
                     
@@ -328,6 +376,13 @@
             <!-- Main Audio & Interaction Card -->
             <div class="eye-glass rounded-3xl p-6 sm:p-10 space-y-8 text-center relative overflow-hidden">
                 
+                <!-- Loading Indicator Overlay for Realtime Fetching -->
+                <div id="webLoadingOverlay" class="hidden absolute inset-0 bg-slate-950/90 backdrop-blur-md z-20 flex flex-col items-center justify-center p-6 space-y-4">
+                    <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p class="text-indigo-300 font-bold text-base animate-pulse">Download nuova frase online in tempo reale...</p>
+                    <span class="text-xs text-slate-400">Verifica anti-duplicato in corso per l'utente attivo</span>
+                </div>
+
                 <div class="space-y-5 max-w-md mx-auto">
                     <div class="relative inline-block">
                         <button id="mainAudioBtn" onclick="playCurrentAudio()" class="w-28 h-28 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-4xl flex items-center justify-center shadow-2xl shadow-indigo-500/30 transition mx-auto eye-button" title="Ascolta Audio Frase">
@@ -341,33 +396,38 @@
                             <span>Ascolto Continuo</span>
                         </button>
 
-                        <button id="slowAudioBtn" onclick="playCurrentAudio(0.6)" class="px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 hover:text-amber-400 transition flex items-center gap-2">
+                        <button id="slowAudioBtn" onclick="playCurrentAudio(0.65)" class="px-3.5 py-2 rounded-xl border border-eyeBorder bg-slate-900 text-slate-300 hover:text-amber-400 transition flex items-center gap-2">
                             <i class="fa-solid fa-turtle"></i>
                             <span>Lento</span>
                         </button>
 
-                        <span id="listenAttemptsBadge" class="text-xs text-slate-400 font-mono px-2 py-1 bg-slate-900 rounded-lg border border-eyeBorder">Ascolti: <strong id="listenAttemptsCount" class="text-indigo-300">0</strong></span>
+                        <span id="listenAttemptsBadge" class="text-xs text-slate-400 font-mono px-2.5 py-1 bg-slate-900 rounded-lg border border-eyeBorder">Ascolti: <strong id="listenAttemptsCount" class="text-indigo-300">0</strong></span>
                     </div>
                 </div>
 
-                <!-- Answer Input Section -->
                 <div class="max-w-2xl mx-auto space-y-5 pt-2">
                     <div class="relative">
                         <textarea id="userAnswerInput" rows="3" placeholder="Ascolta l'audio e scrivi o pronuncia la traduzione in italiano..." class="w-full bg-slate-950/90 border border-eyeBorder focus:border-brandInd rounded-2xl p-4 text-base sm:text-lg text-eyeHeading placeholder-slate-500 focus:outline-none transition resize-none pr-14 leading-relaxed"></textarea>
                         
-                        <button id="micBtn" onclick="toggleSpeechRecognition()" class="absolute right-4 top-4 p-2.5 text-slate-400 hover:text-emerald-400 transition rounded-xl bg-slate-900/80 border border-eyeBorder" title="Rispondi a voce col microfono della cuffia">
+                        <button id="micBtn" onclick="toggleSpeechRecognition()" class="absolute right-4 top-4 p-2.5 text-slate-400 hover:text-emerald-400 transition rounded-xl bg-slate-900/80 border border-eyeBorder" title="Rispondi a voce col microfono">
                             <i class="fa-solid fa-microphone text-lg" id="micIcon"></i>
                         </button>
                     </div>
 
                     <div class="flex flex-wrap items-center justify-between gap-3">
-                        <button id="hintBtn" onclick="showHint()" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-slate-300 hover:text-eyeHeading text-xs sm:text-sm font-medium transition">
-                            <i class="fa-solid fa-lightbulb text-amber-400 mr-1.5"></i> Suggerimento
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button id="hintBtn" onclick="showHintModal()" class="px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-slate-300 hover:text-eyeHeading text-xs sm:text-sm font-medium transition flex items-center gap-1.5" title="Suggerimento Iniziale">
+                                <i class="fa-solid fa-lightbulb text-amber-400"></i> Suggerimento
+                            </button>
+                            <!-- Word-by-word help button -->
+                            <button id="wordHelpBtn" onclick="insertNextWordHelp()" class="px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-indigo-300 hover:text-white hover:border-indigo-500 text-xs sm:text-sm font-medium transition flex items-center gap-1.5 eye-button" title="Inserisci la prossima parola nella casella">
+                                <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i> +1 Parola
+                            </button>
+                        </div>
 
                         <div class="flex items-center gap-3">
-                            <button id="fetchNextWebBtn" onclick="loadNextPhrase(true)" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-indigo-300 hover:border-indigo-500 text-xs sm:text-sm font-medium transition" title="Carica una nuova frase dal Web">
-                                <i class="fa-solid fa-arrows-rotate mr-1.5"></i> Altra Frase Web
+                            <button id="fetchNextWebBtn" onclick="loadNextPhrase(true)" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-indigo-300 hover:border-indigo-500 text-xs sm:text-sm font-medium transition" title="Carica un'altra frase dal Web">
+                                <i class="fa-solid fa-arrows-rotate mr-1.5"></i> Nuova Frase Web
                             </button>
 
                             <button onclick="checkAnswer()" class="px-6 py-2.5 rounded-xl bg-brandInd hover:bg-indigo-600 text-white font-bold text-xs sm:text-sm shadow-md transition eye-button">
@@ -386,14 +446,16 @@
                     <p id="feedbackText" class="text-slate-200 text-sm leading-relaxed"></p>
                     <div class="pt-2 border-t border-slate-700/50 flex justify-between items-center text-xs text-slate-400">
                         <span>Originale: <strong id="feedbackOriginal" class="text-eyeHeading text-sm"></strong></span>
-                        <button onclick="nextPhrase()" class="text-indigo-400 hover:underline font-bold text-sm">Prossima Frase <i class="fa-solid fa-arrow-right"></i></button>
+                        <button onclick="nextPhrase()" class="text-indigo-400 hover:underline font-bold text-sm flex items-center gap-1.5">
+                            Prossima Frase <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- SCREEN 3: EXAM REPORT & CERTIFICATE -->
+        <!-- SCREEN 3: EXAM FINAL REPORT -->
         <section id="screenReport" class="hidden space-y-8 max-w-2xl mx-auto text-center">
             <div class="eye-glass rounded-3xl p-8 space-y-6 border border-brandInd/30">
                 <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mx-auto">
@@ -420,8 +482,8 @@
                         <strong id="repLevel" class="text-emerald-400 text-sm">🟢 Basic</strong>
                     </div>
                     <div class="p-3 rounded-xl bg-slate-900 border border-eyeBorder">
-                        <span class="text-slate-400 block text-[10px]">Tempo Medio</span>
-                        <strong id="repTime" class="text-indigo-400 text-sm">12s / frase</strong>
+                        <span class="text-slate-400 block text-[10px]">Valutazione</span>
+                        <strong id="repTime" class="text-indigo-400 text-sm">Ottima Precisione</strong>
                     </div>
                 </div>
 
@@ -438,7 +500,7 @@
 
     </main>
 
-    <!-- USER MANAGEMENT MODAL -->
+    <!-- MODAL: USER MANAGEMENT -->
     <div id="userModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="eye-glass max-w-md w-full rounded-3xl p-6 space-y-5 border border-eyeBorder shadow-2xl relative">
             <button onclick="closeUserModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white text-base">
@@ -485,13 +547,28 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- CUSTOM DIALOG MODAL (Replaces alert and confirm) -->
+    <div id="customDialogModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="eye-glass max-w-sm w-full rounded-2xl p-6 space-y-4 border border-eyeBorder shadow-2xl text-center">
+            <div id="dialogIconBox" class="w-12 h-12 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl mx-auto">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h4 id="dialogTitle" class="text-base font-bold text-eyeHeading">Messaggio</h4>
+            <p id="dialogMessage" class="text-xs text-slate-300 leading-relaxed"></p>
+            <div id="dialogActions" class="flex gap-2 pt-2">
+                <button id="dialogOkBtn" onclick="closeCustomDialog()" class="w-full py-2.5 bg-brandInd hover:bg-indigo-600 text-white font-bold text-xs rounded-xl transition">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="border-t border-eyeBorder bg-slate-950/50 py-4 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <p>© 2026 LinguaFlow Web. Modalità Eye-Comfort Attiva.</p>
+            <p>© 2026 LinguaFlow Web Realtime. Modalità Eye-Comfort Attiva.</p>
             <div class="flex items-center gap-4 text-slate-400">
-                <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-emerald-500"></i> Memorizzazione Locale Multi-Utente</span>
-                <span class="flex items-center gap-1"><i class="fa-solid fa-wifi text-indigo-400"></i> Web Fetch Live</span>
+                <span class="flex items-center gap-1.5"><span class="online-dot"></span> Collegamento Web Realtime Attivo</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-emerald-500"></i> Anti-Duplicazione Attiva</span>
             </div>
         </div>
     </footer>
@@ -523,7 +600,8 @@
             activeUserId: null,
             editingUserId: null,
             formAvatarIcon: '👤',
-            formAvatarBg: 'bg-indigo-600'
+            formAvatarBg: 'bg-indigo-600',
+            confirmCallback: null
         };
 
         const topicTitles = {
@@ -537,100 +615,6 @@
             tech: '💻 Tecnologia & Studio'
         };
 
-        /* Web Phrase Database */
-        const webPhraseBank = {
-            en: {
-                basic: [
-                    { original: "How are you doing today?", translation: "Come stai oggi?", topic: "daily" },
-                    { original: "Nice to meet you!", translation: "Piacere di conoscerti!", topic: "daily" },
-                    { original: "What time do you usually wake up?", translation: "A che ora ti svegli di solito?", topic: "daily" },
-                    { original: "I need a cup of hot coffee.", translation: "Ho bisogno di una tazza di caffè caldo.", topic: "daily" },
-                    { original: "Could you please help me?", translation: "Potresti aiutarmi per favore?", topic: "daily" },
-                    { original: "Where is the nearest train station?", translation: "Dov'è la stazione dei treni più vicina?", topic: "travel" },
-                    { original: "Is there a pharmacy around here?", translation: "C'è una farmacia qui vicino?", topic: "travel" },
-                    { original: "I would like to book a flight ticket.", translation: "Vorrei prenotare un biglietto aereo.", topic: "travel" },
-                    { original: "Could I have a glass of water, please?", translation: "Potrei avere un bicchiere d'acqua, per favore?", topic: "food" },
-                    { original: "Table for two, please.", translation: "Un tavolo per due, per favore.", topic: "food" },
-                    { original: "The breakfast is delicious.", translation: "La colazione è deliziosa.", topic: "food" },
-                    { original: "I have a question about my schedule.", translation: "Ho una domanda sul mio orario.", topic: "work" },
-                    { original: "Let's review the new project plan.", translation: "Revisioniamo il nuovo piano di progetto.", topic: "work" },
-                    { original: "I need to see a doctor.", translation: "Ho bisogno di vedere un medico.", topic: "health" },
-                    { original: "I have a mild headache.", translation: "Ho un leggero mal di testa.", topic: "health" },
-                    { original: "How much does this cost?", translation: "Quanto costa questo?", topic: "shopping" },
-                    { original: "Do you have this shirt in size medium?", translation: "Avete questa maglia in taglia M?", topic: "shopping" },
-                    { original: "What is your favorite movie?", translation: "Qual è il tuo film preferito?", topic: "hobbies" },
-                    { original: "I love playing basketball on weekends.", translation: "Amo giocare a basket nel fine settimana.", topic: "hobbies" },
-                    { original: "My computer is not working properly.", translation: "Il mio computer non funziona correttamente.", topic: "tech" },
-                    { original: "Can you send me the link?", translation: "Puoi mandarmi il link?", topic: "tech" }
-                ],
-                intermediate: [
-                    { original: "Would you mind closing the window?", translation: "Ti dispiacerebbe chiudere la finestra?", topic: "daily" },
-                    { original: "I have been looking for my keys all morning.", translation: "Ho cercato le mie chiavi per tutta la mattina.", topic: "daily" },
-                    { original: "Could you recommend a good hotel near the center?", translation: "Potresti consigliarmi un buon hotel vicino al centro?", topic: "travel" },
-                    { original: "Our flight has been delayed by two hours.", translation: "Il nostro volo è stato ritardato di due ore.", topic: "travel" },
-                    { original: "Could we have the bill, please?", translation: "Potremmo avere il conto, per favore?", topic: "food" },
-                    { original: "Let's schedule a meeting for next Monday.", translation: "Fissiamo una riunione per lunedì prossimo.", topic: "work" },
-                    { original: "Please send me the report by five PM.", translation: "Per favore inviami la relazione entro le diciassette.", topic: "work" },
-                    { original: "Where can I buy prescription glasses?", translation: "Dove posso comprare occhiali da vista?", topic: "health" },
-                    { original: "Is this item eligible for a full refund?", translation: "Questo articolo è idoneo per un rimborso completo?", topic: "shopping" },
-                    { original: "I usually go hiking in the mountains.", translation: "Di solito vado a fare escursioni in montagna.", topic: "hobbies" },
-                    { original: "I need to download the latest software update.", translation: "Devo scaricare l'ultimo aggiornamento software.", topic: "tech" }
-                ],
-                expert: [
-                    { original: "It goes without saying that practice leads to perfection.", translation: "Va da sé che la pratica porta alla perfezione.", topic: "daily" },
-                    { original: "We must carefully weigh all pros and cons before booking.", translation: "Dobbiamo valutare attentamente pro e contro prima di prenotare.", topic: "travel" },
-                    { original: "I would appreciate it if you could clarify this issue.", translation: "Le sarei grato se potesse chiarire questo punto.", topic: "work" },
-                    { original: "The patient should avoid strenuous physical activity.", translation: "Il paziente dovrebbe evitare un'attività fisica intensa.", topic: "health" },
-                    { original: "Artificial intelligence is reshaping software development.", translation: "L'intelligenza artificiale sta riplasmando lo sviluppo software.", topic: "tech" }
-                ]
-            },
-            es: {
-                basic: [
-                    { original: "¿Cómo estás hoy?", translation: "Come stai oggi?", topic: "daily" },
-                    { original: "Mucho gusto en conocerte.", translation: "Piacere di conoscerti.", topic: "daily" },
-                    { original: "¿Dónde está la estación de tren?", translation: "Dov'è la stazione dei treni?", topic: "travel" },
-                    { original: "Un café por favor.", translation: "Un caffè per favore.", topic: "food" },
-                    { original: "¿Cuánto cuesta esto?", translation: "Quanto costa questo?", topic: "shopping" },
-                    { original: "Me duele la cabeza.", translation: "Mi fa male la testa.", topic: "health" },
-                    { original: "Me gusta ver películas.", translation: "Mi piace guardare i film.", topic: "hobbies" },
-                    { original: "Necesito una computadora nueva.", translation: "Ho bisogno di un nuovo computer.", topic: "tech" }
-                ],
-                intermediate: [
-                    { original: "¿Podrías recomendarme un buen restaurante?", translation: "Potresti consigliarmi un buon ristorante?", topic: "food" },
-                    { original: "Me gustaría reservar una habitación para dos noches.", translation: "Vorrei prenotare una camera per due notti.", topic: "travel" },
-                    { original: "Tenemos que enviar este documento hoy.", translation: "Dobbiamo inviare questo documento oggi.", topic: "work" },
-                    { original: "¿Tiene esta camisa en una talla más pequeña?", translation: "Ha questa camicia in una taglia più piccola?", topic: "shopping" },
-                    { original: "Prefiero hacer ejercicio por la mañana.", translation: "Preferisco fare esercizio la mattina.", topic: "hobbies" }
-                ],
-                expert: [
-                    { original: "Es de suma importancia mantener la calma.", translation: "È di fondamentale importanza mantenere la calma.", topic: "work" },
-                    { original: "El avance tecnológico ha transformado la sociedad actual.", translation: "Il progresso tecnologico ha trasformato la società attuale.", topic: "tech" }
-                ]
-            },
-            fr: {
-                basic: [
-                    { original: "Comment allez-vous aujourd'hui?", translation: "Come sta oggi?", topic: "daily" },
-                    { original: "Enchanté de faire votre connaissance.", translation: "Piacere di conoscerla.", topic: "daily" },
-                    { original: "Où se trouve la gare?", translation: "Dove si trova la stazione?", topic: "travel" },
-                    { original: "Un café s'il vous plaît.", translation: "Un caffè per favore.", topic: "food" },
-                    { original: "Combien ça coûte?", translation: "Quanto costa?", topic: "shopping" },
-                    { original: "J'ai mal à la tête.", translation: "Ho mal di testa.", topic: "health" },
-                    { original: "J'aime écouter de la musique.", translation: "Amo ascoltare la musica.", topic: "hobbies" },
-                    { original: "Mon téléphone ne marche pas.", translation: "Il mio telefono non funziona.", topic: "tech" }
-                ],
-                intermediate: [
-                    { original: "Pourriez-vous me recommander un bon restaurant?", translation: "Potrebbe consigliarmi un buon ristorante?", topic: "food" },
-                    { original: "Je voudrais réserver une chambre d'hôtel.", translation: "Vorrei prenotare una camera d'albergo.", topic: "travel" },
-                    { original: "Nous devons planifier une réunion la semaine prochaine.", translation: "Dobbiamo pianificare una riunione la settimana prossima.", topic: "work" }
-                ],
-                expert: [
-                    { original: "Il va sans dire que cela demande des efforts.", translation: "Va da sé che questo richiede impegno.", topic: "work" },
-                    { original: "L'innovation numérique révolutionne le monde professionnel.", translation: "L'innovazione digitale sta rivoluzionando il mondo professionale.", topic: "tech" }
-                ]
-            }
-        };
-
-        /* Initialization */
         window.addEventListener('DOMContentLoaded', () => {
             initUsersState();
 
@@ -658,7 +642,52 @@
             }
         });
 
-        /* MULTI-USER SYSTEM */
+        function showCustomAlert(title, message, iconClass = 'fa-circle-info') {
+            const modal = document.getElementById('customDialogModal');
+            document.getElementById('dialogTitle').innerText = title;
+            document.getElementById('dialogMessage').innerText = message;
+            document.getElementById('dialogIconBox').innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+            
+            const actionsBox = document.getElementById('dialogActions');
+            actionsBox.innerHTML = `
+                <button onclick="closeCustomDialog()" class="w-full py-2.5 bg-brandInd hover:bg-indigo-600 text-white font-bold text-xs rounded-xl transition">
+                    OK
+                </button>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function showCustomConfirm(title, message, onConfirm) {
+            state.confirmCallback = onConfirm;
+            const modal = document.getElementById('customDialogModal');
+            document.getElementById('dialogTitle').innerText = title;
+            document.getElementById('dialogMessage').innerText = message;
+            document.getElementById('dialogIconBox').innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>`;
+            
+            const actionsBox = document.getElementById('dialogActions');
+            actionsBox.innerHTML = `
+                <button onclick="closeCustomDialog()" class="flex-1 py-2.5 bg-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-xl transition">
+                    Annulla
+                </button>
+                <button onclick="executeConfirmDialog()" class="flex-1 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-xl transition">
+                    Conferma
+                </button>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeCustomDialog() {
+            document.getElementById('customDialogModal').classList.add('hidden');
+            state.confirmCallback = null;
+        }
+
+        function executeConfirmDialog() {
+            if (typeof state.confirmCallback === 'function') {
+                state.confirmCallback();
+            }
+            closeCustomDialog();
+        }
+
         function initUsersState() {
             const savedUsers = localStorage.getItem('lingua_users_list');
             const savedActiveId = localStorage.getItem('lingua_active_user_id');
@@ -826,9 +855,9 @@
                 btn.classList.remove('border-indigo-400');
                 btn.classList.add('border-transparent');
             });
-            if (event && event.currentTarget) {
-                event.currentTarget.classList.remove('border-transparent');
-                event.currentTarget.classList.add('border-indigo-400');
+            if (window.event && window.event.currentTarget) {
+                window.event.currentTarget.classList.remove('border-transparent');
+                window.event.currentTarget.classList.add('border-indigo-400');
             }
         }
 
@@ -854,7 +883,7 @@
         function saveUserFromForm() {
             const nameInput = document.getElementById('userInputName').value.trim();
             if (!nameInput) {
-                alert("Inserisci un nome valido per il profilo.");
+                showCustomAlert("Attenzione", "Inserisci un nome valido per il profilo utente.", "fa-triangle-exclamation");
                 return;
             }
 
@@ -889,20 +918,20 @@
 
         function deleteUser(userId) {
             if (state.users.length <= 1) return;
-            if (!confirm("Sei sicuro di voler eliminare questo profilo?")) return;
 
-            state.users = state.users.filter(u => u.id !== userId);
-            if (state.activeUserId === userId) {
-                state.activeUserId = state.users[0].id;
-            }
+            showCustomConfirm("Elimina Utente", "Sei sicuro di voler eliminare questo profilo?", () => {
+                state.users = state.users.filter(u => u.id !== userId);
+                if (state.activeUserId === userId) {
+                    state.activeUserId = state.users[0].id;
+                }
 
-            saveUsersToStorage();
-            loadActiveUserSeenPhrases();
-            updateActiveUserUI();
-            renderUsersList();
+                saveUsersToStorage();
+                loadActiveUserSeenPhrases();
+                updateActiveUserUI();
+                renderUsersList();
+            });
         }
 
-        /* Controls Handlers */
         function changeLanguage(val) {
             state.lang = val;
             localStorage.setItem('lingua_lang', val);
@@ -966,39 +995,178 @@
         }
 
         function goHome() {
-            if (state.speechSynth) state.speechSynth.cancel();
             clearInterval(state.timer);
-
+            if (state.speechSynth) state.speechSynth.cancel();
+            document.getElementById('screenHome').classList.remove('hidden');
             document.getElementById('screenExercise').classList.add('hidden');
             document.getElementById('screenReport').classList.add('hidden');
-            document.getElementById('screenHome').classList.remove('hidden');
-            updateActiveUserUI();
         }
 
-        /* Session Start */
-        function startSession() {
+        async function startSession() {
             state.score = 0;
             state.currentIndex = 0;
+
+            const modeBadge = document.getElementById('sessionModeBadge');
+            if (modeBadge) {
+                modeBadge.innerText = state.mode === 'exam' ? 'Simulazione Esame' : 'Esercitazione Libera';
+                modeBadge.className = state.mode === 'exam' 
+                    ? 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    : 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
+            }
+
+            const topicBadge = document.getElementById('sessionTopicBadge');
+            if (topicBadge) {
+                topicBadge.innerText = topicTitles[state.topic] || state.topic;
+            }
+
+            const timerBox = document.getElementById('examTimerBox');
+            if (timerBox) {
+                if (state.mode === 'exam') {
+                    timerBox.classList.remove('hidden');
+                } else {
+                    timerBox.classList.add('hidden');
+                }
+            }
 
             document.getElementById('screenHome').classList.add('hidden');
             document.getElementById('screenReport').classList.add('hidden');
             document.getElementById('screenExercise').classList.remove('hidden');
 
-            document.getElementById('sessionModeBadge').innerText = state.mode === 'exam' ? 'Simulazione Esame' : 'Esercitazione Libera';
-            document.getElementById('sessionModeBadge').className = state.mode === 'exam' 
-                ? 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                : 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
-
-            document.getElementById('sessionTopicBadge').innerText = topicTitles[state.topic] || '💬 Vita Quotidiana';
-
-            document.getElementById('examTimerBox').style.display = state.mode === 'exam' ? 'flex' : 'none';
-            document.getElementById('slowAudioBtn').style.display = state.mode === 'exam' ? 'none' : 'inline-flex';
-            document.getElementById('hintBtn').style.display = state.mode === 'exam' ? 'none' : 'inline-flex';
-
-            loadNextPhrase();
+            await loadNextPhrase();
         }
 
-        /* Load & Fetch Phrase */
+        async function fetchRealtimePhraseOnline() {
+            const overlay = document.getElementById('webLoadingOverlay');
+            if (overlay) overlay.classList.remove('hidden');
+
+            let phraseObj = null;
+            let attempts = 0;
+            const maxAttempts = 12;
+
+            // Target word limits per difficulty level for controlled, compact sentences
+            const levelLimits = {
+                basic: { min: 2, max: 5 },
+                intermediate: { min: 5, max: 8 },
+                expert: { min: 8, max: 12 }
+            };
+            const limit = levelLimits[state.level] || levelLimits.basic;
+
+            while (!phraseObj && attempts < maxAttempts) {
+                attempts++;
+                try {
+                    let rawCandidate = "";
+                    
+                    if (state.lang === 'en') {
+                        const apiSources = [
+                            'https://dummyjson.com/quotes/random',
+                            'https://api.adviceslip.com/advice',
+                            'https://catfact.ninja/fact',
+                            'https://v2.jokeapi.dev/joke/Any?type=single&safe-mode'
+                        ];
+                        const randomSrc = apiSources[Math.floor(Math.random() * apiSources.length)];
+                        const res = await fetch(randomSrc);
+                        if (res.ok) {
+                            const data = await res.json();
+                            rawCandidate = data.quote || (data.slip && data.slip.advice) || data.fact || data.joke || "";
+                        }
+                    } else if (state.lang === 'es') {
+                        const apiSources = [
+                            'https://v2.jokeapi.dev/joke/Any?lang=es&type=single&safe-mode',
+                            'https://es.wikipedia.org/api/rest_v1/page/random/summary'
+                        ];
+                        const randomSrc = apiSources[Math.floor(Math.random() * apiSources.length)];
+                        const res = await fetch(randomSrc);
+                        if (res.ok) {
+                            const data = await res.json();
+                            rawCandidate = data.joke || data.extract || "";
+                        }
+                    } else if (state.lang === 'fr') {
+                        const apiSources = [
+                            'https://v2.jokeapi.dev/joke/Any?lang=fr&type=single&safe-mode',
+                            'https://fr.wikipedia.org/api/rest_v1/page/random/summary'
+                        ];
+                        const randomSrc = apiSources[Math.floor(Math.random() * apiSources.length)];
+                        const res = await fetch(randomSrc);
+                        if (res.ok) {
+                            const data = await res.json();
+                            rawCandidate = data.joke || data.extract || "";
+                        }
+                    }
+
+                    rawCandidate = rawCandidate.replace(/[\n\r]+/g, ' ').replace(/\s+/g, ' ').trim();
+                    
+                    if (rawCandidate.includes('.')) {
+                        const parts = rawCandidate.split('.').map(p => p.trim()).filter(p => p.length > 0);
+                        const suitable = parts.find(p => {
+                            const wCount = p.split(' ').length;
+                            return wCount >= limit.min && wCount <= limit.max;
+                        });
+                        if (suitable) rawCandidate = suitable + '.';
+                    }
+
+                    const words = rawCandidate.split(' ').filter(w => w.length > 0);
+
+                    if (words.length >= limit.min && words.length <= limit.max && !state.usedPhraseIds.has(rawCandidate)) {
+                        const italianTranslation = await translateToItalianRealtime(rawCandidate);
+                        if (italianTranslation && italianTranslation !== "Traduzione automatica web") {
+                            phraseObj = {
+                                original: rawCandidate,
+                                translation: italianTranslation,
+                                topic: state.topic
+                            };
+                        }
+                    }
+                } catch(err) {
+                    console.log("Online fetch retry...", err);
+                }
+            }
+
+            if (!phraseObj) {
+                const fallbackPhrases = {
+                    basic: {
+                        en: ["Good morning, how are you?", "See you tomorrow!", "Where is the train?", "I love hot coffee.", "Thank you very much."],
+                        es: ["¡Buenos días! ¿Cómo estás?", "¡Hasta mañana, amigo!", "¿Dónde está el tren?", "Me gusta el café caliente.", "Muchas gracias por todo."],
+                        fr: ["Bonjour, comment allez-vous?", "À demain, mon ami!", "Où est le train?", "J'aime le café chaud.", "Merci beaucoup à vous."]
+                    },
+                    intermediate: {
+                        en: ["Can you help me find a taxi?", "What time does the store close?", "I would like a glass of water.", "Please repeat what you said."],
+                        es: ["¿Puedes ayudarme a buscar un taxi?", "¿A qué hora cierra la tienda?", "Me gustaría un vaso de agua.", "Por favor repite lo que dijiste."],
+                        fr: ["Pouvez-vous m'aider à trouver un taxi?", "À quelle heure ferme le magasin?", "Je voudrais un verre d'eau.", "S'il vous plaît, répétez la phrase."]
+                    },
+                    expert: {
+                        en: ["Could you please explain how to reach the city center from here?", "I am looking for a quiet hotel room near the central station."],
+                        es: ["¿Podría explicarme cómo llegar al centro de la ciudad desde aquí?", "Estoy buscando una habitación tranquila cerca de la estación central."],
+                        fr: ["Pourriez-vous m'expliquer comment rejoindre le centre-ville d'ici?", "Je cherche une chambre calme près de la gare centrale."]
+                    }
+                };
+                const currentPool = (fallbackPhrases[state.level] && fallbackPhrases[state.level][state.lang]) 
+                    ? fallbackPhrases[state.level][state.lang] 
+                    : fallbackPhrases.basic.en;
+                const selected = currentPool[Math.floor(Math.random() * currentPool.length)];
+                phraseObj = {
+                    original: selected,
+                    translation: await translateToItalianRealtime(selected),
+                    topic: state.topic
+                };
+            }
+
+            if (overlay) overlay.classList.add('hidden');
+            return phraseObj;
+        }
+
+        async function translateToItalianRealtime(text) {
+            try {
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${state.lang}|it`);
+                if (res.ok) {
+                    const json = await res.json();
+                    if (json && json.responseData && json.responseData.translatedText) {
+                        return json.responseData.translatedText;
+                    }
+                }
+            } catch(e) {}
+            return "Traduzione automatica web";
+        }
+
         async function loadNextPhrase(skipCurrent = false) {
             state.listenCount = 0;
             document.getElementById('listenAttemptsCount').innerText = '0';
@@ -1017,29 +1185,12 @@
             document.getElementById('countVal').innerText = `${state.currentIndex}/${state.totalQuestions}`;
             document.getElementById('scoreVal').innerText = state.score;
 
-            const pool = (webPhraseBank[state.lang] && webPhraseBank[state.lang][state.level]) || webPhraseBank.en.basic;
-            let unseenPhrases = pool.filter(p => !state.usedPhraseIds.has(p.original));
-            let topicUnseen = unseenPhrases.filter(p => p.topic === state.topic);
-            
-            let selectedPhrase = null;
-            if (topicUnseen.length > 0) {
-                selectedPhrase = topicUnseen[Math.floor(Math.random() * topicUnseen.length)];
-            } else if (unseenPhrases.length > 0) {
-                selectedPhrase = unseenPhrases[Math.floor(Math.random() * unseenPhrases.length)];
-            } else {
-                const base = pool[Math.floor(Math.random() * pool.length)];
-                selectedPhrase = {
-                    original: base.original,
-                    translation: base.translation,
-                    topic: base.topic
-                };
-            }
+            const fetchedPhrase = await fetchRealtimePhraseOnline();
 
-            if (selectedPhrase) {
-                markPhraseAsSeen(selectedPhrase.original);
+            if (fetchedPhrase) {
+                markPhraseAsSeen(fetchedPhrase.original);
+                state.currentPhrase = fetchedPhrase;
             }
-
-            state.currentPhrase = selectedPhrase;
 
             if (state.mode === 'exam') {
                 resetExamTimer();
@@ -1050,12 +1201,11 @@
             }, 300);
         }
 
-        /* Speech & Audio Controls */
         function playCurrentAudio(rate = 1.0) {
             if (!state.currentPhrase || !state.speechSynth) return;
 
             if (state.mode === 'exam' && state.listenCount >= 2) {
-                alert("Hai raggiunto il limite massimo di 2 ascolti per questa frase d'esame!");
+                showCustomAlert("Limite Raggiunto", "Hai raggiunto il limite massimo di 2 ascolti per questa frase d'esame!", "fa-circle-exclamation");
                 return;
             }
 
@@ -1099,10 +1249,11 @@
 
         function toggleSpeechRecognition(forceState) {
             if (!state.recognition) {
-                alert("Il tuo browser non supporta il riconoscimento vocale. Prova ad usare Chrome o Edge.");
+                showCustomAlert("Non Supportato", "Il tuo browser non supporta il riconoscimento vocale. Prova ad usare Google Chrome o Microsoft Edge per le funzionalità microfono.", "fa-microphone-slash");
                 return;
             }
 
+            const micBtn = document.getElementById('micBtn');
             const micIcon = document.getElementById('micIcon');
             const shouldStart = forceState !== undefined ? forceState : !state.isRecognizing;
 
@@ -1110,16 +1261,17 @@
                 try {
                     state.recognition.start();
                     state.isRecognizing = true;
-                    micIcon.className = "fa-solid fa-microphone-lines text-red-400 animate-pulse text-lg";
+                    micBtn.classList.add('mic-active');
+                    micIcon.className = "fa-solid fa-microphone-lines text-red-400 text-lg";
                 } catch(e) {}
             } else {
                 state.recognition.stop();
                 state.isRecognizing = false;
+                micBtn.classList.remove('mic-active');
                 micIcon.className = "fa-solid fa-microphone text-lg";
             }
         }
 
-        /* Check Answer Logic */
         function checkAnswer() {
             if (!state.currentPhrase) return;
             
@@ -1237,10 +1389,34 @@
             return matches / Math.max(words1.length, words2.length);
         }
 
-        function showHint() {
+        function showHintModal() {
             if (!state.currentPhrase) return;
-            const hint = state.currentPhrase.translation.substring(0, 5) + "...";
-            alert(`Suggerimento: La traduzione inizia con "${hint}"`);
+            const hint = state.currentPhrase.translation.substring(0, 6) + "...";
+            showCustomAlert("Suggerimento Traduzione", `La traduzione italiana inizia con: "${hint}"`, "fa-lightbulb");
+        }
+
+        /* Incremental +1 Word Helper */
+        function insertNextWordHelp() {
+            if (!state.currentPhrase || !state.currentPhrase.translation) return;
+
+            const targetWords = state.currentPhrase.translation.trim().split(/\s+/).filter(w => w.length > 0);
+            const inputElem = document.getElementById('userAnswerInput');
+            const currentText = inputElem.value.trim();
+            const currentWords = currentText ? currentText.split(/\s+/) : [];
+
+            if (currentWords.length < targetWords.length) {
+                const nextWordIndex = currentWords.length;
+                const nextWord = targetWords[nextWordIndex];
+
+                if (currentText === '') {
+                    inputElem.value = nextWord;
+                } else {
+                    inputElem.value = currentText + ' ' + nextWord;
+                }
+                inputElem.focus();
+            } else {
+                showCustomAlert("Aiuto Completo", "Tutte le parole della frase di riferimento sono già state inserite!", "fa-circle-check");
+            }
         }
 
         function nextPhrase() {
@@ -1304,12 +1480,11 @@
 
             document.getElementById('repScore').innerText = `${state.score} / ${maxScore}`;
             document.getElementById('repLevel').innerText = state.level.toUpperCase();
-            document.getElementById('repTime').innerText = `14s / frase`;
+            document.getElementById('repTime').innerText = percentage >= 80 ? 'Eccezionale' : (percentage >= 60 ? 'Buono' : 'Da Rivedere');
 
             recordSessionProgress(state.score, state.totalQuestions, state.mode === 'exam' ? percentage : null);
         }
 
-        /* Keyboard listener */
         document.addEventListener('keydown', (e) => {
             const exerciseScreen = document.getElementById('screenExercise');
             if (!exerciseScreen || exerciseScreen.classList.contains('hidden')) return;
