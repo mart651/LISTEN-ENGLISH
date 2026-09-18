@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="it" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinguaFlow - Apprendimento Vocale Realtime</title>
+    <title>LinguaFlow - Web App per Apprendimento Vocale Realtime</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -203,7 +202,6 @@
                 </p>
             </div>
 
-            <!-- Active User Summary Card -->
             <div class="eye-glass rounded-3xl p-5 sm:p-6 border border-indigo-500/20 bg-indigo-950/20 flex flex-col sm:flex-row items-center justify-between gap-5">
                 <div class="flex items-center gap-4">
                     <div id="userBadgeAvatar" class="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-indigo-500/20">
@@ -340,7 +338,6 @@
             </div>
         </section>
 
-        <!-- SCREEN 2: EXERCISE / SESSION SCREEN -->
         <section id="screenExercise" class="hidden space-y-6">
             
             <!-- Session Status Bar -->
@@ -419,7 +416,6 @@
                             <button id="hintBtn" onclick="showHintModal()" class="px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-slate-300 hover:text-eyeHeading text-xs sm:text-sm font-medium transition flex items-center gap-1.5" title="Suggerimento Iniziale">
                                 <i class="fa-solid fa-lightbulb text-amber-400"></i> Suggerimento
                             </button>
-                            <!-- Word-by-word help button -->
                             <button id="wordHelpBtn" onclick="insertNextWordHelp()" class="px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-slate-900 border border-eyeBorder text-indigo-300 hover:text-white hover:border-indigo-500 text-xs sm:text-sm font-medium transition flex items-center gap-1.5 eye-button" title="Inserisci la prossima parola nella casella">
                                 <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i> +1 Parola
                             </button>
@@ -437,7 +433,6 @@
                     </div>
                 </div>
 
-                <!-- Feedback Banner -->
                 <div id="feedbackBox" class="hidden max-w-2xl mx-auto p-5 rounded-2xl text-left text-xs sm:text-sm space-y-3 border">
                     <div class="flex items-center justify-between font-bold text-base">
                         <span id="feedbackTitle">Risposta Corretta!</span>
@@ -455,7 +450,6 @@
             </div>
         </section>
 
-        <!-- SCREEN 3: EXAM FINAL REPORT -->
         <section id="screenReport" class="hidden space-y-8 max-w-2xl mx-auto text-center">
             <div class="eye-glass rounded-3xl p-8 space-y-6 border border-brandInd/30">
                 <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mx-auto">
@@ -500,7 +494,6 @@
 
     </main>
 
-    <!-- MODAL: USER MANAGEMENT -->
     <div id="userModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="eye-glass max-w-md w-full rounded-3xl p-6 space-y-5 border border-eyeBorder shadow-2xl relative">
             <button onclick="closeUserModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white text-base">
@@ -547,7 +540,6 @@
         </div>
     </div>
 
-    <!-- CUSTOM DIALOG MODAL (Replaces alert and confirm) -->
     <div id="customDialogModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="eye-glass max-w-sm w-full rounded-2xl p-6 space-y-4 border border-eyeBorder shadow-2xl text-center">
             <div id="dialogIconBox" class="w-12 h-12 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl mx-auto">
@@ -1395,7 +1387,6 @@
             showCustomAlert("Suggerimento Traduzione", `La traduzione italiana inizia con: "${hint}"`, "fa-lightbulb");
         }
 
-        /* Incremental +1 Word Helper */
         function insertNextWordHelp() {
             if (!state.currentPhrase || !state.currentPhrase.translation) return;
 
